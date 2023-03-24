@@ -25,6 +25,7 @@ const displaySpread = document.querySelector('#display_spread');
 const displayCount = document.querySelector('#display_svgNumber'); // ammount existing
 let circleCount = 0;
 
+//Draw circles
 function AddSVGCircle(event){
     for(let i=0; i< svgAmount.valueAsNumber; i++){
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -35,14 +36,23 @@ function AddSVGCircle(event){
         const operatorY = binaryY ? '+' : '-';
         circle.setAttribute("cx" , eval(`event.clientX ${operatorX} Math.random() * svgSpread.valueAsNumber`));
         circle.setAttribute("cy" , eval(`event.clientY ${operatorY} Math.random() * svgSpread.valueAsNumber`));
-        
         circle.setAttribute("r" , svgSize.valueAsNumber);
         circle.setAttribute("fill",svgColor.value);
         screenClick.appendChild(circle);
         circleCount++;
         displayCount.innerHTML = circleCount;
     }
-    
+}
+
+//Update UI slider number
+function ButtonListeners(){
+    displaySvgsize.textContent = svgSize.value;
+    displayAmount.textContent = svgAmount.value;
+    displaySpread.textContent = svgSpread.value;
+    svgSize.addEventListener(`input`, ()=>{displaySvgsize.textContent = svgSize.value;})
+    svgAmount.addEventListener(`input`, ()=>{displayAmount.textContent = svgAmount.value;})
+    svgSpread.addEventListener(`input`, ()=>{displaySpread.textContent = svgSpread.value;})
 
 }
-export{AddSVGCircle};
+
+export{AddSVGCircle, ButtonListeners};
