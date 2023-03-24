@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="overflow:hidden;">
+    <svg id="content_svg" width="100vw" height="100vh"></svg>
+    <ul style="display:inline-block;position:fixed;top:10vh;background-color:rgb(224, 167, 167)">
+        <!--Label-->
+        <label style="font-weight: bold;">Circle Properties</label>
+        <!--Count Property-->
+        <li>Count <p id="display_svgNumber" style="display:inline">_</p></li>
+        <!--Color Property-->
+        <li >Color
+            <input type="color" style="border:0;" id="svgprop_color">
+        </li>
+        <!--Size Property-->
+        <li>Size <p id="display_svgsize" style="display:inline">_</p>
+            <input type="range" min="1" max="100" value="50" class="slider" id="svgprop_size"
+            style="width:75px"
+            >
+        </li>
+        <!--Ammount Property-->
+        <li>Circles <p id="display_amount" style="display:inline">_</p>
+            <input type="range" min="1" max="100" value="1" class="slider" id="svgprop_amount"
+            style="width:75px"
+            >
+        </li>
+        <!--Random Spread Property-->
+        <li>Spread <p id="display_spread" style="display:inline">_</p>
+            <input type="range" min="1" max="300" value="1" class="slider" id="svgprop_spread"
+            style="width:75px"
+            >
+        </li>
+        <hr>
+        <li>list 1</li>
+        <li>list 2</li>
+    </ul>
+    <script src="index.js" type="module"></script>
+</body>
+</html>
