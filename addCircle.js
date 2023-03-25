@@ -26,7 +26,7 @@ const displayCount = document.querySelector('#display_svgNumber'); // ammount ex
 let circleCount = 0;
 
 //Draw circles
-function AddSVGCircle(event){
+function addSVGCircle(event){
     for(let i=0; i< svgAmount.valueAsNumber; i++){
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         //randomizing the spread and axis (+/-) of each click
@@ -45,7 +45,7 @@ function AddSVGCircle(event){
 }
 
 //Update UI slider number
-function ButtonListeners(){
+function buttonListeners(){
     displaySvgsize.textContent = svgSize.value;
     displayAmount.textContent = svgAmount.value;
     displaySpread.textContent = svgSpread.value;
@@ -55,4 +55,4 @@ function ButtonListeners(){
 
 }
 
-export{AddSVGCircle, ButtonListeners};
+export{addSVGCircle, buttonListeners};

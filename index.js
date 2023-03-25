@@ -1,16 +1,16 @@
 "use strict";
-import { AddSVGCircle, ButtonListeners} from './addCircle.js';
-
+import {addSVGCircle, buttonListeners} from './addCircle.js';
+import {generateQuadTree} from './addQuadTree.js';
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
 screenClick.addEventListener('pointerdown', (event) => {
     console.log("test");
-    AddSVGCircle(event);
+    addSVGCircle(event);
 });
 
 //Update UI slider number
 document.addEventListener('DOMContentLoaded', function () {
-    ButtonListeners();
+    buttonListeners();
 });
 
 
@@ -23,3 +23,6 @@ document.querySelector('#clear_svg').addEventListener('pointerdown', () => {
 });
 
 //generate quads
+document.querySelector('#generate_quadtree').addEventListener('pointerdown', () => {
+    generateQuadTree();
+});
