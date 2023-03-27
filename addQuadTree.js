@@ -55,30 +55,108 @@ class QuadTree{
         this.Sw = null;
         this.Se = null;
     }
-    createNewQuad(quadCapacity){
-      const testRect = new Rectangle(0,0,visualViewport.width/2, visualViewport.height/2);
-      this.Nw = new QuadTree(testRect, quadCapacity);
-      this.Ne = new QuadTree(testRect, quadCapacity);
-      this.Sw = new QuadTree(testRect, quadCapacity);
-      this.Se = new QuadTree(testRect, quadCapacity);
+    createNewQuad(quadborderbox, quadCapacity){
+      this.Nw = new QuadTree(quadborderbox, quadCapacity);
+      this.Ne = new QuadTree(quadborderbox, quadCapacity);
+      this.Sw = new QuadTree(quadborderbox, quadCapacity);
+      this.Se = new QuadTree(quadborderbox, quadCapacity);
     }
 
     //recursive counting number of "boundary" in Quad
-    checkForQuads(){
+    checkForQuads(point){
+      console.log(point);
       for(const x in this){
-        if(this[x] instanceof QuadTree && (this.Nw||this.Ne||this.Sw||this.Se)){
+        if(this[x] instanceof QuadTree && (this.Nw!== null||this.Ne!== null||this.Sw!== null||this.Se!== null)){
+          //Nw (0,0), Ne(1,0), Sw(0,1), Se(1,1)
+          //Nw
+          console.log("quad");
+          if((point.x<this.boundary.width/2) && (point.y<this.boundary.height/2)){
+            console.log(`point is Nw`, point)
+            this.Nw.checkForQuads(point);
+            //this.Nw.points.push(point);
+          }
+          //Ne
+          if((point.x>this.boundary.width/2) && (point.y<this.boundary.height/2)){
+            console.log(`point is Ne`, point)
+            this.Ne.checkForQuads(point);
+            //this.Ne.points.push(point);
+          }
+          //Sw
+          if(point.x<this.boundary.width/2 && point.y>this.boundary.height/2){
+            console.log(`point is Sw`, point)
+            this.Sw.checkForQuads(point);
+            //this.Sw.points.push(point);
+          }
+          //Se
+          if(point.x>this.boundary.width/2 && point.y>this.boundary.height/2){
+            console.log(`point is Se`, point);
+            this.Se.checkForQuads();
+            //this.Se.points.push(point);
+          }
           return true;
+        }
+        
+        //if all inner quads are null  
+        //either 1 create new quads if capacity is surpassed and migrate points to new quads
+        //or 2 add point to existing this quad
+        else{
+          if(this.points.length>=this.capacity){
+            
+            //add current point to array aswell for migration
+            this.points.push(point);
+
+            console.log(`create new quad`);
+            this.createNewQuad(this.boundary, this.capacity);
+            for(let i = 0; i<this.points.length;i++){
+              //Ne
+              if(this.points[i].x<this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
+                console.log(`point is in new Nw`, point)
+                this.Nw.points.push(point);
+              }
+              //Ne
+              if(this.points[i].x>this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
+                console.log(`point is in new Ne`, point)
+                this.Ne.points.push(point);
+              }
+              //Sw
+              if(this.points[i].x<this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+                console.log(`point is in new Sw`, point)
+                this.Sw.points.push(point);
+              }
+              //Se
+              if(this.points[i].x>this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+                console.log(`point is in new Se`, point)
+                this.Se.points.push(point);
+              }
+            }
+            //after migrating (points) array to sub quads-array clear it out
+            this.points = [];
+          }
+          else{
+            this.points.push(point);
+          }
         }
       }
       return false;
     }
 
     insertPoint(point, capacity){
-      this.createNewQuad(capacity);
+      //if quad already exist enter appropriate quad
+      //if capacity > 4 create new quad
+      this.checkForQuads(point);
       
-      console.log(this.checkForQuads());
-      //check for existing quads
-      if(this.checkForQuads()){}
+      //console.log(this.checkForQuads(point));
+      
+      //has existing quads
+      /*if(this.checkForQuads()){
+        // check for position, enter quad with matching position
+
+      }
+      //has no existing quads
+      else{
+
+      }*/
+
 
         //if yes check if point coolerates with any of them
       //if not check capacity
@@ -143,7 +221,10 @@ function generateQuadTree(){
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
     const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);
-
+    
+    //test
+    //svgQuadTree.createNewQuad(svgQuadTree.capacity);
+    //svgQuadTree.Nw.createNewQuad(svgQuadTree.capacity);
 
     //add circles point / create new Quad 
     const svgContainer = document.querySelector('#content_svg');
