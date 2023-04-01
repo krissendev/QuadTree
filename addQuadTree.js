@@ -66,7 +66,9 @@ class QuadTree{
     checkForQuads(point){
       console.log(point);
       for(const x in this){
-        if(this[x] instanceof QuadTree && (this.Nw!== null||this.Ne!== null||this.Sw!== null||this.Se!== null)){
+
+        //checks if current QuadTree element contains QuadTree
+        if(this[x] instanceof QuadTree){
           //Nw (0,0), Ne(1,0), Sw(0,1), Se(1,1)
           //Nw
           console.log("quad");
@@ -95,7 +97,7 @@ class QuadTree{
           }
           return true;
         }
-        
+
         //if all inner quads are null  
         //either 1 create new quads if capacity is surpassed and migrate points to new quads
         //or 2 add point to existing this quad
@@ -131,13 +133,16 @@ class QuadTree{
             }
             //after migrating (points) array to sub quads-array clear it out
             this.points = [];
+            break;
           }
           else{
+            (console.log(`regular push`));
             this.points.push(point);
+            break;
           }
         }
       }
-      return false;
+      //return false;
     }
 
     insertPoint(point, capacity){
