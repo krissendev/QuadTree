@@ -64,85 +64,100 @@ class QuadTree{
 
     //recursive counting number of "boundary" in Quad
     checkForQuads(point){
-      console.log(point);
-      for(const x in this){
 
-        //checks if current QuadTree element contains QuadTree
-        if(this[x] instanceof QuadTree){
-          //Nw (0,0), Ne(1,0), Sw(0,1), Se(1,1)
-          //Nw
-          console.log("quad");
-          if((point.x<this.boundary.width/2) && (point.y<this.boundary.height/2)){
-            console.log(`point is Nw`, point)
-            this.Nw.checkForQuads(point);
-            //this.Nw.points.push(point);
-          }
-          //Ne
-          if((point.x>this.boundary.width/2) && (point.y<this.boundary.height/2)){
-            console.log(`point is Ne`, point)
-            this.Ne.checkForQuads(point);
-            //this.Ne.points.push(point);
-          }
-          //Sw
-          if(point.x<this.boundary.width/2 && point.y>this.boundary.height/2){
-            console.log(`point is Sw`, point)
-            this.Sw.checkForQuads(point);
-            //this.Sw.points.push(point);
-          }
-          //Se
-          if(point.x>this.boundary.width/2 && point.y>this.boundary.height/2){
-            console.log(`point is Se`, point);
-            this.Se.checkForQuads();
-            //this.Se.points.push(point);
-          }
-          return true;
+      //check if (this) QuadTree contains instanceof Quadtree
+      let hasQuad = false;
+      const keys = Object.keys(this);
+      const length = keys.length;
+      for(let i =0; i< length; i++){
+        const key=keys[i]
+        const value= this[key];
+        if(value instanceof QuadTree){
+          hasQuad = true;
         }
-
-        //if all inner quads are null  
-        //either 1 create new quads if capacity is surpassed and migrate points to new quads
-        //or 2 add point to existing this quad
-        else{
-          if(this.points.length>=this.capacity){
-            
-            //add current point to array aswell for migration
-            this.points.push(point);
-
-            console.log(`create new quad`);
-            this.createNewQuad(this.boundary, this.capacity);
-            for(let i = 0; i<this.points.length;i++){
-              //Ne
-              if(this.points[i].x<this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
-                console.log(`point is in new Nw`, point)
-                this.Nw.points.push(point);
-              }
-              //Ne
-              if(this.points[i].x>this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
-                console.log(`point is in new Ne`, point)
-                this.Ne.points.push(point);
-              }
-              //Sw
-              if(this.points[i].x<this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
-                console.log(`point is in new Sw`, point)
-                this.Sw.points.push(point);
-              }
-              //Se
-              if(this.points[i].x>this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
-                console.log(`point is in new Se`, point)
-                this.Se.points.push(point);
-              }
+      }
+      if(hasQuad){
+        for(const x in this){
+          //if current QuadTree element contains QuadTree climb down hierarchy
+          if(this[x] instanceof QuadTree){
+            //Nw (0,0), Ne(1,0), Sw(0,1), Se(1,1)
+            //Nw
+            console.log("quad");
+            if((point.x<this.boundary.width/2) && (point.y<this.boundary.height/2)){
+              console.log(`point is Nw`, point)
+              this.Nw.checkForQuads(point);
+              //this.Nw.points.push(point);
             }
-            //after migrating (points) array to sub quads-array clear it out
-            this.points = [];
-            break;
-          }
-          else{
-            (console.log(`regular push`));
-            this.points.push(point);
-            break;
+            //Ne
+            if((point.x>this.boundary.width/2) && (point.y<this.boundary.height/2)){
+              console.log(`point is Ne`, point)
+              this.Ne.checkForQuads(point);
+              //this.Ne.points.push(point);
+            }
+            //Sw
+            if(point.x<this.boundary.width/2 && point.y>this.boundary.height/2){
+              console.log(`point is Sw`, point)
+              this.Sw.checkForQuads(point);
+              //this.Sw.points.push(point);
+            }
+            //Se
+            if(point.x>this.boundary.width/2 && point.y>this.boundary.height/2){
+              console.log(`point is Se`, point);
+              this.Se.checkForQuads();
+              //this.Se.points.push(point);
+            }
+            return true;
           }
         }
       }
-      //return false;
+
+      else{  
+        //if all inner quads are null  
+        //either 1 create new quads if capacity is surpassed and migrate points to new quads
+        //or 2 add point to existing this quad
+        if(this.points.length>=this.capacity){
+            
+          //add current point to array aswell for migration
+          this.points.push(point);
+
+          console.log(`create new quad`);
+          this.createNewQuad(this.boundary, this.capacity);
+          for(let i = 0; i<this.points.length;i++){
+            //Ne
+            console.log("checking for error");
+            console.log(this.points[i]);
+            if(this.points[i].x<this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
+              console.log(`point is in new Nw`, point)
+              this.Nw.points.push(this.points[i]);
+            }
+            //Ne
+            if(this.points[i].x>this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
+              console.log(`point is in new Ne`, point)
+              this.Ne.points.push(this.points[i]);
+            }
+            //Sw
+            if(this.points[i].x<this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+              console.log(`point is in new Sw`, point)
+              console.log(this.points[i]);
+              this.Sw.points.push(this.points[i]);
+            }
+            //Se
+            if(this.points[i].x>this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+              console.log(`point is in new Se`, point)
+              this.Se.points.push(this.points[i]);
+            }
+          }
+          //after migrating (points) array to sub quads-array clear it out
+          this.points = [];
+          console.log(`clear points`);
+          //check if quad capacity is surpassed, if yes recurse 
+        }
+        else{
+          (console.log(`regular push`));
+          this.points.push(point);
+        }
+      }
+
     }
 
     insertPoint(point, capacity){
