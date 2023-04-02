@@ -4,7 +4,6 @@ import {generateQuadTree} from './addQuadTree.js';
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
 screenClick.addEventListener('pointerdown', (event) => {
-    console.log("test");
     addSVGCircle(event);
 });
 
