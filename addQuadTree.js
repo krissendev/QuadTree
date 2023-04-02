@@ -123,7 +123,7 @@ class QuadTree{
           console.log(`create new quad`);
           this.createNewQuad(this.boundary, this.capacity);
           for(let i = 0; i<this.points.length;i++){
-            //Ne
+            //Nw
             console.log("checking for error");
             console.log(this.points[i]);
             if(this.points[i].x<this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
@@ -131,18 +131,18 @@ class QuadTree{
               this.Nw.points.push(this.points[i]);
             }
             //Ne
-            if(this.points[i].x>this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
+            else if(this.points[i].x>this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
               console.log(`point is in new Ne`, point)
               this.Ne.points.push(this.points[i]);
             }
             //Sw
-            if(this.points[i].x<this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+            else if(this.points[i].x<this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
               console.log(`point is in new Sw`, point)
               console.log(this.points[i]);
               this.Sw.points.push(this.points[i]);
             }
             //Se
-            if(this.points[i].x>this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+            else if(this.points[i].x>this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
               console.log(`point is in new Se`, point)
               this.Se.points.push(this.points[i]);
             }
@@ -242,7 +242,8 @@ function generateQuadTree(){
     let quadCapacity = 4;
     const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);
     
-    //test
+    //testing
+    window.svgQuadTree = svgQuadTree;
     //svgQuadTree.createNewQuad(svgQuadTree.capacity);
     //svgQuadTree.Nw.createNewQuad(svgQuadTree.capacity);
 
