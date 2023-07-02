@@ -15,7 +15,9 @@ class Rectangle{
     }
 }
 class QuadTree{
+  static instance=0;
   constructor(boundary,capacity){
+      QuadTree.instance++;
       this.boundary = boundary;
       this.capacity = capacity;
       this.points = [];
@@ -62,8 +64,8 @@ class QuadTree{
   }
 
     //recursive counting number of "boundary" in Quad
-    checkForQuads(){
-      // is any child in QuadTree object key (key:value) another Quad ?
+  checkForQuads(){
+    // is any child in QuadTree object key (key:value) another Quad ?
     //   constructor(boundary,capacity){
     //     this.boundary = boundary;
     //     this.capacity = capacity;
@@ -73,76 +75,83 @@ class QuadTree{
     //       [null, null]   // Represents the Sw and Se quadrants
     //   ];
     // }
-      const keys = Object.keys(this);
-      for(let row of this.quadrants){   //array level 1     
-        for (let col of row) {          //array level 2 either null or Quad
-          if(col === null){return false;}
-          else if(col instanceof QuadTree){ 
-            return true;
-          }
+    const keys = Object.keys(this);
+    for(let row of this.quadrants){   //array level 1     
+      for (let col of row) {          //array level 2 either null or Quad
+        if(col === null){return false;}
+        else if(col instanceof QuadTree){ 
+          return true;
         }
       }
-      return false;
     }
+    return false;
+  }
 
 
-    insertPoint(quad, point, capacity){
-      //If quad has quadrants
-      if(quad.quadrants[0][0] !== null){
-        console.log(quad.quadrants[0])
-        //Nw
-        if(
-          point.x >= quad.boundary.x &&
-          point.x < quad.boundary.x + quad.boundary.width &&
-          point.y >= quad.boundary.y &&
-          point.y < quad.boundary.y + quad.boundary.height
-          ){
-            
-            //If quad.quadrants:quad has no further nesting, go on to place point
-            let quadNW = quad.quadrants[0][0];
-            if(!(this.checkForQuads(quadNW, point, capacity))){
+  insertPoint(currentQuad, point, capacity){
+    //If quad has quadrants
+    if(currentQuad.quadrants[0][0] !== null){
+      console.log(currentQuad.quadrants[0])
+      //Nw
+      if(
+        point.x >= currentQuad.boundary.x &&
+        point.x < currentQuad.boundary.x + currentQuad.boundary.width &&
+        point.y >= currentQuad.boundary.y &&
+        point.y < currentQuad.boundary.y + currentQuad.boundary.height
+        ){
+          
+          //If quad.quadrants:quad has no further nesting, go on to place point
+          let quadNW = currentQuad.quadrants[0][0];
+          if(!(this.checkForQuads(quadNW, point, capacity))){
 
-              //If capacity is not reached simply push point
-              //if(quadNW.points === null || quadNW.points.length < capacity){
-              if (quadNW.points?.length < capacity) {
-                quadNW.quadrants[0][0].points.push(point)
-              }
-              //If capacity reached, create more quads
-              else if(quadNW.points.length>capacity){
-                //Extract all current points into a temporary array for relocation
-                let pointsNewQuads = [];
-                pointsNewQuads.push(point);
-                quadNW.points.forEach((points)=>{
-                  pointsNewQuads.push(points);
-                });
-                //Clear points array in quad and create 4 new quads
-                quadNW.point = [];
-                quadNW.createNewQuads(quadNW, capacity);
-                
-                //Relocate points to appropriate quad according to position
-                pointsNewQuads.forEach((p)=>{
-                  //Nw-Nw
-                  if(
-                    p.x >= quadNW.boundary.x &&
-                    p.x < quadNW.boundary.x + quad.boundary.width &&
-                    p.y >= quadNW.boundary.y &&
-                    p.y < quadNW.quadrants.y + quad.boundary.height
-                    ){
-                      quadNW.quadrants[0][0].points.push(p);
-                  }
-                  else(console.log("outside NW-NW"));
-                  //NW-NE, NW-SW, NW-SE
-                })
-              }
-              else{
-                console.error("something unexpected happened to capacity check");
-              }       
+            //If capacity is not reached simply push point
+            //if(quadNW.points === null || quadNW.points.length < capacity){
+            if (quadNW.points?.length < capacity) {
+              quadNW.quadrants[0][0].points.push(point)
             }
-            console.log("quad has further nesting");
+            //If capacity reached, create more quads
+            else if(quadNW.points.length>capacity){
+              //Extract all current points into a temporary array for relocation
+              let pointsNewQuads = [];
+              pointsNewQuads.push(point);
+              quadNW.points.forEach((points)=>{
+                pointsNewQuads.push(points);
+              });
+              //Clear points array in quad and create 4 new quads
+              quadNW.point = [];
+              quadNW.createNewQuads(quadNW, capacity);
+              
+              //Relocate points to appropriate quad according to position
+              pointsNewQuads.forEach((p)=>{
+                //Nw-Nw
+                if(
+                  p.x >= quadNW.boundary.x &&
+                  p.x < quadNW.boundary.x + quadNW.boundary.width &&
+                  p.y >= quadNW.boundary.y &&
+                  p.y < quadNW.quadrants.y + quadNW.boundary.height
+                  ){
+                    quadNW.quadrants[0][0].points.push(p);
+                }
+                else(console.log("outside NW-NW"));
+                //NW-NE, NW-SW, NW-SE
+              })
+            }
+            else{
+              console.error("something unexpected happened to capacity check");
+            }       
           }
-        console.log("point is outside NW");
-      }
-      console.log("quad has no quadrants yet");
+          console.log("quad has further nesting");
+        }
+      console.log("point is outside NW");
+    }
+    //if current capacity is not reached simply push point to currentQuad
+    else if(currentQuad.points?.length < capacity) {
+      console.log("no need to create Quads yet");
+      currentQuad.points.push(point);
+    }
+    else if(currentQuad.points.length > capacity){
+      console.log("need to create Quads");
+    }
   }
 }
 
@@ -192,6 +201,13 @@ class QuadTree{
 
 //Create Quad
 function generateQuadTree(){
+  //singleton pattern to prevent multiple 
+  //instances of QuadTree
+  if(QuadTree.instance){
+    console.log("quadtree instance already detected")
+  }
+  else{
+    console.log(QuadTree)
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
     const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);
@@ -200,7 +216,7 @@ function generateQuadTree(){
     window.svgQuadTree = svgQuadTree;
     //svgQuadTree.createNewQuad(svgQuadTree.capacity);
     //svgQuadTree.Nw.createNewQuad(svgQuadTree.capacity);
-
+  
     //add circles point / create new Quad 
     const svgContainer = document.querySelector('#content_svg');
     const circleElements = svgContainer.querySelectorAll('circle');
@@ -211,8 +227,9 @@ function generateQuadTree(){
         console.log(point)
         svgQuadTree.insertPoint(svgQuadTree, point, svgQuadTree.capacity);
       });
-
+  
     console.log(svgQuadTree);
+  }
 }
 
 
