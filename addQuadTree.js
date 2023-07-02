@@ -25,14 +25,38 @@ class QuadTree{
     ];
   }
   createNewQuad(quadborderbox, quadCapacity){
+    let quadNw = {
+      x:quadborderbox.x,
+      y:quadborderbox.y,
+      width:quadborderbox.width/2,
+      height:quadborderbox.height/2
+    };
+    let quadNe = {
+      x:quadborderbox.width/2,
+      y:quadborderbox.y,
+      width:quadborderbox.width/2,
+      height:quadborderbox.height/2
+    };
+    let quadSw = {
+      x:quadborderbox.x,
+      y:quadborderbox.height/2,
+      width:quadborderbox.width/2,
+      height:quadborderbox.height/2
+    };
+    let quadSe = {
+      x:quadborderbox.width/2,
+      y:quadborderbox.height/2,
+      width:quadborderbox.width/2,
+      height:quadborderbox.height/2
+    };
     this.quadrants = [
-        [
-            new QuadTree(quadborderbox, quadCapacity),  // Nw at [0][0]
-            new QuadTree(quadborderbox, quadCapacity)   // Ne at [0][1]
+        [          
+            new QuadTree(quadNw, quadCapacity),  // Nw at [0][0]
+            new QuadTree(quadNe, quadCapacity)   // Ne at [0][1]
         ],
         [
-            new QuadTree(quadborderbox, quadCapacity),  // Sw at [1][0]
-            new QuadTree(quadborderbox, quadCapacity)   // Se at [1][1]
+            new QuadTree(quadSw, quadCapacity),  // Sw at [1][0]
+            new QuadTree(quadSe, quadCapacity)   // Se at [1][1]
         ]
     ];
   }
@@ -40,10 +64,22 @@ class QuadTree{
     //recursive counting number of "boundary" in Quad
     checkForQuads(){
       // is any child in QuadTree object key (key:value) another Quad ?
+    //   constructor(boundary,capacity){
+    //     this.boundary = boundary;
+    //     this.capacity = capacity;
+    //     this.points = [];
+    //     this.quadrants = [
+    //       [null, null],  // Represents the Nw and Ne quadrants
+    //       [null, null]   // Represents the Sw and Se quadrants
+    //   ];
+    // }
       const keys = Object.keys(this);
-      for(let i =0; i< keys.length; i++){        
-        if(this[keys[i]] instanceof QuadTree){
-          return true;
+      for(let row of this.quadrants){   //array level 1     
+        for (let col of row) {          //array level 2 either null or Quad
+          if(col === null){return false;}
+          else if(col instanceof QuadTree){ 
+            return true;
+          }
         }
       }
       return false;
@@ -51,8 +87,19 @@ class QuadTree{
 
 
     insertPoint(point, capacity){
-      console.log(this.checkForQuads());
-      //if (hasQuad) {
+      //Check for existing quads at top level
+      if (this.checkForQuads()) {
+        //check point position
+        
+        //recursive loop until hits null on position
+
+        console.log("testbool worked!")
+      }
+      //create quad at top level
+      else{
+        this.createNewQuad(this.boundary, this.capacity);
+      }
+
         //Nw (0,0), Ne(1,0), Sw(0,1), Se(1,1)
         //  (f,f ),   (t,f),   (f,t),   (t,t)   
 
@@ -84,7 +131,7 @@ class QuadTree{
     // else {} //not !hasQuad 
      //}
 
-     this.createNewQuad();
+     
   }
 }
 
@@ -108,6 +155,7 @@ function generateQuadTree(){
         const x = parseFloat(circle.getAttribute('cx'));
         const y = parseFloat(circle.getAttribute('cy'));
         const point = new Point(x, y, circle);
+        console.log(point)
         svgQuadTree.insertPoint(point, svgQuadTree.capacity);
       });
 
