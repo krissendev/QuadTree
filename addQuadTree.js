@@ -24,7 +24,7 @@ class QuadTree{
         [null, null]   // Represents the Sw and Se quadrants
     ];
   }
-  createNewQuad(quadborderbox, quadCapacity){
+  createNewQuads(quadborderbox, quadCapacity){
     let quadNw = {
       x:quadborderbox.x,
       y:quadborderbox.y,
@@ -49,7 +49,7 @@ class QuadTree{
       width:quadborderbox.width/2,
       height:quadborderbox.height/2
     };
-    this.quadrants = [
+    quadborderbox.quadrants = [
         [          
             new QuadTree(quadNw, quadCapacity),  // Nw at [0][0]
             new QuadTree(quadNe, quadCapacity)   // Ne at [0][1]
@@ -86,19 +86,74 @@ class QuadTree{
     }
 
 
-    insertPoint(point, capacity){
-      //Check for existing quads at top level
-      if (this.checkForQuads()) {
-        //check point position
+    insertPoint(quad, point, capacity){
+      //If quad has quadrants
+      if(quad.quadrants[0][0] !== null){
+        console.log(quad.quadrants[0])
+        //Nw
+        if(
+          point.x >= quad.boundary.x &&
+          point.x < quad.boundary.x + quad.boundary.width &&
+          point.y >= quad.boundary.y &&
+          point.y < quad.boundary.y + quad.boundary.height
+          ){
+            
+            //If quad.quadrants:quad has no further nesting, go on to place point
+            let quadNW = quad.quadrants[0][0];
+            if(!(this.checkForQuads(quadNW, point, capacity))){
+
+              //If capacity is not reached simply push point
+              //if(quadNW.points === null || quadNW.points.length < capacity){
+              if (quadNW.points?.length < capacity) {
+                quadNW.quadrants[0][0].points.push(point)
+              }
+              //If capacity reached, create more quads
+              else if(quadNW.points.length>capacity){
+                //Extract all current points into a temporary array for relocation
+                let pointsNewQuads = [];
+                pointsNewQuads.push(point);
+                quadNW.points.forEach((points)=>{
+                  pointsNewQuads.push(points);
+                });
+                //Clear points array in quad and create 4 new quads
+                quadNW.point = [];
+                quadNW.createNewQuads(quadNW, capacity);
+                
+                //Relocate points to appropriate quad according to position
+                pointsNewQuads.forEach((p)=>{
+                  //Nw-Nw
+                  if(
+                    p.x >= quadNW.boundary.x &&
+                    p.x < quadNW.boundary.x + quad.boundary.width &&
+                    p.y >= quadNW.boundary.y &&
+                    p.y < quadNW.quadrants.y + quad.boundary.height
+                    ){
+                      quadNW.quadrants[0][0].points.push(p);
+                  }
+                  else(console.log("outside NW-NW"));
+                  //NW-NE, NW-SW, NW-SE
+                })
+              }
+              else{
+                console.error("something unexpected happened to capacity check");
+              }       
+            }
+            console.log("quad has further nesting");
+          }
+        console.log("point is outside NW");
+      }
+      console.log("quad has no quadrants yet");
+  }
+}
+
+        //check until quadrant matches point
+        //check if quadrant contains null and if points in quadrant > capacity
+        
         
         //recursive loop until hits null on position
-
-        console.log("testbool worked!")
-      }
+      
       //create quad at top level
-      else{
-        this.createNewQuad(this.boundary, this.capacity);
-      }
+
 
         //Nw (0,0), Ne(1,0), Sw(0,1), Se(1,1)
         //  (f,f ),   (t,f),   (f,t),   (t,t)   
@@ -131,9 +186,7 @@ class QuadTree{
     // else {} //not !hasQuad 
      //}
 
-     
-  }
-}
+
 
 
 
@@ -156,7 +209,7 @@ function generateQuadTree(){
         const y = parseFloat(circle.getAttribute('cy'));
         const point = new Point(x, y, circle);
         console.log(point)
-        svgQuadTree.insertPoint(point, svgQuadTree.capacity);
+        svgQuadTree.insertPoint(svgQuadTree, point, svgQuadTree.capacity);
       });
 
     console.log(svgQuadTree);
