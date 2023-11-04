@@ -261,7 +261,6 @@ function generateQuadTree(){
     window.svgQuadTree = svgQuadTree;
     //svgQuadTree.createNewQuad(svgQuadTree.capacity);
     //svgQuadTree.Nw.createNewQuad(svgQuadTree.capacity);
-
     //add circles point / create new Quad 
     const svgContainer = document.querySelector('#content_svg');
     const circleElements = svgContainer.querySelectorAll('circle');
