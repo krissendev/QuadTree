@@ -1,6 +1,7 @@
 "use strict";
 import {addSVGCircle, buttonListeners} from './addCircle.js';
 import {generateQuadTree} from './addQuadTree.js';
+import {createRects} from './addRect.js';
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
 screenClick.addEventListener('pointerdown', (event) => {
@@ -25,3 +26,10 @@ document.querySelector('#clear_svg').addEventListener('pointerdown', () => {
 document.querySelector('#generate_quadtree').addEventListener('pointerdown', () => {
     generateQuadTree();
 });
+
+//generate rect
+document.querySelector('#generate_rect').addEventListener('pointerdown', () => {
+    console.log("click");
+    createRects();
+});
+

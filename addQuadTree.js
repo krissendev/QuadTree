@@ -1,34 +1,12 @@
 "use strict";
+import {borderQuadsplit} from './splitQuadTree.js';
 //svg and quad tree are sepparated
 //svg point to objects within quad-tree
 
 //check for quad existing
 //check for more than 4 elements on screen
 //if yes split area into rectangle of four
-//
 
-// NW   |   NE
-// SW   |   SE  
-
-/*
-class Rectangle {
-  constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-  }
-
-class QuadTree {
-  constructor(boundary, capacity) {
-
-  }
-  subdivide() {
-    NWNESWSE
-  }
-}
-
-*/
 class Point{
     constructor(x,y,data){
         this.x = x;
@@ -45,31 +23,34 @@ class Rectangle{
     }
 }
 class QuadTree{
-    constructor(boundary,capacity){
+    constructor(boundary,capacity, tag){
+        this.borderQuadsplit = borderQuadsplit; //imported function
         this.boundary = boundary;
         this.capacity = capacity;
         this.points = [];
-        this.divided = false;
+        this.tag = tag;
         this.Nw = null;
         this.Ne = null;
         this.Sw = null;
         this.Se = null;
     }
     createNewQuad(quadborderbox, quadCapacity){
-      this.Nw = new QuadTree(quadborderbox, quadCapacity);
-      this.Ne = new QuadTree(quadborderbox, quadCapacity);
-      this.Sw = new QuadTree(quadborderbox, quadCapacity);
-      this.Se = new QuadTree(quadborderbox, quadCapacity);
+      this.Nw = new QuadTree(quadborderbox.nw, quadCapacity, "Nw");
+      this.Ne = new QuadTree(quadborderbox.ne, quadCapacity, "Ne");
+      this.Sw = new QuadTree(quadborderbox.sw, quadCapacity, "Sw");
+      this.Se = new QuadTree(quadborderbox.se, quadCapacity, "Se");
     }
 
     //recursive counting number of "boundary" in Quad
-    checkForQuads(point){
-      debugObject("67", this, point)
+    checkForQuads(point, capacity){
+      //If x or y of point is outside DOM canvas skip point
+      if (this.checkpointOutsideScope(point)){return;}
+      //debugObject("67", this, point)
+
       //check if (this) QuadTree contains instanceof Quadtree
       let hasQuad = false;
       const keys = Object.keys(this);
       const length = keys.length;
-
       try{
         for(let i =0; i< length; i++){
           const key=keys[i]
@@ -82,45 +63,52 @@ class QuadTree{
         
         
         if(hasQuad){
-          console.log(`This:${this} HasQuad true, with point: \`${JSON.stringify(point)}\``)
+          //console.log(`This:${this} HasQuad true, with point: \`${JSON.stringify(point)}\``)
+
           for(const x in this){
             //if current QuadTree element contains QuadTree climb down hierarchy
             if(this[x] instanceof QuadTree){
               //Nw (0,0), Ne(1,0), Sw(0,1), Se(1,1)
               //Nw
               if((point.x<this.boundary.width/2) && (point.y<this.boundary.height/2)){
-                this.Nw.checkForQuads(point);
-                //this.Nw.points.push(point);
+                this.Nw.checkForQuads(point, capacity);
+                return;
               }
               //Ne
-              if((point.x>this.boundary.width/2) && (point.y<this.boundary.height/2)){
-                this.Ne.checkForQuads(point);
-                //this.Ne.points.push(point);
+              if(((point.x<this.boundary.width)) && ((point.y<this.boundary.height/2))){
+                this.Ne.checkForQuads(point,capacity);
+                return;
               }
               //Sw
-              if(point.x<this.boundary.width/2 && point.y>this.boundary.height/2){
-                this.Sw.checkForQuads(point);
-                //this.Sw.points.push(point);
+              if((point.x<this.boundary.width/2) && (point.y<this.boundary.height)){
+                this.Sw.checkForQuads(point,capacity);
+                return;
               }
               //Se
-              if(point.x>this.boundary.width/2 && point.y>this.boundary.height/2){
-                this.Se.checkForQuads(point);
-                //this.Se.points.push(point);
+              if((point.x<this.boundary.width) && (point.y<this.boundary.height)){
+                this.Se.checkForQuads(point, capacity);
+                return;
               }
-              return true;
+              else{
+                console.debug(`something unexpected happened`);
+              }
             }
           }
+          return true;
         }
-  
-        else{  
+        
+        else if(!hasQuad){  
           //if all inner quads are null  
           //either 1 create new quads if capacity is surpassed and migrate points to new quads
           //or 2 add point to existing this quad
+
+          //points array is full, split quad and redistribute points
           if(this.points.length>=this.capacity){
               
             //add current point to array aswell for migration
             this.points.push(point);
-            this.createNewQuad(this.boundary, this.capacity);
+            console.log("creatingNewQuad");
+            this.createNewQuad(this.borderQuadsplit(this.boundary, this.tag), this.capacity);
             for(let i = 0; i<this.points.length;i++){
               //Nw
               //console.log(this.points[i]);
@@ -128,23 +116,34 @@ class QuadTree{
                 this.Nw.points.push(this.points[i]);
               }
               //Ne
-              else if(this.points[i].x>this.boundary.width/2 && this.points[i].y<this.boundary.height/2){
+              else if(this.points[i].x<this.boundary.width && this.points[i].y<this.boundary.height/2){
                 this.Ne.points.push(this.points[i]);
               }
               //Sw
-              else if(this.points[i].x<this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+              else if((this.points[i].x<this.boundary.width/2) && (this.points[i].y<this.boundary.height)){
                 this.Sw.points.push(this.points[i]);
               }
               //Se
-              else if(this.points[i].x>this.boundary.width/2 && this.points[i].y>this.boundary.height/2){
+              else if((this.points[i].x<this.boundary.width) && (this.points[i].y<this.boundary.height)){
                 this.Se.points.push(this.points[i]);
+              }
+              else{
+                console.debug(`something unexpected happened`);
               }
             }
             //after migrating (points) array to sub quads-array clear it out
             this.points = [];
+            return;
+          }
+          //points array is not yet filled
+          else if(this.points.length<this.capacity){
+            //if points array is full
+            this.points.push(point);
+            return;
           }
           else{
-            this.points.push(point);
+            console.debug(`something unexpected happened`);
+            return;
           }
         }
       }
@@ -160,78 +159,16 @@ class QuadTree{
       }
     }
 
-    insertPoint(point, capacity){
-      //if quad already exist enter appropriate quad
-      //if capacity > 4 create new quad
-      this.checkForQuads(point);
-      
-      //console.log(this.checkForQuads(point));
-      
-      //has existing quads
-      /*if(this.checkForQuads()){
-        // check for position, enter quad with matching position
-
+    checkpointOutsideScope(point){
+      if (point.x >this.width || point.x < 0){
+        debug.log(`point.x ${point} out of bounds`)
+        return true //I want this to exit out from checkForQuads
       }
-      //has no existing quads
-      else{
-
-      }*/
-
-
-        //if yes check if point coolerates with any of them
-      //if not check capacity
-        //capacity exceeding divide quads then add point
-
-        //capacity ok add point
-
-
-      //this.createNewQuad(capacity);
-      //this.countRectangleCildren();
-
-      function hideComments(){
-
-      //1. get point position, find matching border
-      /*for(let i = 0; i < this.children.length; i++)
-      {console.log("child")}*/
-      
-      /*if(this.boundary){
-
-        console.log("has inner boundary", this.boundary)
+      else if(point.y > this.height || point.y<0){
+        debug.log(`point.y ${point} out of bounds`)
+        return true //I want this to exit out from checkForQuads
       }
-      else{
-        console.log("has no inner boundary")
-      }*/
-
-
-      //2. check if boundary/rectangle has sub/under boundary
-
-
-      //3. if yes, continue checking for boundaries in correct coordinate until no more border is left
-
-      //4. check if boundary has more than or equal to >= 4
-
-      //4.1 if not add point do boundary
-
-      //4.2 if yes split boundary into 4 new boundary with naming convention Nw,Ne,Sw,Se
-
-      //4.2.1 add all belonging points to new boundary aswell as the current point
-
-
-
-      /*if(this.points.length<this.capacity)
-      {
-        console.log("insert" + this.points);
-        this.points.push(point);
-      }
-      else{
-        subdivideQuad(point);
-        console.log("subdivided");
-      }*/
-    }
-
-    }
-    subdivideQuad(){
-        //console.log("subdividing quad");
+      return false //I want this to continue in checkForQuads
     }
     //Draw quad/rectangle
 }
@@ -240,7 +177,7 @@ class QuadTree{
 function generateQuadTree(){
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
-    const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);
+    const svgQuadTree = new QuadTree(quadborderbox, quadCapacity, "root");
     
     //testing
     window.svgQuadTree = svgQuadTree;
@@ -249,14 +186,23 @@ function generateQuadTree(){
     //add circles point / create new Quad 
     const svgContainer = document.querySelector('#content_svg');
     const circleElements = svgContainer.querySelectorAll('circle');
+    window.circleElements = circleElements;
+    //for printing circle coordinates
+    /*
+    window.circleElements.forEach(circle => {
+    const x = circle.getAttribute('cx');
+    const y = circle.getAttribute('cy');
+    console.log(`Circle at (x: ${x}, y: ${y})`);
+    });
+    */
     circleElements.forEach(circle => {
         const x = parseFloat(circle.getAttribute('cx'));
         const y = parseFloat(circle.getAttribute('cy'));
         const point = new Point(x, y, circle);
-        svgQuadTree.insertPoint(point, svgQuadTree.capacity);
+        svgQuadTree.checkForQuads(point, svgQuadTree.capacity);
       });
 
-    console.log(svgQuadTree);
+    //console.log(svgQuadTree);
 }
 
 function debugObject(line){
