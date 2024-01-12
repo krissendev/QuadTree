@@ -40,6 +40,7 @@ class QuadTree{
     checkForQuads(point, capacity){
       //If x or y of point is outside DOM canvas skip point
       if (this.checkpointOutsideScope(point)){return;}
+      
       //debugObject("67", this, point)
 
       //check if (this) QuadTree contains instanceof Quadtree
@@ -58,8 +59,9 @@ class QuadTree{
         if(hasQuad){
           for(const x in this){
             //if current QuadTree element contains QuadTree climb down hierarchy
+            console.log(this[x], this[x] instanceof QuadTree)
             if(this[x] instanceof QuadTree){
-              const withinboundary = checkBoundary(point, this[x]);
+              const withinboundary = checkBoundary(point, this[x].boundary, this);
               if(withinboundary !== null){
                 withinboundary.checkForQuads(point, capacity)
               }
@@ -75,9 +77,11 @@ class QuadTree{
             this.points.push(point);
             this.createNewQuad(this.borderQuadsplit(this.boundary), this.capacity);
             for(let i = 0; i<this.points.length;i++){
-              const withinboundary = checkBoundary(this.points[i].x, this.boundary);
-              if(withinboundary !== null){
-                withinboundary.points.push(this.points[i]);
+              if(this.points[i] !== null && this.points[i] !== undefined) {
+                const withinboundary = checkBoundary(this.points[i], this.boundary, this);
+                if(withinboundary !== null){
+                  withinboundary.points.push(this.points[i]);
+                }
               }
             }
             this.points = [];
@@ -121,11 +125,13 @@ class QuadTree{
     }
 }
 
+let pointCounter = 0;
+
 //Create Quad
 function generateQuadTree(){
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
-    const svgQuadTree = new QuadTree(quadborderbox, quadCapacity, "root");
+    const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);
     const svgContainer = document.querySelector('#content_svg');
     const circleElements = svgContainer.querySelectorAll('circle');
     
@@ -140,6 +146,9 @@ function generateQuadTree(){
     });
     */
     circleElements.forEach(circle => {
+        pointCounter++;
+        console.log(pointCounter)
+
         const x = parseFloat(circle.getAttribute('cx'));
         const y = parseFloat(circle.getAttribute('cy'));
         const point = new Point(x, y, circle);
