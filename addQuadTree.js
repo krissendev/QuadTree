@@ -36,61 +36,68 @@ class QuadTree{
       this.Se = new QuadTree(quadborderbox.se, quadCapacity);
     }
 
-    //recursive counting number of "boundary" in Quad
+    //Recursive counting number of "boundary" in Quad
     checkForQuads(point, capacity){
-      //If x or y of point is outside DOM canvas skip point
-      if (this.checkpointOutsideScope(point)){return;}
+      const quadTree = this;
+      if (quadTree.checkpointOutsideScope(point, quadTree)){return;}
       
-      //debugObject("67", this, point)
-
-      //check if (this) QuadTree contains instanceof Quadtree
-      let hasQuad = false;
-      const keys = Object.keys(this);
-      const length = keys.length;
       try{
-        for(let i =0; i< length; i++){
-          const key=keys[i]
-          const value= this[key];
-          if(value instanceof QuadTree){
+        //Check if this QuadTree hasQuad (Contains instance of Quadtree)
+        let hasQuad = false;
+        const quadProperties = Object.keys(quadTree);
+        const numbersofQuadProperties = quadProperties.length;
+        for(let propertyIndex =0; propertyIndex< numbersofQuadProperties; propertyIndex++){
+          const property=quadProperties[propertyIndex]
+          const propertyValue= quadTree[property];
+          if(propertyValue instanceof QuadTree){
             hasQuad = true;
             break;
           }
         }
         if(hasQuad){
-          for(const x in this){
-            //if current QuadTree element contains QuadTree climb down hierarchy
-            console.log(this[x], this[x] instanceof QuadTree)
-            if(this[x] instanceof QuadTree){
-              const withinboundary = checkBoundary(point, this[x].boundary, this);
+          for(const quadProperty in quadTree){
+            //If current QuadTree element contains QuadTree climb down hierarchy recursivly, ie Nw,Ne,Sw,Se
+            if(quadTree[quadProperty] instanceof QuadTree){
+              const withinboundary = checkBoundary(point, quadTree[quadProperty].boundary, quadTree);
               if(withinboundary !== null){
                 withinboundary.checkForQuads(point, capacity)
+                break;
               }
             }
           }
           return true;
         }
         
-        else if(!hasQuad){  
-          if(this.points.length>=this.capacity){
+        //Current QuadTree in recursion is empty
+        else if(!hasQuad){
+          //If point not already pushed
+          if (!quadTree.points.includes(point)) {
+            quadTree.points.push(point);
+          }
+          
+          if(quadTree.points.length>=quadTree.capacity){
               
             //add current point to array aswell for migration
-            this.points.push(point);
-            this.createNewQuad(this.borderQuadsplit(this.boundary), this.capacity);
-            for(let i = 0; i<this.points.length;i++){
-              if(this.points[i] !== null && this.points[i] !== undefined) {
-                const withinboundary = checkBoundary(this.points[i], this.boundary, this);
+            //this.points.push(point);
+            quadTree.createNewQuad(quadTree.borderQuadsplit(quadTree.boundary), quadTree.capacity);
+
+
+            for(let i = 0; i<quadTree.points.length;i++){
+              if(quadTree.points[i] !== null && quadTree.points[i] !== undefined) {
+                const withinboundary = checkBoundary(quadTree.points[i], quadTree.boundary, quadTree);
                 if(withinboundary !== null){
-                  withinboundary.points.push(this.points[i]);
+                  withinboundary.points.push(quadTree.points[i]);
                 }
               }
             }
-            this.points = [];
+            quadTree.points = [];
             return;
           }
           //points array is not yet filled
-          else if(this.points.length<this.capacity){
+          else if(quadTree.points.length<this.capacity && 
+                  !quadTree.points.includes(point)){
             //if points array is full
-            this.points.push(point);
+            quadTree.points.push(point);
             return;
           }
           else{
@@ -103,7 +110,7 @@ class QuadTree{
       catch{
         console.error(`error in checkForQuads`)
         console.error(`
-        this: \`${JSON.stringify(this)}\`,
+        this: \`${JSON.stringify(quadTree)}\`,
         point: \`${JSON.stringify(point)}\`,
         hasQuad: ${hasQuad},
         Object-keys: ${keys},
@@ -112,13 +119,13 @@ class QuadTree{
       }
     }
 
-    checkpointOutsideScope(point){
-      if (point.x >this.width || point.x < 0){
-        debug.log(`point.x ${point} out of bounds`)
+    checkpointOutsideScope(point, quadTree){
+      if (point.x >quadTree.width || point.x < 0){
+        console.debug(`point.x ${point} out of bounds`)
         return true //I want this to exit out from checkForQuads
       }
-      else if(point.y > this.height || point.y<0){
-        debug.log(`point.y ${point} out of bounds`)
+      else if(point.y > quadTree.height || point.y<0){
+        console.debug(`point.y ${point} out of bounds`)
         return true //I want this to exit out from checkForQuads
       }
       return false //I want this to continue in checkForQuads
