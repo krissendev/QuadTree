@@ -37,8 +37,8 @@ class QuadTree{
     }
 
     //Recursive counting number of "boundary" in Quad
-    checkForQuads(point, capacity){
-      const quadTree = this;
+    checkForQuads(point, capacity, quad){
+      const quadTree = quad;
       if (quadTree.checkpointOutsideScope(point, quadTree)){return;}
       
       try{
@@ -60,7 +60,7 @@ class QuadTree{
             if(quadTree[quadProperty] instanceof QuadTree){
               const withinboundary = checkBoundary(point, quadTree[quadProperty].boundary, quadTree);
               if(withinboundary !== null){
-                withinboundary.checkForQuads(point, capacity)
+                withinboundary.checkForQuads(point, capacity, withinboundary)
                 break;
               }
             }
@@ -159,7 +159,7 @@ function generateQuadTree(){
         const x = parseFloat(circle.getAttribute('cx'));
         const y = parseFloat(circle.getAttribute('cy'));
         const point = new Point(x, y, circle);
-        svgQuadTree.checkForQuads(point, svgQuadTree.capacity);
+        svgQuadTree.checkForQuads(point, svgQuadTree.capacity, svgQuadTree);
       });
 }
 
