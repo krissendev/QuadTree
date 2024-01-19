@@ -2,6 +2,8 @@
 import {addSVGCircle, buttonListeners} from './addCircle.js';
 import {generateQuadTree} from './addQuadTree.js';
 import {createRects} from './addRect.js';
+import {startPhysicsloop, stopPhysicsloop} from './physics.js';
+
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
 screenClick.addEventListener('pointerdown', (event) => {
@@ -33,3 +35,13 @@ document.querySelector('#generate_rect').addEventListener('pointerdown', () => {
     createRects();
 });
 
+//turn on physics
+document.querySelector('#toggle_mousePhysics').addEventListener('change', (event) => {
+    let checkbox = event.target;
+    if(checkbox.checked){
+        startPhysicsloop();
+    }
+    else{
+        stopPhysicsloop();
+    }
+});

@@ -54,6 +54,7 @@ class QuadTree{
             break;
           }
         }
+        if (quadTree.points.includes(point)) {return}
         if(hasQuad){
           for(const quadProperty in quadTree){
             //If current QuadTree element contains QuadTree climb down hierarchy recursivly, ie Nw,Ne,Sw,Se
@@ -69,14 +70,9 @@ class QuadTree{
         }
         
         //Current QuadTree in recursion is empty
-        else if(!hasQuad){
-          //If point not already pushed
-          if (!quadTree.points.includes(point)) {
-            quadTree.points.push(point);
-          }
-          
+        else if(!hasQuad){      
           if(quadTree.points.length>=quadTree.capacity){
-              
+            quadTree.points.push(point);
             //add current point to array aswell for migration
             //this.points.push(point);
             quadTree.createNewQuad(quadTree.borderQuadsplit(quadTree.boundary), quadTree.capacity);
