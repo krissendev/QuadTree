@@ -1,32 +1,34 @@
 "use strict";
 
-
-
+let physicsInterval;
 let looping = false;
 function startPhysicsloop(mousePosition){
+    console.log("startphysics");
     const svgContainer = document.querySelector('#content_svg');
     const circleElements = svgContainer.querySelectorAll('circle');
     if(!looping){
         looping = true;
         physicsloop(mousePosition, circleElements);
+        setInterval(() => {
+            physicsloop(mousePosition, circleElements)
+        }, 100); // Adjust the interval as needed
     }
 }
 function stopPhysicsloop(){
     if(looping){
+        clearInterval(physicsInterval);
         looping = false;
     }
 }
 
 function physicsloop(mousePosition,circleElements){
-    //console.log("loop");
     if (looping && circleElements ){
-        //console.log(circleElements.length)
+        console.log(circleElements.length)
         circleElements.forEach(circle => {
-            let cx = circle.getAttribute('cx');
-            let cy = circle.getAttribute('cy');
-            let r = circle.getAttribute('r')
-            
-            
+            let cx = parseFloat(circle.getAttribute('cx'));
+            let cy = parseFloat(circle.getAttribute('cy'));
+            let r = parseFloat(circle.getAttribute('r'));
+
             if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
                (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
                     //console.log(`mp:${mousePosition.x} ${mousePosition.y}, circle: ${cx} ${cy} ${r}`);
@@ -39,10 +41,6 @@ function physicsloop(mousePosition,circleElements){
             }
             
         })
-
-        
-        //console.log(`Mouse: ${mousePosition.x}, ${mousePosition.y}`);
-        window.requestAnimationFrame(() => physicsloop(mousePosition, circleElements));    
     }
 }
 

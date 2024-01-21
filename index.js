@@ -51,6 +51,7 @@ document.querySelector('#toggle_mousePhysics').addEventListener('change', (event
         startPhysicsloop(mousePosition);
     }
     else{
+        console.log("stopphysics")
         stopPhysicsloop();
     }
 });
