@@ -4,6 +4,7 @@ import {generateQuadTree} from './addQuadTree.js';
 import {createRects} from './addRect.js';
 import {startPhysicsloop, stopPhysicsloop} from './physics.js';
 
+
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
 screenClick.addEventListener('pointerdown', (event) => {
@@ -35,13 +36,23 @@ document.querySelector('#generate_rect').addEventListener('pointerdown', () => {
     createRects();
 });
 
+//store mouse position
+let mousePosition = { x: 0, y: 0 };
+document.addEventListener("mousemove", (event)=>{
+    mousePosition.x = event.clientX;
+    mousePosition.y = event.clientY;
+});
+
 //turn on physics
 document.querySelector('#toggle_mousePhysics').addEventListener('change', (event) => {
     let checkbox = event.target;
     if(checkbox.checked){
-        startPhysicsloop();
+        console.log("startphysics")
+        startPhysicsloop(mousePosition);
     }
     else{
         stopPhysicsloop();
     }
 });
+
+
