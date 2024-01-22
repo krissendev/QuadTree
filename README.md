@@ -9,6 +9,10 @@ Next on the list is to add random circle movement, collision correction between 
 
 
 
-https://github.com/krissendev/QuadTree/assets/43881249/a60daedc-b271-4be2-a59f-c7d48b77dd23
+
+https://github.com/krissendev/QuadTree/assets/43881249/fc2bf17a-49f6-403a-a184-4fc18bc9698a
+
+
+
 <br>
 (video format currently not supported for firefox & safari, will look for alternatives)
