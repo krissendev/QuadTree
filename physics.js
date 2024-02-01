@@ -33,6 +33,20 @@ function physicsloop(mousePosition,circleElements){
                (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
                     //console.log(`mp:${mousePosition.x} ${mousePosition.y}, circle: ${cx} ${cy} ${r}`);
                     circle.setAttribute('fill', '#ff0000');
+                    
+                    let dx = mousePosition.x - cx;
+                    let dy = mousePosition.y - cy;
+                    let distanceScalar = Math.sqrt(dx * dx + dy * dy);
+                    let step1 = (Math.exp(-distanceScalar));
+                    let step2 = 1/(step1-1);
+                    //let nx = dx / distance;
+                    //let ny = dy / distance;
+                    let nx = (dx / step2)+ cx ;
+                    let ny = (dy / step2)+ cy ;
+                    console.log(nx)
+                    
+                    circle.setAttribute('cx', nx );
+                    circle.setAttribute('cy', ny );
 
             }
             else{
