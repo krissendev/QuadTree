@@ -9,9 +9,9 @@ function startPhysicsloop(mousePosition){
     if(!looping){
         looping = true;
         physicsloop(mousePosition, circleElements);
-        setInterval(() => {
+        physicsInterval = setInterval(() => {
             physicsloop(mousePosition, circleElements)
-        }, 100); // Adjust the interval as needed
+        }, 100); 
     }
 }
 function stopPhysicsloop(){
@@ -22,6 +22,7 @@ function stopPhysicsloop(){
 }
 
 function physicsloop(mousePosition,circleElements){
+    console.log("looping");
     if (looping && circleElements ){
         console.log(circleElements.length)
         circleElements.forEach(circle => {
@@ -57,7 +58,6 @@ function physicsloop(mousePosition,circleElements){
         })
     }
 }
-
 
 
 export{startPhysicsloop, stopPhysicsloop};
