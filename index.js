@@ -56,4 +56,56 @@ document.querySelector('#toggle_mousePhysics').addEventListener('change', (event
     }
 });
 
+//Minimize GUI docker
+document.querySelector('#corner_icon').addEventListener('pointerdown', () => {
+    let border = document.querySelector("ul");
+    let group= document.querySelector("ul").childNodes[3].style;
 
+    if(group.visibility == "visible"){
+        group.visibility = "hidden";
+        border.style.height = "50px";
+    }
+    else{
+        group.visibility = "visible"
+        border.style.height = "auto";
+    } 
+});
+
+
+//Movable GUI
+let isMovingGUI = false;
+
+//Drag and release ul gui element to move
+document.querySelector('.title_bar').addEventListener('pointerdown', () => {
+    let gui = document.querySelector('#gui_floater');
+    let computedstyle = (window.getComputedStyle(gui));
+    let computedx = parseFloat(computedstyle.left.match(/^-?\d+(\.\d+)?/)[0]);
+    let computedy = parseFloat(computedstyle.top.match(/^-?\d+(\.\d+)?/)[0]);
+    let anchor_x = mousePosition.x - computedx;
+    let anchor_y = mousePosition.y - computedy;
+    isMovingGUI = true;
+    guimove(gui.style, anchor_x, anchor_y);
+    
+});
+
+document.querySelector('.title_bar').addEventListener('pointerup', () => {
+    isMovingGUI = false;
+});
+
+function guimove(gui, anchor_x, anchor_y){
+    let border = document.querySelector('.title_bar').getBoundingClientRect();
+    //loop if pressed LMB mouse
+    if(isMovingGUI){        
+        //loop if mouse if above GUI, else exit
+        if((mousePosition.x > border.x) 
+        && (mousePosition.x < (border.width+border.x))
+        &&(mousePosition.y > border.y) 
+        && (mousePosition.y < (border.height+border.y))){
+            gui.left = (mousePosition.x - anchor_x) + "px";
+            gui.top = (mousePosition.y - anchor_y) + "px";
+            window.requestAnimationFrame(()=> guimove(gui, anchor_x, anchor_y));
+        }
+        else{isMovingGUI=false;}
+    }
+    else{isMovingGUI=false;}
+}

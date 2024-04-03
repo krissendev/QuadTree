@@ -1,0 +1,22 @@
+ul {
+    padding:5px;
+    display:inline-block;
+    position:fixed;
+    top:10vh;
+    background-color:rgb(224, 167, 167); 
+    height:auto;
+}
+
+#corner_icon{
+    height: 50px;
+    width: 50px;
+    background-color: red;
+}
+
+.title_bar{
+    /* display:inline; */
+    width:100%;
+}
+.title_bar label{
+    font-weight: bold;
+}
