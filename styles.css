@@ -1,22 +1,76 @@
-ul {
-    padding:5px;
+/*
+Overview of hierarchy:
+gui_floater
+    title_bar
+        corner_icon
+            corner_icon_inside
+    list
+*/
+/*Ul: #gui_floater*/
+#gui_floater {
+    padding:0;
+    margin:0; 
+    border:0;
     display:inline-block;
     position:fixed;
     top:10vh;
-    background-color:rgb(224, 167, 167); 
+    border:solid;
+    background-color:white; 
     height:auto;
 }
-
-#corner_icon{
-    height: 50px;
-    width: 50px;
-    background-color: red;
+#gui_floater:hover{
+    border-color:#3584e4;
 }
 
+
+/*Titlebar */
 .title_bar{
-    /* display:inline; */
+    /*border:solid;*/
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color:white; 
     width:100%;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+.title_bar:hover {
+    cursor: move;
+    background-color:rgb(165, 215, 255);
+}
+.title_bar label{
+    cursor: move;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .title_bar label{
     font-weight: bold;
 }
+
+/*Button*/
+#corner_icon{
+    padding:0;
+    margin:0;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    border:2px solid black;
+    height: 15px;
+    width: 18px;
+    background-color: white;
+}
+#corner_icon:hover, #corner_icon:hover #corner_icon_inside{background-color:#3584e4;}
+#corner_icon_inside{
+    border:2px solid black;
+    height: 0px;
+    width: 7px;
+    background-color:white;
+}
+
+
+/*List*/
+li {
+    list-style-type: none;
+  }

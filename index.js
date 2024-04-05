@@ -57,6 +57,7 @@ document.querySelector('#toggle_mousePhysics').addEventListener('change', (event
 });
 
 //Minimize GUI docker
+let cornerIcon = document.querySelector('#corner_icon_inside');
 document.querySelector('#corner_icon').addEventListener('pointerdown', () => {
     let border = document.querySelector("ul");
     let group= document.querySelector("ul").childNodes[3].style;
@@ -64,10 +65,12 @@ document.querySelector('#corner_icon').addEventListener('pointerdown', () => {
     if(group.visibility == "visible"){
         group.visibility = "hidden";
         border.style.height = "50px";
+        cornerIcon.style.height = "6px";
     }
     else{
         group.visibility = "visible"
         border.style.height = "auto";
+        cornerIcon.style.height = "0px";
     } 
 });
 
@@ -91,6 +94,7 @@ document.querySelector('.title_bar').addEventListener('pointerdown', () => {
 document.querySelector('.title_bar').addEventListener('pointerup', () => {
     isMovingGUI = false;
 });
+
 
 function guimove(gui, anchor_x, anchor_y){
     let border = document.querySelector('.title_bar').getBoundingClientRect();
