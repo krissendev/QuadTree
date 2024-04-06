@@ -39,13 +39,13 @@ export class QuadTree{
     //Recursive counting number of "boundary" in Quad
     checkForQuads(point, capacity, quad){
       const quadTree = quad;
+      let hasQuad = false;
+      const quadProperties = Object.keys(quadTree);
+      const numbersofQuadProperties = quadProperties.length;
       if (quadTree.checkpointOutsideScope(point, quadTree)){return;}
       
       try{
         //Check if this QuadTree hasQuad (Contains instance of Quadtree)
-        let hasQuad = false;
-        const quadProperties = Object.keys(quadTree);
-        const numbersofQuadProperties = quadProperties.length;
         for(let propertyIndex =0; propertyIndex< numbersofQuadProperties; propertyIndex++){
           const property=quadProperties[propertyIndex]
           const propertyValue= quadTree[property];
@@ -59,7 +59,7 @@ export class QuadTree{
           for(const quadProperty in quadTree){
             //If current QuadTree element contains QuadTree climb down hierarchy recursivly, ie Nw,Ne,Sw,Se
             if(quadTree[quadProperty] instanceof QuadTree){
-              const withinboundary = checkBoundary(point, quadTree[quadProperty].boundary, quadTree);
+              const withinboundary = checkBoundary(point, quadTree);
               if(withinboundary !== null){
                 withinboundary.checkForQuads(point, capacity, withinboundary)
                 break;
@@ -76,11 +76,12 @@ export class QuadTree{
             //add current point to array aswell for migration
             //this.points.push(point);
             quadTree.createNewQuad(quadTree.borderQuadsplit(quadTree.boundary), quadTree.capacity);
-
+            hasQuad = true;
 
             for(let i = 0; i<quadTree.points.length;i++){
               if(quadTree.points[i] !== null && quadTree.points[i] !== undefined) {
-                const withinboundary = checkBoundary(quadTree.points[i], quadTree.boundary, quadTree);
+                // const withinboundary = checkBoundary(quadTree.points[i], quadTree.boundary, quadTree);
+                const withinboundary = checkBoundary(quadTree.points[i], quadTree);
                 if(withinboundary !== null){
                   withinboundary.points.push(quadTree.points[i]);
                 }
@@ -109,8 +110,8 @@ export class QuadTree{
         this: \`${JSON.stringify(quadTree)}\`,
         point: \`${JSON.stringify(point)}\`,
         hasQuad: ${hasQuad},
-        Object-keys: ${keys},
-        Object-keylength: ${length}
+        Object-keys: ${quadProperties},
+        Object-keylength: ${numbersofQuadProperties}
         `)
       }
     }
