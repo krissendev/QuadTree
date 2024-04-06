@@ -2,22 +2,27 @@
 
 let physicsIntervalSwarm;
 let physicsIntervalCursor;
-let physicsIntervalSwarnCollision;
+let physicsIntervalSwarmCollision;
 let looping = false;
-function startPhysicsloop(mousePosition){
-    console.log("startphysics");
+
+let svgQuadTree;
+function startPhysicsloop(mousePosition, QuadTree){
+    //
+    svgQuadTree = window.svgQuadTree;
+
+    //console.log("startphysics");
     const svgContainer = document.querySelector('#content_svg');
     const circleElements = svgContainer.querySelectorAll('circle');
     if(!looping){
         looping = true;
         physicsMouseloop(mousePosition, circleElements);
         physicsIntervalCursor = setInterval(() => {
-            physicsMouseloop(mousePosition, circleElements)
+            physicsMouseloop(mousePosition, circleElements, QuadTree, svgQuadTree)
         }, 100);
         physicsIntervalSwarm = setInterval(() => {
             physicsSwarmMove(circleElements)
         }, 100); 
-        physicsIntervalSwarnCollision = setInterval(() => {
+        physicsIntervalSwarmCollision = setInterval(() => {
             physicsCircleCollision(circleElements)
         }, 10);
     }
@@ -26,48 +31,96 @@ function stopPhysicsloop(){
     if(looping){
         clearInterval(physicsIntervalSwarm);
         clearInterval(physicsIntervalCursor);
-        clearInterval(physicsIntervalSwarnCollision);
+        clearInterval(physicsIntervalSwarmCollision);
         
         looping = false;
     }
 }
 
-function physicsMouseloop(mousePosition,circleElements){
+function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
+    
     //console.log("looping");
-    if (looping && circleElements ){
-        console.log(circleElements.length)
-        circleElements.forEach(circle => {
-            let cx = parseFloat(circle.getAttribute('cx'));
-            let cy = parseFloat(circle.getAttribute('cy'));
-            let r = parseFloat(circle.getAttribute('r'));
+    if (looping && svgQuadTree ){
+        
+        const quadProperties = Object.keys(svgQuadTree);
+        //console.log("length:", quadProperties.length)
 
-            if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
-               (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
-                    //console.log(`mp:${mousePosition.x} ${mousePosition.y}, circle: ${cx} ${cy} ${r}`);
-                    circle.setAttribute('fill', '#ff0000');
-                    
-                    let dx = mousePosition.x - cx;
-                    let dy = mousePosition.y - cy;
-                    let distanceScalar = Math.sqrt(dx * dx + dy * dy);
-                    let step1 = (Math.exp(-distanceScalar));
-                    let step2 = 1/(step1-1);
-                    //let nx = dx / distance;
-                    //let ny = dy / distance;
-                    let nx = (dx / step2)+ cx ;
-                    let ny = (dy / step2)+ cy ;
-                    console.log(nx)
-                    
-                    circle.setAttribute('cx', nx );
-                    circle.setAttribute('cy', ny );
 
+        for(let i=0;i<quadProperties.length; i++){
+
+            const property=quadProperties[i]
+            const propertyValue= svgQuadTree[property];
+            // console.log("property", propertyValue)
+            if(propertyValue instanceof QuadTree){
+
+                //If mouse overlaps a quad enter the quad where "propertyValue" is the recursive quad
+                let boundary = propertyValue.boundary;
+                if(mousePosition.x< boundary.x + boundary.width &&
+                   mousePosition.x> boundary.x &&
+                   mousePosition.y<  boundary.y + boundary.height &&
+                   mousePosition.x> boundary.y){
+                    physicsMouseloop(mousePosition,circleElements, QuadTree, propertyValue)
+
+                   }
             }
-            else{
-                //console.log(circle);
-                circle.setAttribute('fill', '#000000');
-            }
+        }
+        //no quadTree found at current Quad check circle elements in quad
+        console.log("mouseoverlap:",svgQuadTree);
+        let boundaryCircles = svgQuadTree.points
+        console.log(boundaryCircles)
+        if(boundaryCircles.length>0){
             
-        })
+            for(let i=0; i<boundaryCircles.length;i++){
+                let cx = boundaryCircles[i].data.getAttribute('cx')
+                let cy = boundaryCircles[i].data.getAttribute('cy')
+                let r  = boundaryCircles[i].data.getAttribute('r')
+    
+                if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
+                (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
+                    boundaryCircles[i].data.setAttribute('fill', '#ff0000');
+                }
+            }
+        }
+        return;
     }
+
+    // if (looping && circleElements ){
+    //     console.log(circleElements.length)
+    //     circleElements.forEach(circle => {
+    //         let cx = parseFloat(circle.getAttribute('cx'));
+    //         let cy = parseFloat(circle.getAttribute('cy'));
+    //         let r = parseFloat(circle.getAttribute('r'));
+
+    //         if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
+    //            (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
+    //                 //console.log(`mp:${mousePosition.x} ${mousePosition.y}, circle: ${cx} ${cy} ${r}`);
+    //                 circle.setAttribute('fill', '#ff0000');
+                    
+    //                 let dx = mousePosition.x - cx;
+    //                 let dy = mousePosition.y - cy;
+    //                 let distanceScalar = Math.sqrt(dx * dx + dy * dy);
+    //                 let step1 = (Math.exp(-distanceScalar));
+    //                 let step2 = 1/(step1-1);
+    //                 //let nx = dx / distance;
+    //                 //let ny = dy / distance;
+    //                 let nx = (dx / step2)+ cx ;
+    //                 let ny = (dy / step2)+ cy ;
+    //                 console.log(nx)
+                    
+    //                 circle.setAttribute('cx', nx );
+    //                 circle.setAttribute('cy', ny );
+
+    //         }
+    //         else{
+    //             //console.log(circle);
+    //             circle.setAttribute('fill', '#000000');
+    //         }
+            
+    //     })
+    // }
+}
+function checkMouseQuadCollision(){
+
 }
 function physicsCircleCollision(circleElements){
     if (looping && circleElements ){
@@ -91,7 +144,7 @@ function physicsCircleCollision(circleElements){
                 /*if((icx-r > jcx-r) && (icx+r < jcx+r) &&
                    (icy-r > jcy-r) && (icy+r < jcy+r)){*/
                     
-                    console.log("circle collision");
+                    //console.log("circle collision");
                     let dx = icx - jcx;
                     let dy = icy - jcy;
 
@@ -129,7 +182,7 @@ function physicsSwarmMove(circleElements){
             let balance = weight/2;
             let movex = (Math.random()* weight - balance)
             let movey = (Math.random()* weight - balance)
-            console.log(movex, movey);
+            //console.log(movex, movey);
             let cx = parseFloat(circle.getAttribute('cx'));
             let cy = parseFloat(circle.getAttribute('cy'));
             

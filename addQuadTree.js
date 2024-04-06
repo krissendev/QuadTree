@@ -17,7 +17,7 @@ class Rectangle{
        this.height = height; 
     }
 }
-class QuadTree{
+export class QuadTree{
     constructor(boundary,capacity){
         this.borderQuadsplit = borderQuadsplit; //imported function
         this.checkBoundary = checkBoundary;     //imported function
@@ -117,11 +117,11 @@ class QuadTree{
 
     checkpointOutsideScope(point, quadTree){
       if (point.x >quadTree.width || point.x < 0){
-        console.debug(`point.x ${point} out of bounds`)
+        // console.debug(`point.x ${point} out of bounds`)
         return true //I want this to exit out from checkForQuads
       }
       else if(point.y > quadTree.height || point.y<0){
-        console.debug(`point.y ${point} out of bounds`)
+        // console.debug(`point.y ${point} out of bounds`)
         return true //I want this to exit out from checkForQuads
       }
       return false //I want this to continue in checkForQuads
@@ -138,6 +138,7 @@ function generateQuadTree(){
     const svgContainer = document.querySelector('#content_svg');
     const circleElements = svgContainer.querySelectorAll('circle');
     
+    window.QuadTree = QuadTree;
     window.svgQuadTree = svgQuadTree;
     window.circleElements = circleElements;
     //for printing circle coordinates
@@ -150,13 +151,14 @@ function generateQuadTree(){
     */
     circleElements.forEach(circle => {
         pointCounter++;
-        console.log(pointCounter)
+        // console.log(pointCounter)
 
         const x = parseFloat(circle.getAttribute('cx'));
         const y = parseFloat(circle.getAttribute('cy'));
         const point = new Point(x, y, circle);
         svgQuadTree.checkForQuads(point, svgQuadTree.capacity, svgQuadTree);
       });
+      return svgQuadTree;
 }
 
 function debugObject(line){
@@ -177,7 +179,8 @@ function debugObject(line){
     }
   }
   //write string of objects
-  console.log(debugObj);
+  // console.log(debugObj);
 }
+
 
 export{generateQuadTree}

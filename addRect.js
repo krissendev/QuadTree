@@ -23,9 +23,9 @@ function createRects(){
         stack[0].node = root;              //current heead
         stack[0].path[0] =`Root`;         //chain-head, string of array identifiers
 
-        console.log("full stack:", stack)
-        console.log("stack0:", stack[0])
-        console.log("length:", stack.length )
+        // console.log("full stack:", stack)
+        // console.log("stack0:", stack[0])
+        // console.log("length:", stack.length )
         recursiveRect(svgQuadTree, stack);
         //test(svgQuadTree, stack)
     }

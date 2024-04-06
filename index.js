@@ -1,6 +1,6 @@
 "use strict";
 import {addSVGCircle, buttonListeners} from './addCircle.js';
-import {generateQuadTree} from './addQuadTree.js';
+import {generateQuadTree, QuadTree} from './addQuadTree.js';
 import {createRects} from './addRect.js';
 import {startPhysicsloop, stopPhysicsloop} from './physics.js';
 
@@ -20,19 +20,23 @@ document.addEventListener('DOMContentLoaded', function () {
 //clear canvas
 document.querySelector('#clear_svg').addEventListener('pointerdown', () => {
     for(let i = screenClick.childElementCount - 1; i>=0; i--){
-        console.log(screenClick.childNodes[i]);
+        // console.log(screenClick.childNodes[i]);
         screenClick.removeChild(screenClick.childNodes[i]);
     }
 });
 
+//let reusableData;
 //generate quads
 document.querySelector('#generate_quadtree').addEventListener('pointerdown', () => {
     generateQuadTree();
+    //reusableData = generateQuadTree();
+    //console.log(reusableData);
+
 });
 
 //generate rect
 document.querySelector('#generate_rect').addEventListener('pointerdown', () => {
-    console.log("click");
+    //console.log("click");
     createRects();
 });
 
@@ -47,11 +51,11 @@ document.addEventListener("mousemove", (event)=>{
 document.querySelector('#toggle_mousePhysics').addEventListener('change', (event) => {
     let checkbox = event.target;
     if(checkbox.checked){
-        console.log("startphysics")
-        startPhysicsloop(mousePosition);
+        //console.log("startphysics")
+        startPhysicsloop(mousePosition, QuadTree);
     }
     else{
-        console.log("stopphysics")
+        //console.log("stopphysics")
         stopPhysicsloop();
     }
 });
@@ -77,7 +81,6 @@ document.querySelector('#corner_icon').addEventListener('pointerdown', () => {
 
 //Movable GUI
 let isMovingGUI = false;
-
 //Drag and release ul gui element to move
 document.querySelector('.title_bar').addEventListener('pointerdown', () => {
     let gui = document.querySelector('#gui_floater');

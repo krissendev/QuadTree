@@ -1,6 +1,6 @@
 "use strict"
 function borderQuadsplit(boundary){
-    console.log("splitting boreders");
+    // console.log("splitting boreders");
     const quadborderbox= {
         nw:{
             x: boundary.x,
