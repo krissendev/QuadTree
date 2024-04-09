@@ -23,8 +23,8 @@ function startPhysicsloop(mousePosition, QuadTree){
             physicsSwarmMove(circleElements)
         }, 100); 
         physicsIntervalSwarmCollision = setInterval(() => {
-            physicsCircleCollision(circleElements)
-        }, 10);
+            physicsCircleCollisionQuad(circleElements, QuadTree, svgQuadTree)
+        }, 100);
     }
 }
 function stopPhysicsloop(){
@@ -40,6 +40,44 @@ function stopPhysicsloop(){
 function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
     
     //console.log("looping");
+    if (looping && circleElements ){
+         //console.log("looping");
+        if (looping && circleElements ){
+            console.log(circleElements.length)
+            circleElements.forEach(circle => {
+                let cx = parseFloat(circle.getAttribute('cx'));
+                let cy = parseFloat(circle.getAttribute('cy'));
+                let r = parseFloat(circle.getAttribute('r'));
+
+                if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
+                (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
+                        //console.log(`mp:${mousePosition.x} ${mousePosition.y}, circle: ${cx} ${cy} ${r}`);
+                        circle.setAttribute('fill', '#ff0000');
+                        
+                        let dx = mousePosition.x - cx;
+                        let dy = mousePosition.y - cy;
+                        let distanceScalar = Math.sqrt(dx * dx + dy * dy);
+                        let step1 = (Math.exp(-distanceScalar));
+                        let step2 = 1/(step1-1);
+                        //let nx = dx / distance;
+                        //let ny = dy / distance;
+                        let nx = (dx / step2)+ cx ;
+                        let ny = (dy / step2)+ cy ;
+                        console.log(nx)
+                        
+                        circle.setAttribute('cx', nx );
+                        circle.setAttribute('cy', ny );
+
+                }
+                else{
+                    //console.log(circle);
+                    circle.setAttribute('fill', '#000000');
+                }  
+            })
+        }
+    }
+}
+function physicsMouseloopQuad(){
     if (looping && svgQuadTree ){
         
         const quadProperties = Object.keys(svgQuadTree);
@@ -65,9 +103,9 @@ function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
             }
         }
         //no quadTree found at current Quad check circle elements in quad
-        console.log("mouseoverlap:",svgQuadTree);
+        // console.log("mouseoverlap:",svgQuadTree);
         let boundaryCircles = svgQuadTree.points
-        console.log(boundaryCircles)
+        // console.log(boundaryCircles)
         if(boundaryCircles.length>0){
             
             for(let i=0; i<boundaryCircles.length;i++){
@@ -84,44 +122,73 @@ function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
         return;
     }
 
-    // if (looping && circleElements ){
-    //     console.log(circleElements.length)
-    //     circleElements.forEach(circle => {
-    //         let cx = parseFloat(circle.getAttribute('cx'));
-    //         let cy = parseFloat(circle.getAttribute('cy'));
-    //         let r = parseFloat(circle.getAttribute('r'));
-
-    //         if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
-    //            (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
-    //                 //console.log(`mp:${mousePosition.x} ${mousePosition.y}, circle: ${cx} ${cy} ${r}`);
-    //                 circle.setAttribute('fill', '#ff0000');
-                    
-    //                 let dx = mousePosition.x - cx;
-    //                 let dy = mousePosition.y - cy;
-    //                 let distanceScalar = Math.sqrt(dx * dx + dy * dy);
-    //                 let step1 = (Math.exp(-distanceScalar));
-    //                 let step2 = 1/(step1-1);
-    //                 //let nx = dx / distance;
-    //                 //let ny = dy / distance;
-    //                 let nx = (dx / step2)+ cx ;
-    //                 let ny = (dy / step2)+ cy ;
-    //                 console.log(nx)
-                    
-    //                 circle.setAttribute('cx', nx );
-    //                 circle.setAttribute('cy', ny );
-
-    //         }
-    //         else{
-    //             //console.log(circle);
-    //             circle.setAttribute('fill', '#000000');
-    //         }
-            
-    //     })
-    // }
 }
-function checkMouseQuadCollision(){
+function moveCircle(circleI, circleJ){
 
+    let icr = parseFloat(circleI.getAttribute('r'));
+    let r = parseFloat(circleI.getAttribute('r'));
+    let icx = parseFloat(circleI.getAttribute('cx'));
+    let icy = parseFloat(circleI.getAttribute('cy'));
+    let jcx = parseFloat(circleJ.getAttribute('cx'));
+    let jcy = parseFloat(circleJ.getAttribute('cy'));
+
+    let dx = icx - jcx;
+    let dy = icy - jcy;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < 2*r) {
+        let dx = icx - jcx;
+        let dy = icy - jcy;
+
+        let distanceScalar = Math.sqrt(dx * dx + dy * dy);
+        //let step1 = (Math.exp(-distanceScalar));
+        if (distanceScalar === 0) distanceScalar = 0.01;
+        let moveDistance = r - (distanceScalar / 2);
+
+
+        let nix = icx + (dx / distanceScalar) * moveDistance;
+        let niy = icy + (dy / distanceScalar) * moveDistance;
+        let njx = jcx - (dx / distanceScalar) * moveDistance;
+        let njy = jcy - (dy / distanceScalar) * moveDistance;
+        /*let step2 = 1/(step1-1);
+        let nix = (dx / step2)+ icx ;
+        let niy = (dy / step2)+ icy ;
+        let njx = (dx / step2)- jcx ;
+        let njy = (dy / step2)- icy ;*/
+        circleI.setAttribute('cx', nix );
+        circleI.setAttribute('cy', niy );
+        circleJ.setAttribute('cx', njx );
+        circleJ.setAttribute('cy', njy );
+    }
 }
+
+function physicsCircleCollisionQuad(circleElements, QuadTree, svgQuadTree){
+
+    
+    //check point overlap top hierarchy
+    if(svgQuadTree.points.length >0){
+        for(let i=0; i<svgQuadTree.points.length; i++){
+            for(let j=1; j<svgQuadTree.points.length; j++){
+
+                let circleI = svgQuadTree.points[i].data;
+                let circleJ = svgQuadTree.points[j].data;
+                moveCircle(circleI, circleJ);
+            }
+        }
+    }
+    //if no points check for deeper nesting
+    else{
+        const quadProperties = Object.keys(svgQuadTree);
+        for(let i=0;i<quadProperties.length; i++){
+            const property=quadProperties[i]
+            const propertyValue= svgQuadTree[property];
+            if(propertyValue instanceof QuadTree){
+                physicsCircleCollisionQuad(circleElements, QuadTree, propertyValue)
+            }
+        }
+    }
+}
+
 function physicsCircleCollision(circleElements){
     if (looping && circleElements ){
         for(let i = 0; i<circleElements.length; i++){
@@ -174,6 +241,7 @@ function physicsCircleCollision(circleElements){
         }
     } 
 }
+
 
 function physicsSwarmMove(circleElements){
     if (looping && circleElements ){
