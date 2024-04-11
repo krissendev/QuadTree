@@ -47,12 +47,16 @@ document.addEventListener("mousemove", (event)=>{
     mousePosition.y = event.clientY;
 });
 
+
+
 //turn on physics
 document.querySelector('#toggle_mousePhysics').addEventListener('change', (event) => {
     let checkbox = event.target;
     if(checkbox.checked){
-        //console.log("startphysics")
-        startPhysicsloop(mousePosition, QuadTree);
+        //if ('svgQuadTree' in window) {
+        if (typeof svgQuadTree !== 'undefined') {
+            startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
+        }
     }
     else{
         //console.log("stopphysics")
