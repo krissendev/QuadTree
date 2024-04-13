@@ -2,6 +2,8 @@
 import {borderQuadsplit} from './splitQuadTree.js';
 import {checkBoundary} from './checkpointQuadTree.js';
 
+let generationInterval;
+let looping = false;
 class Point{
     constructor(x,y,data){
         this.x = x;
@@ -133,6 +135,7 @@ let pointCounter = 0;
 
 //Create Quad
 function generateQuadTree(){
+    console.log("generateQuadTree")
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
     const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);
@@ -162,6 +165,21 @@ function generateQuadTree(){
       return svgQuadTree;
 }
 
+function startQuadGenerationLoop(){
+  if (!looping){
+    looping = true;
+    generationInterval = setInterval(() => {
+      generateQuadTree();
+          }, 200);
+  }
+}
+function stopQuadGenerationLoop(){
+  if(looping){
+    clearInterval(generationInterval)
+    looping = false;
+  }
+}
+
 function debugObject(line){
   let debugObj = `On line:${line}. \n`
   for (let i = 1; i < arguments.length; i++) {
@@ -184,4 +202,4 @@ function debugObject(line){
 }
 
 
-export{generateQuadTree}
+export{generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop}

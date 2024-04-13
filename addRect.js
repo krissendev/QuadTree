@@ -6,6 +6,24 @@ let stack = [{node: root, path: [null]}];
 //let stack = [{node: Nw, path: [svgQuadTree.Nw.Nw.Se.Sw.Nw]}];
 //svgQuadTree.Nw.Nw.Se.Sw.Nw
 
+let reactInterval;
+let looping = false;
+
+function startReactCreate(){
+    if(!looping){
+        looping = true;
+        reactInterval = setInterval(() => {
+            createRects()
+        }, 200); 
+    }
+}
+function stopReactCreate(){
+    if(looping){
+        clearInterval(reactInterval);        
+        looping = false;
+    }
+}
+
 function createRects(){
     console.log("func")
     if(window.svgQuadTree === undefined || window.svgQuadTree === null){
@@ -110,4 +128,4 @@ function drawBorder(rectRef){
     rect.setAttribute("stroke", "red");
     screenClick.appendChild(rect);    
 }
-export{createRects};
+export{createRects, startReactCreate, stopReactCreate};

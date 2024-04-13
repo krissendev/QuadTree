@@ -1,7 +1,7 @@
 "use strict";
 import {addSVGCircle, buttonListeners} from './addCircle.js';
-import {generateQuadTree, QuadTree} from './addQuadTree.js';
-import {createRects} from './addRect.js';
+import {generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop, QuadTree} from './addQuadTree.js';
+import {createRects, startReactCreate, stopReactCreate} from './addRect.js';
 import {startPhysicsloop, stopPhysicsloop} from './physics.js';
 
 
@@ -38,6 +38,7 @@ document.querySelector('#generate_quadtree').addEventListener('pointerdown', () 
 document.querySelector('#generate_rect').addEventListener('pointerdown', () => {
     //console.log("click");
     createRects();
+    
 });
 
 //store mouse position
@@ -56,11 +57,15 @@ document.querySelector('#toggle_mousePhysics').addEventListener('change', (event
         //if ('svgQuadTree' in window) {
         if (typeof svgQuadTree !== 'undefined') {
             startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
+            startQuadGenerationLoop();
+            startReactCreate();
         }
     }
     else{
         //console.log("stopphysics")
         stopPhysicsloop();
+        stopQuadGenerationLoop();
+        stopReactCreate();
     }
 });
 

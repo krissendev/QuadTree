@@ -84,16 +84,15 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
     if (looping && svgQuadTree ){
         if(svgQuadTree.points.length >0){
             for(let i=0; i<svgQuadTree.points.length; i++){
-                let circle = svgQuadTree.points[i];
+                let circle = svgQuadTree.points[i].data;
                 
 
-                let cx = circle.data.getAttribute('cx')
-                let cy = circle.data.getAttribute('cy')
-                let r = circle.data.getAttribute('r')
+                let cx = parseInt(circle.getAttribute('cx'))
+                let cy = parseInt(circle.getAttribute('cy'))
+                let r = parseInt(circle.getAttribute('r'))
                 if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
                 (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
-                    circle.data.setAttribute('fill', '#ff0000');
-                       
+                    circle.setAttribute('fill', '#ff0000');
                     let dx = mousePosition.x - cx;
                     let dy = mousePosition.y - cy;
                     let distanceScalar = Math.sqrt(dx * dx + dy * dy);
@@ -101,10 +100,14 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
                     let step2 = 1/(step1-1);
                     let nx = (dx / step2)+ cx ;
                     let ny = (dy / step2)+ cy ;
-                    console.log(nx)
                     
-                    circle.setAttribute('cx', nx );
-                    circle.setAttribute('cy', ny );
+                    console.log("mouseposition:", mousePosition)
+                    console.log(cx, cy)
+                    console.log(nx, ny)
+
+
+                    circle.setAttribute('cx', ""+nx );
+                    circle.setAttribute('cy', ""+ny );
                 }                
                     
             }
@@ -127,35 +130,6 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
                 }
             }
         }
-
-    
-
-            /*const property=quadProperties[i]
-            console.log("svgQuad;")
-            console.log(svgQuadTree)
-            console.log("property;")
-            console.log(property)
-            console.log("boundary")
-            console.log(property.boundary)
-            const propertyValue= svgQuadTree[property];
-            
-            let x = propertyValue.boundary.x;
-            let y = propertyValue.boundary.y;
-            let h = propertyValue.boundary.width;;
-            let w = propertyValue.boundary.height;;
-
-            */
-
-            // if(propertyValue instanceof QuadTree &&
-            //     mousePosition.x>x &&
-            //     mousePosition.x<x+w&&
-            //     mousePosition.y>y &&
-            //     mousePosition.y<y+h
-            //     ){
-            //         console.log("it's a match!")
-            //         //physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree)
-            // }
-        //}
     }
 }
 
@@ -240,16 +214,11 @@ function physicsCircleCollision(circleElements){
     
                 if (distance < 2*r) {
 
-                /*if((icx-r > jcx-r) && (icx+r < jcx+r) &&
-                   (icy-r > jcy-r) && (icy+r < jcy+r)){*/
-                    
-                    //console.log("circle collision");
                     let dx = icx - jcx;
                     let dy = icy - jcy;
 
                     //
                     let distanceScalar = Math.sqrt(dx * dx + dy * dy);
-                    //let step1 = (Math.exp(-distanceScalar));
                     if (distanceScalar === 0) distanceScalar = 0.01;
                     let moveDistance = r - (distanceScalar / 2);
 
@@ -258,11 +227,7 @@ function physicsCircleCollision(circleElements){
                     let niy = icy + (dy / distanceScalar) * moveDistance;
                     let njx = jcx - (dx / distanceScalar) * moveDistance;
                     let njy = jcy - (dy / distanceScalar) * moveDistance;
-                    /*let step2 = 1/(step1-1);
-                    let nix = (dx / step2)+ icx ;
-                    let niy = (dy / step2)+ icy ;
-                    let njx = (dx / step2)- jcx ;
-                    let njy = (dy / step2)- icy ;*/
+
                     circleI.setAttribute('cx', nix );
                     circleI.setAttribute('cy', niy );
                     circleJ.setAttribute('cx', njx );
@@ -282,7 +247,6 @@ function physicsSwarmMove(circleElements){
             let balance = weight/2;
             let movex = (Math.random()* weight - balance)
             let movey = (Math.random()* weight - balance)
-            //console.log(movex, movey);
             let cx = parseFloat(circle.getAttribute('cx'));
             let cy = parseFloat(circle.getAttribute('cy'));
             
