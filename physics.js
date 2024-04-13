@@ -17,7 +17,7 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
         physicsMouseloopQuad(mousePosition, circleElements, QuadTree, svgQuadTree);
         physicsIntervalCursor = setInterval(() => {
             physicsMouseloopQuad(mousePosition, circleElements, QuadTree, svgQuadTree)
-        }, 100);
+        }, 50);
         physicsIntervalSwarm = setInterval(() => {
             physicsSwarmMove(circleElements)
         }, 100); 
@@ -55,7 +55,7 @@ function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
                         
                         let dx = mousePosition.x - cx;
                         let dy = mousePosition.y - cy;
-                        let distanceScalar = Math.sqrt(dx * dx + dy * dy);
+                        let distanceScalar = Math.sqrt(dx * dx + dy * dy)+500;
                         let step1 = (Math.exp(-distanceScalar));
                         let step2 = 1/(step1-1);
                         //let nx = dx / distance;

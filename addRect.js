@@ -14,7 +14,7 @@ function startReactCreate(){
         looping = true;
         reactInterval = setInterval(() => {
             createRects()
-        }, 200); 
+        }, 500); 
     }
 }
 function stopReactCreate(){
@@ -32,6 +32,9 @@ function createRects(){
     }
     else{
 
+        //clear out frame
+        screenClick.innerHTML ="";
+        
         
         //stack declaration
         const svgQuadTree = window.svgQuadTree;

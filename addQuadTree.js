@@ -170,7 +170,7 @@ function startQuadGenerationLoop(){
     looping = true;
     generationInterval = setInterval(() => {
       generateQuadTree();
-          }, 200);
+          }, 500);
   }
 }
 function stopQuadGenerationLoop(){
