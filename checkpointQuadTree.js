@@ -5,7 +5,7 @@ function checkBoundary(point, parentQuad){
     // const Ne = parentQuad.Ne;
     // const Sw = parentQuad.Sw;
     // const Se = parentQuad.Se;
-    let quadrants = [parentQuad.Nw, parentQuad.Ne, parentQuad.Sw, parentQuad.Se]
+    let quadrants = [parentQuad.NW, parentQuad.NE, parentQuad.SW, parentQuad.SE]
 
     // const width = boundary.x + boundary.width;
     // const height = boundary.y + boundary.height;

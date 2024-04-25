@@ -26,16 +26,16 @@ export class QuadTree{
         this.boundary = boundary;
         this.capacity = capacity;
         this.points = [];
-        this.Nw = null;
-        this.Ne = null;
-        this.Sw = null;
-        this.Se = null;
+        this.NW = null;
+        this.NE = null;
+        this.SW = null;
+        this.SE = null;
     }
     createNewQuad(quadborderbox, quadCapacity){
-      this.Nw = new QuadTree(quadborderbox.nw, quadCapacity);
-      this.Ne = new QuadTree(quadborderbox.ne, quadCapacity);
-      this.Sw = new QuadTree(quadborderbox.sw, quadCapacity);
-      this.Se = new QuadTree(quadborderbox.se, quadCapacity);
+      this.NW = new QuadTree(quadborderbox.NW, quadCapacity);
+      this.NE = new QuadTree(quadborderbox.NE, quadCapacity);
+      this.SW = new QuadTree(quadborderbox.SW, quadCapacity);
+      this.SE = new QuadTree(quadborderbox.SE, quadCapacity);
     }
 
     //Recursive counting number of "boundary" in Quad
@@ -135,7 +135,7 @@ let pointCounter = 0;
 
 //Create Quad
 function generateQuadTree(){
-    console.log("generateQuadTree")
+    // console.log("generateQuadTree")
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
     const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);

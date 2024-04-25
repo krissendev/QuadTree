@@ -2,25 +2,25 @@
 function borderQuadsplit(boundary){
     // console.log("splitting boreders");
     const quadborderbox= {
-        nw:{
+        NW:{
             x: boundary.x,
             y: boundary.y,
             width: boundary.width/2,
             height: boundary.height/2
         }, 
-        ne:{
+        NE:{
             x: boundary.x + boundary.width/2,
             y: boundary.y,
             width: boundary.width/2,
             height: boundary.height/2
         }, 
-        sw:{
+        SW:{
             x: boundary.x,
             y: boundary.y + boundary.height/2,
             width: boundary.width/2,
             height: boundary.height/2
         },
-        se:{
+        SE:{
             x: boundary.x + boundary.width/2,
             y: boundary.y + boundary.height/2,
             width: boundary.width/2,

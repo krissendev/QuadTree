@@ -25,7 +25,7 @@ function stopReactCreate(){
 }
 
 function createRects(){
-    console.log("func")
+    // console.log("func")
     if(window.svgQuadTree === undefined || window.svgQuadTree === null){
         console.error(`Create Quad Tree first!`);
         //console.log(`undefined? \`${JSON.stringify(window.svgQuadTree)} \``);
@@ -38,7 +38,7 @@ function createRects(){
         
         //stack declaration
         const svgQuadTree = window.svgQuadTree;
-        console.log(svgQuadTree);
+        // console.log(svgQuadTree);
 
         root = svgQuadTree;             //init-head
         stack[0].node = root;              //current heead
@@ -53,14 +53,14 @@ function createRects(){
 }
 
 function test(svgQuadTree, stack){
-    console.log(svgQuadTree);
+    //console.log(svgQuadTree);
     for(let i in svgQuadTree){
         stack.push({
             node: stack[0].node[i],
             path: [...stack[0].path, i] 
         });
-        console.log(stack[0].node);
-        console.log(stack.length);
+        // console.log(stack[0].node);
+        // console.log(stack.length);
     }
 }
 
@@ -74,8 +74,8 @@ function recursiveRect(svgQuadTree, stack){
         if(i === `boundary` &&                          // match i to boundary
         svgQuadTree[i] &&                               // i not null
         (Object.keys(svgQuadTree[i]).length > 0)){      //i has children
-            console.log(`drawing boundary`, i);
-            console.log(`in:\`${JSON.stringify(i, null, 2)} \``);
+            // console.log(`drawing boundary`, i);
+            // console.log(`in:\`${JSON.stringify(i, null, 2)} \``);
             drawBorder(svgQuadTree[i]);
         }
         
@@ -121,7 +121,7 @@ function recursiveRect(svgQuadTree, stack){
 }
 
 function drawBorder(rectRef){
-    console.log(`drawing border`, rectRef);    
+    // console.log(`drawing border`, rectRef);    
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     rect.setAttribute("x", rectRef.x);
     rect.setAttribute("y", rectRef.y);
