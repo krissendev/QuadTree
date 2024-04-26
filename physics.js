@@ -175,9 +175,10 @@ function moveCircle(circleI, circleJ){
 }
 
 function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
-    //check point overlap current quad
     if(currentQuad.points.length >0){
         for(let i=0; i<currentQuad.points.length; i++){
+            
+            //check point against overlap in current quad
             for(let j=1; j<currentQuad.points.length; j++){
 
                 let circleI = currentQuad.points[i].data;
@@ -185,20 +186,13 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
                 moveCircle(circleI, circleJ);
             }
 
-            //check if point crosses boundary
+            //check if point against boundary and eventual points at intersection
             let circle = currentQuad.points[i].data;
             let cx = circle.getAttribute('cx');
             let cy = circle.getAttribute('cy');
             let r = circle.getAttribute('r');
             let boundary = currentQuad.boundary;
 
-
-            
-
-            //This code can be drasticly simplified and the head can simply be used to create a tempHead for quadTree lookup
-            //Primary is the axis
-            //Flip every attribute being the opposite of the primary and when the axis i s found the change is finished
-            //If the last link is null, remove it...until the last link is not null
             //SeNwNeNw + N = NeSwSeSw(Sw=null) -> NeSwSe
             //SeNwNeSe + S = SeNwSe
             //SeNw + W = SwNe (Ne=null) -> Sw
@@ -209,18 +203,17 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
             if(cx+r > boundary.x + boundary.width){crossingBorders.push("E")}
             if(cx-r < boundary.x){crossingBorders.push("W")}
             if(cy+r > boundary.y + boundary.width){crossingBorders.push("S")}
-
             
-            if(crossingBorders.length >0){
-                for(let i =0; i< crossingBorders.length; i++){
 
-                    //shorthand array
+            //Every crossingBorder is checked for point overlap by using "headBorderTarget" as a shorthand starting lookup point             
+            if(crossingBorders.length >0){
+                for(let j =0; j< crossingBorders.length; j++){
+
                     let headBorderTarget = head;
                     let switchPairObj =  {"N":"S", "S":"N", "E":"W", "W":"E"};
-
                     
                     //swap based on parameter
-                    for(let j = headBorderTarget.length; j>0; j--){
+                    for(let k = headBorderTarget.length; k>0; k--){
 						
 						//crossingBorders ammount of borders to check and loop  through
 						//headBorderTarget = ["NW", "NE","SW"....]
@@ -228,20 +221,30 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
 
 
                         //if it contains the opposite axis, it's a match. Switch and exit
-                        if(headBorderTarget[j-1].includes(switchPairObj[crossingBorders[i]])){
-                            headBorderTarget[j-1] = headBorderTarget[j-1].replace(switchPairObj[crossingBorders[i]], crossingBorders[i]);
+                        if(headBorderTarget[k-1].includes(switchPairObj[crossingBorders[j]])){
+                            headBorderTarget[k-1] = headBorderTarget[k-1].replace(switchPairObj[crossingBorders[j]], crossingBorders[j]);
                             break;
                         }
                         //else if it contains the same axis, switch and continue until root
-                        else if(headBorderTarget[j-1].includes(crossingBorders[i])){
-                            headBorderTarget[j-1] = headBorderTarget[j-1].replace(crossingBorders[i], switchPairObj[crossingBorders[i]])
+                        else if(headBorderTarget[k-1].includes(crossingBorders[j])){
+                            headBorderTarget[k-1] = headBorderTarget[k-1].replace(crossingBorders[j], switchPairObj[crossingBorders[j]])
                                                         
                         }
                     }
-					//headBorderTarget set,remove "null's" or recursive function remaining steps
 					
 					//check for null entries
                     removeHeadEndNull(headBorderTarget, quadTree);
+                    
+                    
+                    let tempTree = quadTree;
+                    for(let j=0; j<headBorderTarget.length-1; j++){
+                        if(tempTree[headBorderTarget[j]]==(null||undefined)){}
+                        else{tempTree = tempTree[headBorderTarget[j]];}
+                    }
+                    let point = currentQuad.points[i]
+                    //opposite direction to find the closest boundary in the boundary checkup of headBorderTarget-tempTree
+                    let direction = switchPairObj[crossingBorders[i]];
+                    checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r);
 
 					//if tempTree does not have instances of QuadTree check the matching quad to boundary
 					//else if tempTree has QuadTree run a recursive function until the matchin boundary has
@@ -252,7 +255,7 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
 
         }
     }
-    //if no points check for deeper nesting
+    //if no points check for deeper nesting, recursion
     else{
         const quadProperties = Object.keys(currentQuad);
         for(let i=0;i<quadProperties.length; i++){
@@ -266,7 +269,47 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
     }
     head.pop();
 }
+function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r){
+    //this tempTree is the end point to check for
+    if(tempTree.points.length>0){
+        //check points against point
+        for(let j=0; j<tempTree.points; j++){
+            let point2 = tempTree.points[j].data;
+            moveCircle(point, point2);
+        }
 
+    }
+    else{
+        
+        const quadProperties = Object.keys(tempTree);
+        for(let i=0; i< quadProperties.length; i++){
+            if(tempTree[quadProperties[i-1]]!==(null||undefined)){
+
+                if(tempTree[quadProperties[i-1]] instanceof QuadTree){
+                    let quadBoundary = tempTree[quadProperties[i-1]].boundary;
+                    //continue deeper if point is within bounds
+                    if(quadBoundary.x < cx-r &&
+                       quadBoundary.y < cy-r &&
+                       quadBoundary.x + quadBoundary.width  > cx+r &&
+                       quadBoundary.y + quadBoundary.height > cy+r){
+                         //en akse er presis, type : x'{x, x+width}
+                         //en annen akse er retningsmessig prioritert, type y'>{y} men av alle y'':{y1',y2',y3'} den minste
+                         //matches the boundary!
+     
+                         //Because multiple nested quads can in theory be in bounds of the point diameter, tempTree should not be changed
+                         //so that it can be reused in the loop for multicases, therefore using "recursiveInstancedTempTree" instead in the recursion "checkBorders"
+                         let recursiveInstancedTempTree = tempTree[quadProperties[i-1]];
+                         
+                         checkBorders(recursiveInstancedTempTree, QuadTree, boundary, direction,  point, cx, cy, r);
+                    }
+                }
+            }
+            
+        }
+
+        //else no point found
+    }
+}
 function removeHeadEndNull(headBorderTarget, quadTree){
 
     //tempHeadClone     ["NW","SE"...]
