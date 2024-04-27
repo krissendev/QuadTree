@@ -61,7 +61,7 @@ function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
                         
                         let dx = mousePosition.x - cx;
                         let dy = mousePosition.y - cy;
-                        let distanceScalar = Math.sqrt(dx * dx + dy * dy)+500;
+                        let distanceScalar = Math.sqrt(dx * dx + dy * dy);
                         let step1 = (Math.exp(-distanceScalar));
                         let step2 = 1/(step1-1);
                         //let nx = dx / distance;
@@ -102,6 +102,7 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
                     let dx = mousePosition.x - cx;
                     let dy = mousePosition.y - cy;
                     let distanceScalar = Math.sqrt(dx * dx + dy * dy);
+                    if (distanceScalar === 0) distanceScalar = 0.01;
                     let step1 = (Math.exp(-distanceScalar));
                     let step2 = 1/(step1-1);
                     let nx = (dx / step2)+ cx ;
@@ -144,28 +145,33 @@ function moveCircle(circleI, circleJ){
 
     let icr = parseFloat(circleI.getAttribute('r'));
     let r = parseFloat(circleI.getAttribute('r'));
-    let icx = parseFloat(circleI.getAttribute('cx'));
-    let icy = parseFloat(circleI.getAttribute('cy'));
-    let jcx = parseFloat(circleJ.getAttribute('cx'));
-    let jcy = parseFloat(circleJ.getAttribute('cy'));
 
+    //round to 2 decimal numbers Number(_.toFixed(2))
+    let icx = Number(parseFloat(circleI.getAttribute('cx')).toFixed(2));
+    let icy = Number(parseFloat(circleI.getAttribute('cy')).toFixed(2));
+    let jcx = Number(parseFloat(circleJ.getAttribute('cx')).toFixed(2));
+    let jcy = Number(parseFloat(circleJ.getAttribute('cy')).toFixed(2));
+
+
+    
+    //icx = Number(icx.toFixed(2));
     let dx = icx - jcx;
     let dy = icy - jcy;
-    let distance = Math.sqrt(dx * dx + dy * dy);
+    
+    let distance = Number(Math.sqrt(dx * dx + dy * dy).toFixed(2))
+    
+    
 
     if (distance < 2*r) {
-        let dx = icx - jcx;
-        let dy = icy - jcy;
-
         let distanceScalar = Math.sqrt(dx * dx + dy * dy);
         if (distanceScalar === 0) distanceScalar = 0.01;
-        let moveDistance = r - (distanceScalar / 2);
 
 
-        let nix = icx + (dx / distanceScalar) * moveDistance;
-        let niy = icy + (dy / distanceScalar) * moveDistance;
-        let njx = jcx - (dx / distanceScalar) * moveDistance;
-        let njy = jcy - (dy / distanceScalar) * moveDistance;
+        let nix = Number((icx + (dx / distanceScalar)).toFixed(2))
+        let niy = Number((icy + (dy / distanceScalar)).toFixed(2))
+        let njx = Number((jcx - (dx / distanceScalar)).toFixed(2))
+        let njy = Number((jcy - (dy / distanceScalar)).toFixed(2))
+        
 
         circleI.setAttribute('cx', nix );
         circleI.setAttribute('cy', niy );
@@ -174,12 +180,15 @@ function moveCircle(circleI, circleJ){
     }
 }
 
+    
+
 function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
-    if(currentQuad.points.length >0){
+    //there is no point of checking with 1 or less points against each other
+    if(currentQuad.points.length >1){
         for(let i=0; i<currentQuad.points.length; i++){
             
             //check point against overlap in current quad
-            for(let j=1; j<currentQuad.points.length; j++){
+            for(let j=i+1; j<currentQuad.points.length; j++){
 
                 let circleI = currentQuad.points[i].data;
                 let circleJ = currentQuad.points[j].data;
@@ -241,7 +250,7 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
                         if(tempTree[headBorderTarget[j]]==(null||undefined)){}
                         else{tempTree = tempTree[headBorderTarget[j]];}
                     }
-                    let point = currentQuad.points[i]
+                    let point = currentQuad.points[i].data;
                     //opposite direction to find the closest boundary in the boundary checkup of headBorderTarget-tempTree
                     let direction = switchPairObj[crossingBorders[i]];
                     checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r);
@@ -268,14 +277,16 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, quadTree, head){
         }
     }
     head.pop();
-}
+} 
 function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r){
     //this tempTree is the end point to check for
     if(tempTree.points.length>0){
         //check points against point
-        for(let j=0; j<tempTree.points; j++){
+        for(let j=0; j<tempTree.points.length; j++){
             let point2 = tempTree.points[j].data;
-            moveCircle(point, point2);
+            if(point!==point2){
+                moveCircle(point, point2);
+            }
         }
 
     }
