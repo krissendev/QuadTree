@@ -19,9 +19,9 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
         physicsIntervalCursor = setInterval(() => {
             physicsMouseloopQuad(mousePosition, circleElements, QuadTree, currentQuad)
         }, 50);
-        physicsIntervalSwarm = setInterval(() => {
-            physicsSwarmMove(circleElements)
-        }, 500); 
+        // physicsIntervalSwarm = setInterval(() => {
+        //     physicsSwarmMove(circleElements)
+        // }, 500); 
         physicsIntervalSwarmCollision = setInterval(() => {
             //QuadTree is class for typechecking quads
             //currentQuad = used for recursing down the three like a tail 
@@ -33,7 +33,7 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
 }
 function stopPhysicsloop(){
     if(looping){
-        clearInterval(physicsIntervalSwarm);
+        //clearInterval(physicsIntervalSwarm);
         clearInterval(physicsIntervalCursor);
         clearInterval(physicsIntervalSwarmCollision);
         
@@ -85,7 +85,7 @@ function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
 
 
 function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree){
-    //console.log(svgQuadTree)
+    console.log("CYCLE - START")
     if (looping && svgQuadTree ){
         if(svgQuadTree.points.length >0){
             for(let i=0; i<svgQuadTree.points.length; i++){
@@ -141,7 +141,7 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
 
 
 function moveCircle(circleI, circleJ){
-
+    
     let icr = parseFloat(circleI.getAttribute('r'));
     let r = parseFloat(circleI.getAttribute('r'));
 
@@ -162,6 +162,7 @@ function moveCircle(circleI, circleJ){
     
 
     if (distance < 2*r) {
+        console.log(circleI, circleJ)
         let distanceScalar = Math.sqrt(dx * dx + dy * dy);
         if (distanceScalar === 0) distanceScalar = 0.01;
 
@@ -171,7 +172,7 @@ function moveCircle(circleI, circleJ){
         let niy = Number((icy + (dy + scale / distanceScalar)).toFixed(2))
         let njx = Number((jcx - (dx + scale / distanceScalar)).toFixed(2))
         let njy = Number((jcy - (dy + scale / distanceScalar)).toFixed(2))
-        console.log("collide")
+        // console.log("collide")
         circleI.setAttribute('fill', '#ff0000');
         circleJ.setAttribute('fill', '#ff0000');
         circleI.setAttribute('cx', nix );
@@ -184,13 +185,13 @@ function moveCircle(circleI, circleJ){
     
 
 function physicsCircleCollisionQuad(QuadTree, currentQuad, head){
-    let DBtree = JSON.parse(JSON.stringify(window.svgQuadTree));
-    let DBcurrentQuad = JSON.parse(JSON.stringify(currentQuad));
-    let DBhead = JSON.parse(JSON.stringify(head));
+    // let DBtree = JSON.parse(JSON.stringify(window.svgQuadTree));
+    // let DBcurrentQuad = JSON.parse(JSON.stringify(currentQuad));
+    // let DBhead = JSON.parse(JSON.stringify(head));
     
-    console.log("whole Tree at current time:", DBtree)
-    console.log("currentQuad:",DBcurrentQuad, currentQuad)
-    console.log("currentHead", DBhead, head)
+    // console.log("whole Tree at current time:", DBtree)
+    // console.log("currentQuad:",DBcurrentQuad, currentQuad)
+    // console.log("currentHead", DBhead, head)
 
     //there is no point of checking with 1 or less points against each other
     if(currentQuad.points.length >1){
@@ -241,7 +242,7 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, head){
                         //if it contains the opposite axis, it's a match. Switch and exit
                         if(headBorderTarget[k-1].includes(switchPairObj[crossingBorders[j]])){
                             headBorderTarget[k-1] = headBorderTarget[k-1].replace(switchPairObj[crossingBorders[j]], crossingBorders[j]);
-                            break;
+                            //break;
                         }
                         //else if it contains the same axis, switch and continue until root
                         else if(headBorderTarget[k-1].includes(crossingBorders[j])){
@@ -256,23 +257,23 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, head){
                     
                     let tempTree = window.svgQuadTree;;
                     for(let j=0; j<headBorderTarget.length-1; j++){
-                        let copy1 = JSON.parse(JSON.stringify(headBorderTarget[j]));
-                        let copy2 = JSON.parse(JSON.stringify(tempTree[headBorderTarget[j]]));
+                        // let copy1 = JSON.parse(JSON.stringify(headBorderTarget[j]));
+                        // let copy2 = JSON.parse(JSON.stringify(tempTree[headBorderTarget[j]]));
 
                         if(tempTree[headBorderTarget[j]]==(null||undefined)){
-                            console.log("? undefined",copy1, typeof(copy1), copy2 )
+                            // console.log("? undefined",copy1, typeof(copy1), copy2 )
                         }
                         else{
-                            console.log("DB accessor on tempTree:",copy1, "\n Headbordertarget:", headBorderTarget, headBorderTarget.length-1, j)
+                            // console.log("DB accessor on tempTree:",copy1, "\n Headbordertarget:", headBorderTarget, headBorderTarget.length-1, j)
                             tempTree = tempTree[headBorderTarget[j]];
                         }
                     }
                     let copy2 = JSON.parse(JSON.stringify(tempTree));
-                    console.log("DB final tempTree:",copy2)
+                    // console.log("DB final tempTree:",copy2)
                     let point = currentQuad.points[i].data;
                     //opposite direction to find the closest boundary in the boundary checkup of headBorderTarget-tempTree
                     let direction = switchPairObj[crossingBorders[i]];
-                    checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r);
+                    checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r, headBorderTarget);
 
 					//if tempTree does not have instances of QuadTree check the matching quad to boundary
 					//else if tempTree has QuadTree run a recursive function until the matchin boundary has
@@ -299,7 +300,7 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, head){
     console.log("out")
     head.pop();
 } 
-function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r){
+function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r, headBorderTarget){
     //this tempTree is the end point to check for
     if(tempTree.points.length>0){
         //check points against point
@@ -358,8 +359,9 @@ function removeHeadEndNull(headBorderTarget){
         }
         else{
             //when a null entry is reached all remaining array entries are dropped
-            let indexesDeleted = headBorderTarget.length - headBorderTarget[h];
-            headBorderTarget.slice(0,-indexesDeleted)
+            //let indexesDeleted = headBorderTarget.length - headBorderTarget[h];
+            let indexesDeleted = headBorderTarget.length - h;
+            headBorderTarget = headBorderTarget.slice(0,-indexesDeleted)
             // console.log("inside null drop:", headBorderTarget, "is null?:", tempTree[headBorderTarget[h]], headBorderTarget.length, h, tempTree)
             return headBorderTarget;
         }
