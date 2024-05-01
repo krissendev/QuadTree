@@ -27,7 +27,7 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
             //currentQuad = used for recursing down the three like a tail 
             //quadTree = the whole three
             //head array of path 
-            physicsCircleCollisionQuad(QuadTree, currentQuad, head)
+            physicsCircleCollisionQuad(QuadTree, head)
         }, 100);
     }
 }
@@ -184,7 +184,19 @@ function moveCircle(circleI, circleJ){
 
     
 
-function physicsCircleCollisionQuad(QuadTree, currentQuad, head){
+function physicsCircleCollisionQuad(QuadTree, head){
+    console.log(head)
+    //currentQuad refresh of window.svgQuadTree for consistent read/lookup
+    let currentQuad = window.svgQuadTree;
+    if(head.length>0){
+        for(let i = 0; i<head.length;i++){
+            if(currentQuad[head[i]]!=null && currentQuad!=null){
+                currentQuad = currentQuad[head[i]];
+            }
+            //else{}
+        }
+    }
+
     // let DBtree = JSON.parse(JSON.stringify(window.svgQuadTree));
     // let DBcurrentQuad = JSON.parse(JSON.stringify(currentQuad));
     // let DBhead = JSON.parse(JSON.stringify(head));
@@ -293,7 +305,11 @@ function physicsCircleCollisionQuad(QuadTree, currentQuad, head){
             if(propertyValue instanceof QuadTree){
                 console.log("in");
                 head.push(property)
-                physicsCircleCollisionQuad(QuadTree, propertyValue, head)
+                let copy1 = JSON.parse(JSON.stringify(window.svgQuadTree));
+                let copy2 = JSON.parse(JSON.stringify(head));
+                console.log(copy1, copy2)
+
+                physicsCircleCollisionQuad(QuadTree, head)
             }
         }
     }
@@ -344,7 +360,6 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
     }
 }
 function removeHeadEndNull(headBorderTarget){
-
     //tempHeadClone     ["NW","SE"...]
     //tempTree          root:{NW:{SE:....}}
     //head is used in every iteration of crossingBorders
@@ -354,10 +369,10 @@ function removeHeadEndNull(headBorderTarget){
     let tempTree = window.svgQuadTree;;
     for(let h = 0; h<headBorderTarget.length - 1; h++){
         //console.log([headBorderTarget[h]]);
-        if(tempTree[headBorderTarget[h]]!==(undefined||null) ){
+        if(tempTree[headBorderTarget[h]]!=null){
             tempTree = tempTree[headBorderTarget[h]]	
         }
-        else{
+        else if(tempTree[headBorderTarget[h]]==null){
             //when a null entry is reached all remaining array entries are dropped
             //let indexesDeleted = headBorderTarget.length - headBorderTarget[h];
             let indexesDeleted = headBorderTarget.length - h;
