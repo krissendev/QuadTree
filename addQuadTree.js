@@ -135,7 +135,7 @@ let pointCounter = 0;
 
 //Create Quad
 function generateQuadTree(){
-    // console.log("generateQuadTree")
+    console.log("generateQuadTree")
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
     const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);

@@ -27,6 +27,7 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
             //currentQuad = used for recursing down the three like a tail 
             //quadTree = the whole three
             //head array of path 
+            console.log("Set Interval...")
             physicsCircleCollisionQuad(QuadTree, head)
         }, 100);
     }
@@ -85,7 +86,7 @@ function physicsMouseloop(mousePosition,circleElements, QuadTree, svgQuadTree){
 
 
 function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree){
-    console.log("CYCLE - START")
+    //console.log("CYCLE - START")
     if (looping && svgQuadTree ){
         if(svgQuadTree.points.length >0){
             for(let i=0; i<svgQuadTree.points.length; i++){
@@ -162,7 +163,7 @@ function moveCircle(circleI, circleJ){
     
 
     if (distance < 2*r) {
-        console.log(circleI, circleJ)
+        //console.log(circleI, circleJ)
         let distanceScalar = Math.sqrt(dx * dx + dy * dy);
         if (distanceScalar === 0) distanceScalar = 0.01;
 
@@ -185,7 +186,7 @@ function moveCircle(circleI, circleJ){
     
 
 function physicsCircleCollisionQuad(QuadTree, head){
-    console.log(head)
+    console.log("STARTING...")
     //currentQuad refresh of window.svgQuadTree for consistent read/lookup
     let currentQuad = window.svgQuadTree;
     if(head.length>0){
@@ -193,28 +194,23 @@ function physicsCircleCollisionQuad(QuadTree, head){
             if(currentQuad[head[i]]!=null && currentQuad!=null){
                 currentQuad = currentQuad[head[i]];
             }
-            //else{}
+            else{break;}
         }
     }
 
-    // let DBtree = JSON.parse(JSON.stringify(window.svgQuadTree));
-    // let DBcurrentQuad = JSON.parse(JSON.stringify(currentQuad));
-    // let DBhead = JSON.parse(JSON.stringify(head));
-    
-    // console.log("whole Tree at current time:", DBtree)
-    // console.log("currentQuad:",DBcurrentQuad, currentQuad)
-    // console.log("currentHead", DBhead, head)
-
-    //there is no point of checking with 1 or less points against each other
-    if(currentQuad.points.length >1){
+    //Check point collision
+    if(currentQuad.points.length >0){   
+        //there is no point of checking with 1 or less points against each other
         for(let i=0; i<currentQuad.points.length; i++){
             
             //check point against overlap in current quad
-            for(let j=i+1; j<currentQuad.points.length; j++){
-
-                let circleI = currentQuad.points[i].data;
-                let circleJ = currentQuad.points[j].data;
-                moveCircle(circleI, circleJ);
+            if(currentQuad.points.length >1){
+                for(let j=i+1; j<currentQuad.points.length; j++){
+    
+                    let circleI = currentQuad.points[i].data;
+                    let circleJ = currentQuad.points[j].data;
+                    moveCircle(circleI, circleJ);
+                }
             }
 
             //check if point against boundary and eventual points at intersection
@@ -233,14 +229,15 @@ function physicsCircleCollisionQuad(QuadTree, head){
             if(cy-r < boundary.y){crossingBorders.push("N")}
             if(cx+r > boundary.x + boundary.width){crossingBorders.push("E")}
             if(cx-r < boundary.x){crossingBorders.push("W")}
-            if(cy+r > boundary.y + boundary.width){crossingBorders.push("S")}
+            if(cy+r > boundary.y + boundary.height){crossingBorders.push("S")}
             
 
             //Every crossingBorder is checked for point overlap by using "headBorderTarget" as a shorthand starting lookup point             
             if(crossingBorders.length >0){
+                let headBorderTarget;
                 for(let j =0; j< crossingBorders.length; j++){
 
-                    let headBorderTarget = head;
+                    headBorderTarget = head;
                     let switchPairObj =  {"N":"S", "S":"N", "E":"W", "W":"E"};
                     
                     //swap based on parameter
@@ -254,7 +251,7 @@ function physicsCircleCollisionQuad(QuadTree, head){
                         //if it contains the opposite axis, it's a match. Switch and exit
                         if(headBorderTarget[k-1].includes(switchPairObj[crossingBorders[j]])){
                             headBorderTarget[k-1] = headBorderTarget[k-1].replace(switchPairObj[crossingBorders[j]], crossingBorders[j]);
-                            //break;
+                            break;
                         }
                         //else if it contains the same axis, switch and continue until root
                         else if(headBorderTarget[k-1].includes(crossingBorders[j])){
@@ -264,51 +261,51 @@ function physicsCircleCollisionQuad(QuadTree, head){
                     }
 					
 					//check for null entries
-                    removeHeadEndNull(headBorderTarget);
+                    headBorderTarget = removeHeadEndNull(headBorderTarget);
                     
                     
-                    let tempTree = window.svgQuadTree;;
-                    for(let j=0; j<headBorderTarget.length-1; j++){
-                        // let copy1 = JSON.parse(JSON.stringify(headBorderTarget[j]));
-                        // let copy2 = JSON.parse(JSON.stringify(tempTree[headBorderTarget[j]]));
-
-                        if(tempTree[headBorderTarget[j]]==(null||undefined)){
-                            // console.log("? undefined",copy1, typeof(copy1), copy2 )
-                        }
-                        else{
-                            // console.log("DB accessor on tempTree:",copy1, "\n Headbordertarget:", headBorderTarget, headBorderTarget.length-1, j)
-                            tempTree = tempTree[headBorderTarget[j]];
+                    if(headBorderTarget!=null){
+                        let tempTree = window.svgQuadTree;;
+                        for(let j=0; j<headBorderTarget.length-1; j++){
+                            let copy1 = JSON.parse(JSON.stringify(headBorderTarget[j]));
+                            let copy2 = JSON.parse(JSON.stringify(tempTree[headBorderTarget[j]]));
+    
+                            if(tempTree[headBorderTarget[j]]==null){
+                                console.log("? undefined",copy1, typeof(copy1), copy2 )
+                            }
+                            else{
+                                // console.log("DB accessor on tempTree:",copy1, "\n Headbordertarget:", headBorderTarget, headBorderTarget.length-1, j)
+                                tempTree = tempTree[headBorderTarget[j]];
+                            }
+                            //let copy2 = JSON.parse(JSON.stringify(tempTree));
+                            // console.log("DB final tempTree:",copy2)
+        
+                            let point = currentQuad.points[i].data;
+                            //opposite direction to find the closest boundary in the boundary checkup of headBorderTarget-tempTree
+                            let direction = switchPairObj[crossingBorders[i]];
+                            checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r, headBorderTarget);
+        
+                            //if tempTree does not have instances of QuadTree check the matching quad to boundary
+                            //else if tempTree has QuadTree run a recursive function until the matchin boundary has
+                            //no further QuadTree instances
                         }
                     }
-                    let copy2 = JSON.parse(JSON.stringify(tempTree));
-                    // console.log("DB final tempTree:",copy2)
-                    let point = currentQuad.points[i].data;
-                    //opposite direction to find the closest boundary in the boundary checkup of headBorderTarget-tempTree
-                    let direction = switchPairObj[crossingBorders[i]];
-                    checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r, headBorderTarget);
 
-					//if tempTree does not have instances of QuadTree check the matching quad to boundary
-					//else if tempTree has QuadTree run a recursive function until the matchin boundary has
-					//no further QuadTree instances
 
                 }
             }
 
         }
     }
-    //if no points check for deeper nesting, recursion
+    //Recurse deper
     else{
         const quadProperties = Object.keys(currentQuad);
         for(let i=0;i<quadProperties.length; i++){
             const property=quadProperties[i]
             const propertyValue= currentQuad[property];
             if(propertyValue instanceof QuadTree){
-                console.log("in");
+                console.log("in", head);
                 head.push(property)
-                let copy1 = JSON.parse(JSON.stringify(window.svgQuadTree));
-                let copy2 = JSON.parse(JSON.stringify(head));
-                console.log(copy1, copy2)
-
                 physicsCircleCollisionQuad(QuadTree, head)
             }
         }
@@ -316,6 +313,7 @@ function physicsCircleCollisionQuad(QuadTree, head){
     console.log("out")
     head.pop();
 } 
+
 function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r, headBorderTarget){
     //this tempTree is the end point to check for
     if(tempTree.points.length>0){
@@ -331,8 +329,9 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
     else{
         
         const quadProperties = Object.keys(tempTree);
+        console.log(headBorderTarget);
         for(let i=0; i< quadProperties.length; i++){
-            if(tempTree[quadProperties[i-1]]!==(null||undefined)){
+            if(tempTree[quadProperties[i-1]]!=null){
 
                 if(tempTree[quadProperties[i-1]] instanceof QuadTree){
                     let quadBoundary = tempTree[quadProperties[i-1]].boundary;
@@ -360,19 +359,20 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
     }
 }
 function removeHeadEndNull(headBorderTarget){
+    try{
     //tempHeadClone     ["NW","SE"...]
     //tempTree          root:{NW:{SE:....}}
     //head is used in every iteration of crossingBorders
     //headBorderTarget is crossingBorders target destination
 
-    // console.log(quadTree);
     let tempTree = window.svgQuadTree;;
     for(let h = 0; h<headBorderTarget.length - 1; h++){
-        //console.log([headBorderTarget[h]]);
+        console.log(tempTree);
         if(tempTree[headBorderTarget[h]]!=null){
             tempTree = tempTree[headBorderTarget[h]]	
         }
-        else if(tempTree[headBorderTarget[h]]==null){
+        //else if(tempTree[headBorderTarget[h]]==null){
+        else {
             //when a null entry is reached all remaining array entries are dropped
             //let indexesDeleted = headBorderTarget.length - headBorderTarget[h];
             let indexesDeleted = headBorderTarget.length - h;
@@ -381,6 +381,11 @@ function removeHeadEndNull(headBorderTarget){
             return headBorderTarget;
         }
     }
+    }
+    catch(error){
+        console.log(error)
+    }
+    
 }
 
 function circleBoundaryOverlap (point, border, head, quadTree, QuadTree){
