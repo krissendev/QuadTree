@@ -215,9 +215,9 @@ function physicsCircleCollisionQuad(QuadTree, head){
 
             //check if point against boundary and eventual points at intersection
             let circle = currentQuad.points[i].data;
-            let cx = circle.getAttribute('cx');
-            let cy = circle.getAttribute('cy');
-            let r = circle.getAttribute('r');
+            let cx = parseFloat(circle.getAttribute('cx'));
+            let cy = parseFloat(circle.getAttribute('cy'));
+            let r = parseFloat(circle.getAttribute('r'));
             let boundary = currentQuad.boundary;
 
             //SeNwNeNw + N = NeSwSeSw(Sw=null) -> NeSwSe
@@ -226,10 +226,11 @@ function physicsCircleCollisionQuad(QuadTree, head){
 
 
             let crossingBorders = [];
+            console.log(`cy: ${cy}, r: ${r}, cy + r: ${cy + r}, boundary.y: ${boundary.y}, boundary.height: ${boundary.height}, total boundary height: ${boundary.y + boundary.height}`);
             if(cy-r < boundary.y){crossingBorders.push("N")}
-            if(cx+r > boundary.x + boundary.width){crossingBorders.push("E")}
+            if(cx+r > (boundary.x + boundary.width)){crossingBorders.push("E")}
             if(cx-r < boundary.x){crossingBorders.push("W")}
-            if(cy+r > boundary.y + boundary.height){crossingBorders.push("S")}
+            if(cy+r > (boundary.y + boundary.height)){crossingBorders.push("S")}
             
 
             //Every crossingBorder is checked for point overlap by using "headBorderTarget" as a shorthand starting lookup point             
@@ -262,11 +263,11 @@ function physicsCircleCollisionQuad(QuadTree, head){
 					
 					//check for null entries
                     headBorderTarget = removeHeadEndNull(headBorderTarget);
-                    
+                    console.log(headBorderTarget)
                     
                     if(headBorderTarget!=null){
                         let tempTree = window.svgQuadTree;;
-                        for(let j=0; j<headBorderTarget.length-1; j++){
+                        for(let j=0; j<headBorderTarget.length; j++){
                             let copy1 = JSON.parse(JSON.stringify(headBorderTarget[j]));
                             let copy2 = JSON.parse(JSON.stringify(tempTree[headBorderTarget[j]]));
     
@@ -279,16 +280,15 @@ function physicsCircleCollisionQuad(QuadTree, head){
                             }
                             //let copy2 = JSON.parse(JSON.stringify(tempTree));
                             // console.log("DB final tempTree:",copy2)
-        
-                            let point = currentQuad.points[i].data;
-                            //opposite direction to find the closest boundary in the boundary checkup of headBorderTarget-tempTree
-                            let direction = switchPairObj[crossingBorders[i]];
-                            checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r, headBorderTarget);
-        
-                            //if tempTree does not have instances of QuadTree check the matching quad to boundary
-                            //else if tempTree has QuadTree run a recursive function until the matchin boundary has
-                            //no further QuadTree instances
                         }
+                        let point = currentQuad.points[i].data;
+                        //opposite direction to find the closest boundary in the boundary checkup of headBorderTarget-tempTree
+                        let direction = switchPairObj[crossingBorders[i]];
+                        checkBorders(tempTree, QuadTree, boundary, direction, point, cx, cy, r, headBorderTarget);
+    
+                        //if tempTree does not have instances of QuadTree check the matching quad to boundary
+                        //else if tempTree has QuadTree run a recursive function until the matchin boundary has
+                        //no further QuadTree instances
                     }
 
 
@@ -331,10 +331,10 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
         const quadProperties = Object.keys(tempTree);
         console.log(headBorderTarget);
         for(let i=0; i< quadProperties.length; i++){
-            if(tempTree[quadProperties[i-1]]!=null){
+            if(tempTree[quadProperties[i]]!=null){
 
-                if(tempTree[quadProperties[i-1]] instanceof QuadTree){
-                    let quadBoundary = tempTree[quadProperties[i-1]].boundary;
+                if(tempTree[quadProperties[i]] instanceof QuadTree){
+                    let quadBoundary = tempTree[quadProperties[i]].boundary;
                     //continue deeper if point is within bounds
                     if(quadBoundary.x < cx-r &&
                        quadBoundary.y < cy-r &&
@@ -346,7 +346,7 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
      
                          //Because multiple nested quads can in theory be in bounds of the point diameter, tempTree should not be changed
                          //so that it can be reused in the loop for multicases, therefore using "recursiveInstancedTempTree" instead in the recursion "checkBorders"
-                         let recursiveInstancedTempTree = tempTree[quadProperties[i-1]];
+                         let recursiveInstancedTempTree = tempTree[quadProperties[i]];
                          
                          checkBorders(recursiveInstancedTempTree, QuadTree, boundary, direction,  point, cx, cy, r);
                     }
@@ -366,10 +366,15 @@ function removeHeadEndNull(headBorderTarget){
     //headBorderTarget is crossingBorders target destination
 
     let tempTree = window.svgQuadTree;;
-    for(let h = 0; h<headBorderTarget.length - 1; h++){
+    for(let h = 0; h<headBorderTarget.length; h++){
         console.log(tempTree);
         if(tempTree[headBorderTarget[h]]!=null){
-            tempTree = tempTree[headBorderTarget[h]]	
+            tempTree = tempTree[headBorderTarget[h]]
+            
+            //in the case of containing no null entries
+            if(h==(headBorderTarget.length-1)){
+                return headBorderTarget;
+            }
         }
         //else if(tempTree[headBorderTarget[h]]==null){
         else {
@@ -380,6 +385,7 @@ function removeHeadEndNull(headBorderTarget){
             // console.log("inside null drop:", headBorderTarget, "is null?:", tempTree[headBorderTarget[h]], headBorderTarget.length, h, tempTree)
             return headBorderTarget;
         }
+        
     }
     }
     catch(error){

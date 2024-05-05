@@ -14,7 +14,7 @@ display_spread      :   displaySpread
 display_svgNumber   :   displayCount
 */
 
-const screenClick = document.querySelector('#content_svg');
+const svgContainter = document.querySelector('#quadtree-circles');
 const svgColor = document.querySelector('#svgprop_color');
 const svgSize = document.querySelector('#svgprop_size');
 const svgAmount = document.querySelector('#svgprop_amount');
@@ -38,7 +38,7 @@ function addSVGCircle(event){
         circle.setAttribute("cy" , eval(`event.clientY ${operatorY} Math.random() * svgSpread.valueAsNumber`));
         circle.setAttribute("r" , svgSize.valueAsNumber);
         circle.setAttribute("fill",svgColor.value);
-        screenClick.appendChild(circle);
+        svgContainter.appendChild(circle);
         circleCount++;
         displayCount.innerHTML = circleCount;
     }

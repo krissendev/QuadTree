@@ -139,7 +139,7 @@ function generateQuadTree(){
     const quadborderbox = new Rectangle(0,0,visualViewport.width, visualViewport.height);
     let quadCapacity = 4;
     const svgQuadTree = new QuadTree(quadborderbox, quadCapacity);
-    const svgContainer = document.querySelector('#content_svg');
+    const svgContainer = document.querySelector('#quadtree-circles');
     const circleElements = svgContainer.querySelectorAll('circle');
     
     window.QuadTree = QuadTree;
