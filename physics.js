@@ -140,53 +140,70 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
     }
 }
 
+function decimalFixing(num){
+    return +(Math.round(num + "e+2") + "e-2");
+}
 
 function moveCircle(circleI, circleJ){
-    
+    console.log("moveCircle")
     let icr = parseFloat(circleI.getAttribute('r'));
-    let r = parseFloat(circleI.getAttribute('r'));
+    
+    // let r = Number(parseFloat(circleI.getAttribute('r')).toFixed(2));
 
+    // //round to 2 decimal numbers Number(_.toFixed(2))
+    // let icx = Number(parseFloat(circleI.getAttribute('cx')).toFixed(2));
+    // let icy = Number(parseFloat(circleI.getAttribute('cy')).toFixed(2));
+    // let jcx = Number(parseFloat(circleJ.getAttribute('cx')).toFixed(2));
+    // let jcy = Number(parseFloat(circleJ.getAttribute('cy')).toFixed(2));
+
+
+    
     //round to 2 decimal numbers Number(_.toFixed(2))
-    let icx = Number(parseFloat(circleI.getAttribute('cx')).toFixed(2));
-    let icy = Number(parseFloat(circleI.getAttribute('cy')).toFixed(2));
-    let jcx = Number(parseFloat(circleJ.getAttribute('cx')).toFixed(2));
-    let jcy = Number(parseFloat(circleJ.getAttribute('cy')).toFixed(2));
+    let ir = parseFloat(circleI.getAttribute('r'));
+    let jr = parseFloat(circleJ.getAttribute('r'));
+    let combinedRadius = decimalFixing(ir + jr);
 
-
+    let icx = decimalFixing(circleI.getAttribute('cx'));
+    let icy = decimalFixing(circleI.getAttribute('cy'));
+    let jcx = decimalFixing(circleJ.getAttribute('cx'));
+    let jcy = decimalFixing(circleJ.getAttribute('cy'));
     
     //icx = Number(icx.toFixed(2));
-    let dx = icx - jcx;
-    let dy = icy - jcy;
+    // let dx = icx - jcx;
+    // let dy = icy - jcy;
+    // let distance = Number(Math.sqrt(dx * dx + dy * dy).toFixed(2))
     
-    let distance = Number(Math.sqrt(dx * dx + dy * dy).toFixed(2))
+    let dx = decimalFixing(icx - jcx);
+    let dy = decimalFixing(icy - jcy);
     
-    
+    let distanceScalar = decimalFixing(Math.sqrt(dx * dx + dy * dy));
+    console.log("moveCircle",distanceScalar, typeof(distanceScalar))
 
-    if (distance < 2*r) {
+    if (distanceScalar < combinedRadius) {
         //console.log(circleI, circleJ)
-        let distanceScalar = Math.sqrt(dx * dx + dy * dy);
         if (distanceScalar === 0) distanceScalar = 0.01;
-
+        
         let scale = 0;
-
-        let nix = Number((icx + (dx + scale / distanceScalar)).toFixed(2))
-        let niy = Number((icy + (dy + scale / distanceScalar)).toFixed(2))
-        let njx = Number((jcx - (dx + scale / distanceScalar)).toFixed(2))
-        let njy = Number((jcy - (dy + scale / distanceScalar)).toFixed(2))
+        console.log("moveCircle", typeof(icx), typeof(dx), typeof(scale), typeof(distanceScalar))
+        let nix = decimalFixing(icx + (dx + scale / distanceScalar))
+        let niy = decimalFixing(icy + (dy + scale / distanceScalar))
+        let njx = decimalFixing(jcx - (dx + scale / distanceScalar))
+        let njy = decimalFixing(jcy - (dy + scale / distanceScalar))
+        console.log("moveCircle ",nix, niy, njx, njy, typeof(nix))
         // console.log("collide")
         circleI.setAttribute('fill', '#ff0000');
         circleJ.setAttribute('fill', '#ff0000');
-        circleI.setAttribute('cx', nix );
-        circleI.setAttribute('cy', niy );
-        circleJ.setAttribute('cx', njx );
-        circleJ.setAttribute('cy', njy );
+        circleI.setAttribute('cx',  nix );
+        circleI.setAttribute('cy',  niy );
+        circleJ.setAttribute('cx',  njx );
+        circleJ.setAttribute('cy',  njy );
     }
 }
 
     
 
 function physicsCircleCollisionQuad(QuadTree, head){
-    console.log("STARTING...")
+    console.log("physicsCircleCollisionQuad", head)
     //currentQuad refresh of window.svgQuadTree for consistent read/lookup
     let currentQuad = window.svgQuadTree;
     if(head.length>0){
@@ -226,11 +243,11 @@ function physicsCircleCollisionQuad(QuadTree, head){
 
 
             let crossingBorders = [];
-            console.log(`cy: ${cy}, r: ${r}, cy + r: ${cy + r}, boundary.y: ${boundary.y}, boundary.height: ${boundary.height}, total boundary height: ${boundary.y + boundary.height}`);
             if(cy-r < boundary.y){crossingBorders.push("N")}
             if(cx+r > (boundary.x + boundary.width)){crossingBorders.push("E")}
             if(cx-r < boundary.x){crossingBorders.push("W")}
             if(cy+r > (boundary.y + boundary.height)){crossingBorders.push("S")}
+            console.log(`cy: ${cy}, r: ${r}, cy + r: ${cy + r}, boundary.y: ${boundary.y}, boundary.height: ${boundary.height}, total boundary height: ${boundary.y + boundary.height}`, crossingBorders);
             
 
             //Every crossingBorder is checked for point overlap by using "headBorderTarget" as a shorthand starting lookup point             
@@ -251,19 +268,23 @@ function physicsCircleCollisionQuad(QuadTree, head){
 
                         //if it contains the opposite axis, it's a match. Switch and exit
                         if(headBorderTarget[k-1].includes(switchPairObj[crossingBorders[j]])){
+                            console.log("SWAPLOG;BREAK ", "axis:",crossingBorders[j], " value/pre:",headBorderTarget[k-1])
                             headBorderTarget[k-1] = headBorderTarget[k-1].replace(switchPairObj[crossingBorders[j]], crossingBorders[j]);
+                            console.log("SWAPLOG;BREAK ", "axis:",crossingBorders[j], " value/post:",headBorderTarget[k-1])
                             break;
                         }
                         //else if it contains the same axis, switch and continue until root
                         else if(headBorderTarget[k-1].includes(crossingBorders[j])){
+                            console.log("SWAPLOG;CONTINUE ", "axis:",crossingBorders[j], " value/pre:",headBorderTarget[k-1])
                             headBorderTarget[k-1] = headBorderTarget[k-1].replace(crossingBorders[j], switchPairObj[crossingBorders[j]])
+                            console.log("SWAPLOG;CONTINUE ", "axis:",crossingBorders[j], " value/post:",headBorderTarget[k-1])
                                                         
                         }
                     }
 					
 					//check for null entries
                     headBorderTarget = removeHeadEndNull(headBorderTarget);
-                    console.log(headBorderTarget)
+                    console.log("headBorderTarget",headBorderTarget)
                     
                     if(headBorderTarget!=null){
                         let tempTree = window.svgQuadTree;;
@@ -310,11 +331,12 @@ function physicsCircleCollisionQuad(QuadTree, head){
             }
         }
     }
-    console.log("out")
     head.pop();
+    console.log("out", head);
 } 
 
 function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r, headBorderTarget){
+    console.log("checkBorders",headBorderTarget);
     //this tempTree is the end point to check for
     if(tempTree.points.length>0){
         //check points against point
@@ -329,7 +351,6 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
     else{
         
         const quadProperties = Object.keys(tempTree);
-        console.log(headBorderTarget);
         for(let i=0; i< quadProperties.length; i++){
             if(tempTree[quadProperties[i]]!=null){
 
@@ -338,8 +359,8 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
                     //continue deeper if point is within bounds
                     if(quadBoundary.x < cx-r &&
                        quadBoundary.y < cy-r &&
-                       quadBoundary.x + quadBoundary.width  > cx+r &&
-                       quadBoundary.y + quadBoundary.height > cy+r){
+                       (quadBoundary.x + quadBoundary.width)  > cx+r &&
+                       (quadBoundary.y + quadBoundary.height) > cy+r){
                          //en akse er presis, type : x'{x, x+width}
                          //en annen akse er retningsmessig prioritert, type y'>{y} men av alle y'':{y1',y2',y3'} den minste
                          //matches the boundary!
@@ -367,7 +388,7 @@ function removeHeadEndNull(headBorderTarget){
 
     let tempTree = window.svgQuadTree;;
     for(let h = 0; h<headBorderTarget.length; h++){
-        console.log(tempTree);
+        // console.log(tempTree);
         if(tempTree[headBorderTarget[h]]!=null){
             tempTree = tempTree[headBorderTarget[h]]
             

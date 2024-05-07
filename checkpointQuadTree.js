@@ -9,7 +9,6 @@ function checkBoundary(point, parentQuad){
 
     // const width = boundary.x + boundary.width;
     // const height = boundary.y + boundary.height;
-
     for(let i=0; i< quadrants.length; i++){
         if( point.x > quadrants[i].boundary.x &&
             point.x < (quadrants[i].boundary.x + quadrants[i].boundary.width)&& 
@@ -42,7 +41,7 @@ function checkBoundary(point, parentQuad){
     //     console.debug(`something unexpected happened`);
     //     return null;
     // }
-    console.debug(`something unexpected happened`);
+    console.debug(`something unexpected happened`, point.x, point.y, typeof(point.x), parentQuad);
     return null;
 }
 
