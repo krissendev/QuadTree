@@ -1,5 +1,8 @@
 "use strict";
-import {decimalFixing} from '../util/decimalFixing.js';
+//import {decimalFixing} from '../util/decimalFixing.js'
+import {physicsMouseloopQuad} from './mousePhysics.js'
+import{physicsCircleCollisionQuad} from './pointCheckQuad.js'
+
 
 let physicsIntervalSwarm;
 let physicsIntervalCursor;

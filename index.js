@@ -1,8 +1,8 @@
 "use strict";
-import {addSVGCircle, buttonListeners} from './addCircle.js';
-import {generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop, QuadTree} from './addQuadTree.js';
-import {createRects, startReactCreate, stopReactCreate} from './addRect.js';
-import {startPhysicsloop, stopPhysicsloop} from './physics.js';
+import {addSVGCircle, buttonListeners} from './visualization/addCircle.js';
+import {createRects, startReactCreate, stopReactCreate} from './visualization/addRect.js';
+import {generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop} from './quadTree/addQuadTree.js';
+import {startPhysicsloop, stopPhysicsloop} from './physics/physics.js';
 
 
 //Click to add circles

@@ -1,4 +1,6 @@
 "use strict";
+import{decimalFixing} from '../util/decimalFixing.js'
+
 function moveCircle(circleI, circleJ){
     console.log("moveCircle")
     let icr = parseFloat(circleI.getAttribute('r'));
@@ -54,3 +56,4 @@ function moveCircle(circleI, circleJ){
         circleJ.setAttribute('cy',  njy );
     }
 }
+export{moveCircle}

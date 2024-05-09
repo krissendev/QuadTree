@@ -53,3 +53,4 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
         }
     }
 }
+export{physicsMouseloopQuad}

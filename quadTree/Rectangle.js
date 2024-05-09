@@ -1,5 +1,5 @@
 "use strict";
-class Rectangle{
+export class Rectangle{
     constructor(x,y,width,height){
        this.x = x;
        this.y = y;

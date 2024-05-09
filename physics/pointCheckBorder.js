@@ -1,4 +1,5 @@
 "use strict";
+import{moveCircle} from './pointRelocate.js'
 
 function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r, headBorderTarget){
     console.log("checkBorders",headBorderTarget);
@@ -44,3 +45,4 @@ function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r
         //else no point found
     }
 }
+export{checkBorders}

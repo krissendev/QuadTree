@@ -1,4 +1,10 @@
 "use strict";
+import{checkBorders} from './pointCheckBorder.js'
+import{removeHeadEndNull} from './removeHeadEndNull.js'
+import{moveCircle} from './pointRelocate.js'
+
+
+
 function physicsCircleCollisionQuad(QuadTree, head){
     console.log("physicsCircleCollisionQuad", head)
     //currentQuad refresh of window.svgQuadTree for consistent read/lookup
@@ -131,3 +137,5 @@ function physicsCircleCollisionQuad(QuadTree, head){
     head.pop();
     console.log("out", head);
 } 
+
+export{physicsCircleCollisionQuad}

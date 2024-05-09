@@ -16,3 +16,5 @@ function physicsSwarmMove(circleElements){
         });
     }
 }
+//not implemented yet in current commit
+//export{physicsSwarmMove}

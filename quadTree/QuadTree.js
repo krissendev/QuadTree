@@ -1,4 +1,8 @@
 "use strict";
+
+import {borderQuadsplit} from './splitQuadTree.js';
+import {checkBoundary} from './checkpointQuadTree.js';
+
 export class QuadTree{
     constructor(boundary,capacity){
         this.borderQuadsplit = borderQuadsplit; //imported function

@@ -34,3 +34,4 @@ function removeHeadEndNull(headBorderTarget){
     }
     
 }
+export{removeHeadEndNull}

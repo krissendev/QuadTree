@@ -1,6 +1,4 @@
 "use strict";
-import {borderQuadsplit} from './splitQuadTree.js';
-import {checkBoundary} from './checkpointQuadTree.js';
 
 let generationInterval;
 let looping = false;
