@@ -1,4 +1,7 @@
 "use strict";
+import{Rectangle} from './Rectangle.js'
+import{Point} from './Point.js'
+import { QuadTree } from './QuadTree.js';
 
 let generationInterval;
 let looping = false;

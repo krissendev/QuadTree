@@ -1,5 +1,5 @@
 "use strict";
-function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree){
+function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree,looping){
     //console.log("CYCLE - START")
     if (looping && svgQuadTree ){
         if(svgQuadTree.points.length >0){

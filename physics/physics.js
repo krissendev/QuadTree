@@ -21,7 +21,7 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
         looping = true;
         physicsMouseloopQuad(mousePosition, circleElements, QuadTree, currentQuad);
         physicsIntervalCursor = setInterval(() => {
-            physicsMouseloopQuad(mousePosition, circleElements, QuadTree, currentQuad)
+            physicsMouseloopQuad(mousePosition, circleElements, QuadTree, currentQuad,looping)
         }, 50);
         // physicsIntervalSwarm = setInterval(() => {
         //     physicsSwarmMove(circleElements)
