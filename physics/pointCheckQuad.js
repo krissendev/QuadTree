@@ -58,7 +58,7 @@ function physicsCircleCollisionQuad(QuadTree, head){
                 let headBorderTarget;
                 for(let j =0; j< crossingBorders.length; j++){
 
-                    headBorderTarget = head;
+                    headBorderTarget = head.slice();
                     let switchPairObj =  {"N":"S", "S":"N", "E":"W", "W":"E"};
                     
                     //swap based on parameter
