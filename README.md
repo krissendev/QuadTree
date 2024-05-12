@@ -1,30 +1,49 @@
 <img alt="A red cube pushes a grey cube off screen" width="100%" height="100%" src="https://github.com/krissendev/QuadTree/blob/master/banner.png">
 
 <h1 align="center">QuadTree</h1> 
-Made with SVG's and Javascript
-
-A mostly functional QuadTree sorting system. (soon to be perfect) 
-<br>
-Next on the list is to add random circle movement, collision correction between circles aswell as cursor pushing effect. 
-
-
-
-
-https://github.com/krissendev/QuadTree/assets/43881249/fc2bf17a-49f6-403a-a184-4fc18bc9698a
-
-
+This is a quadtree based 2D physics system that uses html and javascript with svg elements to achieve collision detection and correction.
 
 <br>
-(video format currently not supported for firefox & safari, will look for alternatives)
+The video below demonstrates how QuadTree works, if you want to try out QuadTree for yourself simply follow the Quickstart or for a brief summary of the codebase refer to Explanation.
+QuadTree is functional but has still room for general improvements and further feature implementation for example: Three diffing, three balancing etc.
+<br><br>
 
-<br>
+
+https://github.com/krissendev/QuadTree/assets/43881249/555597bf-366f-44a0-ba12-1936e3b41908
+
 <br>
 
 
-
-https://github.com/krissendev/QuadTree/assets/43881249/da902660-6699-4264-bd4c-dbc22fbb869f
-
-
+## Quickstart
 <br>
-(video format currently not supported for firefox & safari, will look for alternatives)
 
+### #1 clone this repository
+```
+git clone https://github.com/krissendev/QuadTree
+```
+<br>
+
+### #2 open project folder
+```
+cd QuadTree   #enter into the folder/dir 
+```
+<br>
+
+### #3 run localhost server
+* either by running "liveserver(Five Server)" plugin in vscode
+  <br>
+* with node.js installed,  install package:"npm install -g http-server" then run: "http-server"
+  <br>
+* or some other form of local server environment
+<br><br>
+## Explanation
+The general codeflow is currently
+<br> <pre>
+* painting svg points: index.html -> index.js -> /visualization/addCircle.js
+* generating quadTree: index.html -> index.js -> /quadTree/addQuadTree.js
+  //𝑤ℎ𝑖𝑐ℎ 𝑢𝑠𝑒𝑠 𝑟𝑒𝑠𝑜𝑢𝑟𝑐𝑒𝑠 𝑓𝑟𝑜𝑚 '/𝑞𝑢𝑎𝑑𝑇𝑟𝑒𝑒'
+* drawing rectangles:  index.html -> index.js -> /visualization/addRect.js
+  //𝑜𝑛𝑙𝑦 𝑓𝑜𝑟 𝑑𝑒𝑏𝑢𝑔𝑔𝑖𝑛𝑔 𝑣𝑖𝑠𝑢𝑎𝑙𝑖𝑧𝑎𝑡𝑖𝑜𝑛 𝑝𝑢𝑟𝑝𝑜𝑠𝑒𝑠
+* collision checking:  index.html -> index.js -> /physics/physics.js
+  //𝘸𝘩𝘪𝘤𝘩 𝘶𝘴𝘦𝘴 𝘳𝘦𝘴𝘰𝘶𝘳𝘤𝘦𝘴 𝘧𝘳𝘰𝘮 '/𝘱𝘩𝘺𝘴𝘪𝘤𝘴' 𝘢𝘴𝘸𝘦𝘭𝘭 𝘢𝘴 𝘸𝘪𝘯𝘥𝘰𝘸 𝘣𝘰𝘶𝘯𝘥 𝘴𝘷𝘨𝘘𝘶𝘢𝘥𝘛𝘳𝘦𝘦 𝘢𝘯𝘥 𝘘𝘶𝘢𝘥𝘛𝘳𝘦𝘦 𝘰𝘣𝘫𝘦𝘤𝘵𝘴 𝘧𝘳𝘰𝘮 '/𝘲𝘶𝘢𝘥𝘛𝘳𝘦𝘦'
+</pre>
