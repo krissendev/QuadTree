@@ -6,7 +6,7 @@ import{moveCircle} from './pointRelocate.js'
 
 
 function physicsCircleCollisionQuad(QuadTree, head){
-    console.log("physicsCircleCollisionQuad", head)
+    //console.log("physicsCircleCollisionQuad", head)
     //currentQuad refresh of window.svgQuadTree for consistent read/lookup
     let currentQuad = window.svgQuadTree;
     if(head.length>0){
@@ -50,7 +50,7 @@ function physicsCircleCollisionQuad(QuadTree, head){
             if(cx+r > (boundary.x + boundary.width)){crossingBorders.push("E")}
             if(cx-r < boundary.x){crossingBorders.push("W")}
             if(cy+r > (boundary.y + boundary.height)){crossingBorders.push("S")}
-            console.log(`cy: ${cy}, r: ${r}, cy + r: ${cy + r}, boundary.y: ${boundary.y}, boundary.height: ${boundary.height}, total boundary height: ${boundary.y + boundary.height}`, crossingBorders);
+            //console.log(`cy: ${cy}, r: ${r}, cy + r: ${cy + r}, boundary.y: ${boundary.y}, boundary.height: ${boundary.height}, total boundary height: ${boundary.y + boundary.height}`, crossingBorders);
             
 
             //Every crossingBorder is checked for point overlap by using "headBorderTarget" as a shorthand starting lookup point             
@@ -71,23 +71,23 @@ function physicsCircleCollisionQuad(QuadTree, head){
 
                         //if it contains the opposite axis, it's a match. Switch and exit
                         if(headBorderTarget[k-1].includes(switchPairObj[crossingBorders[j]])){
-                            console.log("SWAPLOG;BREAK ", "axis:",crossingBorders[j], " value/pre:",headBorderTarget[k-1])
+                            //console.log("SWAPLOG;BREAK ", "axis:",crossingBorders[j], " value/pre:",headBorderTarget[k-1])
                             headBorderTarget[k-1] = headBorderTarget[k-1].replace(switchPairObj[crossingBorders[j]], crossingBorders[j]);
-                            console.log("SWAPLOG;BREAK ", "axis:",crossingBorders[j], " value/post:",headBorderTarget[k-1])
+                            //console.log("SWAPLOG;BREAK ", "axis:",crossingBorders[j], " value/post:",headBorderTarget[k-1])
                             break;
                         }
                         //else if it contains the same axis, switch and continue until root
                         else if(headBorderTarget[k-1].includes(crossingBorders[j])){
-                            console.log("SWAPLOG;CONTINUE ", "axis:",crossingBorders[j], " value/pre:",headBorderTarget[k-1])
+                            //console.log("SWAPLOG;CONTINUE ", "axis:",crossingBorders[j], " value/pre:",headBorderTarget[k-1])
                             headBorderTarget[k-1] = headBorderTarget[k-1].replace(crossingBorders[j], switchPairObj[crossingBorders[j]])
-                            console.log("SWAPLOG;CONTINUE ", "axis:",crossingBorders[j], " value/post:",headBorderTarget[k-1])
+                            //console.log("SWAPLOG;CONTINUE ", "axis:",crossingBorders[j], " value/post:",headBorderTarget[k-1])
                                                         
                         }
                     }
 					
 					//check for null entries
                     headBorderTarget = removeHeadEndNull(headBorderTarget);
-                    console.log("headBorderTarget",headBorderTarget)
+                    //console.log("headBorderTarget",headBorderTarget)
                     
                     if(headBorderTarget!=null){
                         let tempTree = window.svgQuadTree;;
@@ -96,7 +96,7 @@ function physicsCircleCollisionQuad(QuadTree, head){
                             let copy2 = JSON.parse(JSON.stringify(tempTree[headBorderTarget[j]]));
     
                             if(tempTree[headBorderTarget[j]]==null){
-                                console.log("? undefined",copy1, typeof(copy1), copy2 )
+                                //console.log("? undefined",copy1, typeof(copy1), copy2 )
                             }
                             else{
                                 // console.log("DB accessor on tempTree:",copy1, "\n Headbordertarget:", headBorderTarget, headBorderTarget.length-1, j)
@@ -128,14 +128,14 @@ function physicsCircleCollisionQuad(QuadTree, head){
             const property=quadProperties[i]
             const propertyValue= currentQuad[property];
             if(propertyValue instanceof QuadTree){
-                console.log("in", head);
+                //console.log("in", head);
                 head.push(property)
                 physicsCircleCollisionQuad(QuadTree, head)
             }
         }
     }
     head.pop();
-    console.log("out", head);
+    //console.log("out", head);
 } 
 
 export{physicsCircleCollisionQuad}

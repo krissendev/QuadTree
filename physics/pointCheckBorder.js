@@ -2,7 +2,7 @@
 import{moveCircle} from './pointRelocate.js'
 
 function checkBorders(tempTree, QuadTree, boundary, direction,  point, cx, cy, r, headBorderTarget){
-    console.log("checkBorders",headBorderTarget);
+    //console.log("checkBorders",headBorderTarget);
     //this tempTree is the end point to check for
     if(tempTree.points.length>0){
         //check points against point

@@ -2,7 +2,7 @@
 //import {decimalFixing} from '../util/decimalFixing.js'
 import {physicsMouseloopQuad} from './mousePhysics.js'
 import{physicsCircleCollisionQuad} from './pointCheckQuad.js'
-
+import {physicsSwarmMove} from './pointWander.js'
 
 let physicsIntervalSwarm;
 let physicsIntervalCursor;
@@ -15,7 +15,7 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
     let head = [];
 
     //console.log("startphysics");
-    const svgContainer = document.querySelector('#content_svg');
+    const svgContainer = document.querySelector('#quadtree-circles');
     const circleElements = svgContainer.querySelectorAll('circle');
     if(!looping){
         looping = true;
@@ -23,22 +23,23 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
         physicsIntervalCursor = setInterval(() => {
             physicsMouseloopQuad(mousePosition, circleElements, QuadTree, currentQuad,looping)
         }, 50);
-        // physicsIntervalSwarm = setInterval(() => {
-        //     physicsSwarmMove(circleElements)
-        // }, 500); 
+
+        physicsIntervalSwarm = setInterval(() => {
+            physicsSwarmMove(circleElements)
+        }, 100); 
         physicsIntervalSwarmCollision = setInterval(() => {
             //QuadTree is class for typechecking quads
             //currentQuad = used for recursing down the three like a tail 
             //quadTree = the whole three
             //head array of path 
-            console.log("Set Interval...")
+            //console.log("Set Interval...")
             physicsCircleCollisionQuad(QuadTree, head)
         }, 100);
     }
 }
 function stopPhysicsloop(){
     if(looping){
-        //clearInterval(physicsIntervalSwarm);
+        clearInterval(physicsIntervalSwarm);
         clearInterval(physicsIntervalCursor);
         clearInterval(physicsIntervalSwarmCollision);
         

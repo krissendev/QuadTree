@@ -1,7 +1,7 @@
 "use strict";
 //currently not set to use QuadTree
 function physicsSwarmMove(circleElements){
-    if (looping && circleElements ){
+    if (circleElements ){
         circleElements.forEach(circle => {
             let weight = 10; //value is split over 0 so half the value
             let balance = weight/2;
@@ -16,5 +16,4 @@ function physicsSwarmMove(circleElements){
         });
     }
 }
-//not implemented yet in current commit
-//export{physicsSwarmMove}
+export{physicsSwarmMove}

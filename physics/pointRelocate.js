@@ -2,7 +2,7 @@
 import{decimalFixing} from '../util/decimalFixing.js'
 
 function moveCircle(circleI, circleJ){
-    console.log("moveCircle")
+    //console.log("moveCircle")
     let icr = parseFloat(circleI.getAttribute('r'));
     
     // let r = Number(parseFloat(circleI.getAttribute('r')).toFixed(2));
@@ -34,19 +34,19 @@ function moveCircle(circleI, circleJ){
     let dy = decimalFixing(icy - jcy);
     
     let distanceScalar = decimalFixing(Math.sqrt(dx * dx + dy * dy));
-    console.log("moveCircle",distanceScalar, typeof(distanceScalar))
+    //console.log("moveCircle",distanceScalar, typeof(distanceScalar))
 
     if (distanceScalar < combinedRadius) {
         //console.log(circleI, circleJ)
         if (distanceScalar === 0) distanceScalar = 0.01;
         
         let scale = 0;
-        console.log("moveCircle", typeof(icx), typeof(dx), typeof(scale), typeof(distanceScalar))
+        //console.log("moveCircle", typeof(icx), typeof(dx), typeof(scale), typeof(distanceScalar))
         let nix = decimalFixing(icx + (dx + scale / distanceScalar))
         let niy = decimalFixing(icy + (dy + scale / distanceScalar))
         let njx = decimalFixing(jcx - (dx + scale / distanceScalar))
         let njy = decimalFixing(jcy - (dy + scale / distanceScalar))
-        console.log("moveCircle ",nix, niy, njx, njy, typeof(nix))
+        //console.log("moveCircle ",nix, niy, njx, njy, typeof(nix))
         // console.log("collide")
         circleI.setAttribute('fill', '#ff0000');
         circleJ.setAttribute('fill', '#ff0000');
