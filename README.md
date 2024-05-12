@@ -4,7 +4,7 @@
 This is a quadtree based 2D physics system that uses html and javascript with svg elements to achieve collision detection and correction.
 
 <br>
-The video below demonstrates how QuadTree works, if you want to try out QuadTree for yourself simply follow the Quickstart or for a brief summary of the codebase refer to Explanation.
+The video below demonstrates how QuadTree works, if you want to try out QuadTree for yourself simply follow the [Quickstart](#quickstart) or for a brief summary of the codebase refer to [Explanation](#explanation).
 QuadTree is functional but has still room for general improvements and further feature implementation for example: Three diffing, three balancing etc.
 <br><br>
 
@@ -13,7 +13,7 @@ https://github.com/krissendev/QuadTree/assets/43881249/555597bf-366f-44a0-ba12-1
 
 <br>
 
-
+<span id="quickstart"></span>
 ## Quickstart
 <br>
 
