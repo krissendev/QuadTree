@@ -19,9 +19,9 @@ function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
     const circleElements = svgContainer.querySelectorAll('circle');
     if(!looping){
         looping = true;
-        physicsMouseloopQuad(mousePosition, circleElements, QuadTree, currentQuad);
         physicsIntervalCursor = setInterval(() => {
-            physicsMouseloopQuad(mousePosition, circleElements, QuadTree, currentQuad,looping)
+            let svgQuadTree = window.svgQuadTree;
+            physicsMouseloopQuad(mousePosition, circleElements, QuadTree, svgQuadTree)
         }, 50);
 
         physicsIntervalSwarm = setInterval(() => {
@@ -42,7 +42,6 @@ function stopPhysicsloop(){
         clearInterval(physicsIntervalSwarm);
         clearInterval(physicsIntervalCursor);
         clearInterval(physicsIntervalSwarmCollision);
-        
         looping = false;
     }
 }

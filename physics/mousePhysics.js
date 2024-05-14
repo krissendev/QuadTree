@@ -1,26 +1,36 @@
 "use strict";
-function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree,looping){
-    //console.log("CYCLE - START")
-    if (looping && svgQuadTree ){
+import {decimalFixing} from '../util/decimalFixing.js'
+
+//only for debugging
+//let head=[];
+
+
+function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree){    
+    if (svgQuadTree ){
+        //console.log(head)
         if(svgQuadTree.points.length >0){
             for(let i=0; i<svgQuadTree.points.length; i++){
                 let circle = svgQuadTree.points[i].data;
                 
-
-                let cx = parseInt(circle.getAttribute('cx'))
-                let cy = parseInt(circle.getAttribute('cy'))
-                let r = parseInt(circle.getAttribute('r'))
+                let cx = decimalFixing(circle.getAttribute('cx'));
+                let cy = decimalFixing(circle.getAttribute('cy'));
+                let r = decimalFixing(circle.getAttribute('r'));
+                
                 if((mousePosition.x > (cx-r) && mousePosition.x < (cx+r))&&
                 (mousePosition.y > (cy-r) && mousePosition.y < (cy+r))){
-                    circle.setAttribute('fill', '#ff0000');
+                    //circle.setAttribute('fill', '#ff0000');
+                    //console.log(circle)
                     let dx = mousePosition.x - cx;
                     let dy = mousePosition.y - cy;
-                    let distanceScalar = Math.sqrt(dx * dx + dy * dy);
+                    let distanceScalar = decimalFixing(Math.sqrt(dx * dx + dy * dy));
                     if (distanceScalar === 0) distanceScalar = 0.01;
-                    let step1 = (Math.exp(-distanceScalar));
-                    let step2 = 1/(step1-1);
-                    let nx = (dx / step2)+ cx ;
-                    let ny = (dy / step2)+ cy ;
+                    /*let step1 = (Math.exp(-distanceScalar));
+                    let step2 = 1/(step1-1);*/
+                    let scale = 5;
+                    let nx = decimalFixing(cx - (dx + scale / distanceScalar))
+                    let ny = decimalFixing(cy - (dy + scale / distanceScalar))
+                    //let nx = (dx / step2)+ cx ;
+                    //let ny = (dy / step2)+ cy ;
                     
                     //console.log("mouseposition:", mousePosition)
                     // console.log(cx, cy)
@@ -39,6 +49,7 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
             for(let i=0;i<quadProperties.length; i++){
                 if(svgQuadTree[quadProperties[i]] instanceof QuadTree){
                     let quad = svgQuadTree[quadProperties[i]]
+
                     let boundary = quad.boundary;
                     //console.log(quad.points.length)
                     if( mousePosition.x>boundary.x &&
@@ -46,10 +57,14 @@ function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTre
                         mousePosition.y>boundary.y &&
                         mousePosition.y<(boundary.y+boundary.height)
                         ){
+                            //head.push(quadProperties[i])
                             physicsMouseloopQuad(mousePosition,circleElements, QuadTree, quad)
+                            
+  
                     }
                 }
             }
+            //head.pop();
         }
     }
 }
