@@ -112,16 +112,9 @@ function guimove(gui, anchor_x, anchor_y){
     let border = document.querySelector('.title_bar').getBoundingClientRect();
     //loop if pressed LMB mouse
     if(isMovingGUI){        
-        //loop if mouse if above GUI, else exit
-        if((mousePosition.x > border.x) 
-        && (mousePosition.x < (border.width+border.x))
-        &&(mousePosition.y > border.y) 
-        && (mousePosition.y < (border.height+border.y))){
-            gui.left = (mousePosition.x - anchor_x) + "px";
-            gui.top = (mousePosition.y - anchor_y) + "px";
-            window.requestAnimationFrame(()=> guimove(gui, anchor_x, anchor_y));
-        }
-        else{isMovingGUI=false;}
+        gui.left = (mousePosition.x - anchor_x) + "px";
+        gui.top = (mousePosition.y - anchor_y) + "px";
+        window.requestAnimationFrame(()=> guimove(gui, anchor_x, anchor_y));
     }
     else{isMovingGUI=false;}
 }
