@@ -3,12 +3,14 @@ import {addSVGCircle, buttonListeners} from './visualization/addCircle.js';
 import {createRects, startReactCreate, stopReactCreate} from './visualization/addRect.js';
 import {generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop} from './quadTree/addQuadTree.js';
 import {startPhysicsloop, stopPhysicsloop} from './physics/physics.js';
-
+let circleCount=0;
 
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
 screenClick.addEventListener('pointerdown', (event) => {
-    addSVGCircle(event);
+    console.log(circleCount)
+    circleCount = addSVGCircle(circleCount);
+    console.log(circleCount)
 });
 
 //Update UI slider number
@@ -19,10 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //clear canvas
 document.querySelector('#clear_svg').addEventListener('pointerdown', () => {
-    for(let i = screenClick.childElementCount - 1; i>=0; i--){
-        // console.log(screenClick.childNodes[i]);
-        screenClick.removeChild(screenClick.childNodes[i]);
-    }
+    const circles = document.querySelector('#quadtree-circles');
+    const rects = document.querySelector('#quadtree-rects');
+    const displayCount = document.querySelector('#display_svgNumber');
+    circles.innerHTML = '';
+    rects.innerHTML = '';
+    circleCount=0;
+    displayCount.innerHTML = circleCount;
 });
 
 //let reusableData;

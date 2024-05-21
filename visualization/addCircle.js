@@ -26,7 +26,7 @@ const displayCount = document.querySelector('#display_svgNumber'); // ammount ex
 let circleCount = 0;
 
 //Draw circles
-function addSVGCircle(event){
+function addSVGCircle(circleCount){
     for(let i=0; i< svgAmount.valueAsNumber; i++){
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         //randomizing the spread and axis (+/-) of each click
@@ -42,6 +42,8 @@ function addSVGCircle(event){
         circleCount++;
         displayCount.innerHTML = circleCount;
     }
+    console.log(circleCount)
+    return circleCount;
 }
 
 //Update UI slider number

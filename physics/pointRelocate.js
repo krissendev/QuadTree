@@ -48,8 +48,8 @@ function moveCircle(circleI, circleJ){
         let njy = decimalFixing(jcy - (dy + scale / distanceScalar))
         //console.log("moveCircle ",nix, niy, njx, njy, typeof(nix))
         // console.log("collide")
-        circleI.setAttribute('fill', '#ff0000');
-        circleJ.setAttribute('fill', '#ff0000');
+        // circleI.setAttribute('fill', '#ff0000');
+        // circleJ.setAttribute('fill', '#ff0000');
         circleI.setAttribute('cx',  nix );
         circleI.setAttribute('cy',  niy );
         circleJ.setAttribute('cx',  njx );
