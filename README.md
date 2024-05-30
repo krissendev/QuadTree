@@ -1,4 +1,4 @@
-<img alt="A red cube pushes a grey cube off screen" width="100%" height="100%" src="https://github.com/krissendev/QuadTree/blob/master/banner.png">
+<img alt="A red cube pushes a grey cube off screen" width="100%" height="100%" src="https://github.com/krissendev/QuadTree/blob/master/styles/banner.png">
 
 <h1 align="center">QuadTree</h1> 
 This is a quadtree based 2D physics system that uses html and javascript with svg elements to achieve collision detection and correction.

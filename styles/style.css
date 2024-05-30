@@ -8,6 +8,7 @@ gui_floater
 */
 /*Ul: #gui_floater*/
 #gui_floater {
+    z-index: 2;
     padding:0;
     margin:0; 
     border:0;
@@ -21,7 +22,7 @@ gui_floater
 #gui_floater:hover{
     border-color:#3584e4;
 }
-
+.guiLinks{display:block;}
 
 /*Titlebar */
 .title_bar{
@@ -74,3 +75,127 @@ gui_floater
 li {
     list-style-type: none;
   }
+
+
+.burger {
+    z-index: 2;
+    display: none;
+    position:absolute;
+    right: 0px;
+    top: 0;
+    height: 50px;
+    width:50px;
+    background-color: rgba(255, 255, 255, 0.9);
+    background-size: 30px 30px;
+    border-style:solid;
+    border-color: black;
+
+}  
+.burger div{
+    width:24px;
+    height:5px;
+    margin:5px;
+    background-color: black;
+}
+
+.burger:hover {
+    border-color:#3584e4;
+}
+.burger:hover div{
+    background-color: #3584e4;;
+}
+.modal{
+    right: 0;
+    top: 0;
+    z-index: 0;
+    display:none;
+    position: absolute;
+    width:100vh;
+    height:100vh;
+    background-color:hsla(0, 0%, 100%, 0.8)
+}
+
+@media screen and (max-width: 540px) {
+    .guiLinks{
+        z-index: 2;
+        display:none;
+        height: 100vh;
+        flex-direction: column; 
+        justify-content: center;
+        align-items:center; 
+        border:10px;  
+        overflow:scroll
+    }
+    .guiLinks li{
+        padding:10px;
+        z-index: 2;
+    }
+    .burger{
+        display:block;
+    }
+    /*Animating burger lines into cross*/
+    .burger.active div:nth-child(1){
+        animation: bubble 0.1s linear 1 normal forwards;
+        animation-name: transitionBurgerTopDown;
+    }
+    .burger.active div:nth-child(2){
+        display:none;
+    }
+    .burger.active div:nth-child(3){
+        animation: bubble 0.1s linear 1 normal forwards;
+        animation-name: transitionBurgerBottomUp;
+    }
+
+    #gui_floater{
+        top:0px;
+        right:0px;
+        width:100vw;
+        height:10vh;
+        border:none;
+        background-color:none; 
+    }
+    .title_bar{
+        display:none;
+    }
+    .modal{display:none;}
+} 
+
+@keyframes transitionBurgerUp{
+    from{
+        transform: rotate(0deg); 
+        transform-origin: center;   
+    }
+    to{
+        transform: rotate(45deg); 
+        transform-origin: center;    
+    }
+}
+
+/*Burger transtition animation*/
+@keyframes transitionBurgerTopDown{
+    from{
+        width:24px;
+        /* transform:translate(0px,0); */
+        transform: rotate(0deg)translate(0px,0px); 
+        transform-origin: top right;   
+    }
+    to{
+        width:34px;
+        /* transform:translate(150px,0); */
+        transform: rotate(-45deg)translate(-4px,-12px);
+        transform-origin: top right;    
+    }
+}
+@keyframes transitionBurgerBottomUp{
+    from{
+        width:24px;
+        transform: rotate(0deg)translate(0px,0px); 
+        transform-origin: bottom right;   
+    }
+    to{
+        width:34px;
+        transform: rotate(45deg)translate(-4px,12px);
+        transform-origin: bottom right;    
+    }
+}
+

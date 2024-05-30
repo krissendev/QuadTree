@@ -3,7 +3,11 @@ import {addSVGCircle, buttonListeners} from './visualization/addCircle.js';
 import {createRects, startReactCreate, stopReactCreate} from './visualization/addRect.js';
 import {generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop} from './quadTree/addQuadTree.js';
 import {startPhysicsloop, stopPhysicsloop} from './physics/physics.js';
+import {toggleMenu, resetNav} from './util/responsiveMenu.js'
+
 let circleCount=0;
+
+
 
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
@@ -78,7 +82,7 @@ document.querySelector('#toggle_mousePhysics').addEventListener('change', (event
 let cornerIcon = document.querySelector('#corner_icon_inside');
 document.querySelector('#corner_icon').addEventListener('pointerdown', () => {
     let border = document.querySelector("ul");
-    let group= document.querySelector("ul").childNodes[3].style;
+    let group= document.querySelector(".guiLinks").style;
 
     if(group.visibility == "visible"){
         group.visibility = "hidden";
@@ -123,3 +127,7 @@ function guimove(gui, anchor_x, anchor_y){
     }
     else{isMovingGUI=false;}
 }
+
+//Responsive design (mobile) Burger Main menu
+document.querySelector('#mainMenu').addEventListener("pointerdown", toggleMenu);
+window.addEventListener('resize', resetNav);

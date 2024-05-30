@@ -21,7 +21,7 @@
 
                 </div></button>
         </div>
-        <g style="visibility:visible">
+        <div class="guiLinks">
             <!--Count Property-->
             <li>Count <p id="display_svgNumber" style="display:inline">0</p></li>
             <!--Color Property-->
@@ -53,7 +53,12 @@
 
             <!--Toggle physics from mouse to points-->
             <li><input type="checkbox" id="toggle_mousePhysics" unchecked>Toggle physics</li>
-        </g>
+        </div>
+
+        <div class="modal" id="mainMenuModal"></div>
+        <button class="burger" id="mainMenu">
+            <div></div><div></div><div></div>
+        </button>
     </ul>
     <script src="index.js" type="module"></script>
 </body>
