@@ -19,7 +19,6 @@ function toggleMenu(){
         links.style.display = "flex";
         modal.style.display = "block";
         toggled = true;
-
         mainMenu.classList.toggle('active');
         
     }

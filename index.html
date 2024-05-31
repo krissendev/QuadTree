@@ -22,37 +22,36 @@
                 </div></button>
         </div>
         <div class="guiLinks">
+            
+            <li><button id="clear_svg">X Clear circles</button></li>
             <!--Count Property-->
-            <li>Count <p id="display_svgNumber" style="display:inline">0</p></li>
+            <li>Count: <p id="display_svgNumber" style="display:inline">0</p></li>
             <!--Color Property-->
-            <li >Color
+            <li >Color:
                 <input type="color" style="border:0;" id="svgprop_color">
             </li>
             <!--Size Property-->
-            <li>Size <p id="display_svgsize" style="display:inline-block; width:4ch;">_</p>
-                <input type="range" min="1" max="100" value="50" class="slider" id="svgprop_size"
+            <li>Size: <p id="display_svgsize" style="display:inline-block; width:4ch;">_</p>
+                <input type="range" min="1" max="100" value="20" class="slider" id="svgprop_size"
                 style="width:75px"
                 >
             </li>
             <!--Ammount Property-->
-            <li>Circles <p id="display_amount" style="display:inline-block;width:4ch;">_</p>
-                <input type="range" min="1" max="100" value="1" class="slider" id="svgprop_amount"
+            <li>Circles: <p id="display_amount" style="display:inline-block;width:4ch;">_</p>
+                <input type="range" min="1" max="100" value="20" class="slider" id="svgprop_amount"
                 style="width:75px"
                 >
             </li>
             <!--Random Spread Property-->
-            <li>Spread <p id="display_spread" style="display:inline-block;width:4ch;">_</p>
-                <input type="range" min="1" max="300" value="1" class="slider" id="svgprop_spread"
+            <li>Spread: <p id="display_spread" style="display:inline-block;width:4ch;">_</p>
+                <input type="range" min="1" max="300" value="100" class="slider" id="svgprop_spread"
                 style="width:75px"
                 >
             </li>
-            <li><button id="clear_svg">Clear</button></li>
-            <hr>
-            <li><button id="generate_quadtree">Generate QuadTree</button></li>
-            <li><button id="generate_rect">Generate Rectangles</button></li>
+            
 
             <!--Toggle physics from mouse to points-->
-            <li><input type="checkbox" id="toggle_mousePhysics" unchecked>Toggle physics</li>
+            <li><label><input type="checkbox" id="toggle_mousePhysics" unchecked>Toggle physics</li></label>
         </div>
 
         <div class="modal" id="mainMenuModal"></div>

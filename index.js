@@ -1,6 +1,6 @@
 "use strict";
 import {addSVGCircle, buttonListeners} from './visualization/addCircle.js';
-import {createRects, startReactCreate, stopReactCreate} from './visualization/addRect.js';
+import {startReactCreate, stopReactCreate} from './visualization/addRect.js';
 import {generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop} from './quadTree/addQuadTree.js';
 import {startPhysicsloop, stopPhysicsloop} from './physics/physics.js';
 import {toggleMenu, resetNav} from './util/responsiveMenu.js'
@@ -34,21 +34,6 @@ document.querySelector('#clear_svg').addEventListener('pointerdown', () => {
     displayCount.innerHTML = circleCount;
 });
 
-//let reusableData;
-//generate quads
-document.querySelector('#generate_quadtree').addEventListener('pointerdown', () => {
-    generateQuadTree();
-    //reusableData = generateQuadTree();
-    //console.log(reusableData);
-
-});
-
-//generate rect
-document.querySelector('#generate_rect').addEventListener('pointerdown', () => {
-    //console.log("click");
-    createRects();
-    
-});
 
 //store mouse position
 let mousePosition = { x: 0, y: 0 };
@@ -59,16 +44,14 @@ document.addEventListener("mousemove", (event)=>{
 
 
 
-//turn on physics
+//generate quads & turn on physics
 document.querySelector('#toggle_mousePhysics').addEventListener('change', (event) => {
     let checkbox = event.target;
     if(checkbox.checked){
-        //if ('svgQuadTree' in window) {
-        if (typeof svgQuadTree !== 'undefined') {
-            startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
-            startQuadGenerationLoop();
-            startReactCreate();
-        }
+        generateQuadTree();
+        startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
+        startQuadGenerationLoop();
+        startReactCreate();
     }
     else{
         //console.log("stopphysics")
