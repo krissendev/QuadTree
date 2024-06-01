@@ -3,7 +3,7 @@ import {addSVGCircle, buttonListeners} from './visualization/addCircle.js';
 import {startReactCreate, stopReactCreate} from './visualization/addRect.js';
 import {generateQuadTree, startQuadGenerationLoop, stopQuadGenerationLoop} from './quadTree/addQuadTree.js';
 import {startPhysicsloop, stopPhysicsloop} from './physics/physics.js';
-import {toggleMenu, resetNav} from './util/responsiveMenu.js'
+import {toggleMenu, resetNav, debounce, initWindowSize} from './util/responsiveMenu.js'
 
 let circleCount=0;
 
@@ -18,6 +18,9 @@ screenClick.addEventListener('pointerdown', (event) => {
 //Update UI slider number
 document.addEventListener('DOMContentLoaded', function () {
     buttonListeners();
+
+    //Responsive design (mobile) inline style based window width
+    initWindowSize();
 });
 
 
@@ -93,7 +96,7 @@ cornerBtn.addEventListener('keydown', (event) => {
 });
 function togglingBtn(){
     let border = document.querySelector("ul");
-    let group= document.querySelector(".guiLinks").style;
+    let group= document.querySelector(".guiLists").style;
     if(group.visibility == "visible"){
         group.visibility = "hidden";
         border.style.height = "50px";
@@ -142,4 +145,5 @@ function guimove(gui, anchor_x, anchor_y){
 
 //Responsive design (mobile) Burger Main menu
 document.querySelector('#mainMenu').addEventListener("pointerdown", toggleMenu);
-window.addEventListener('resize', resetNav);
+window.addEventListener('resize', debounce(resetNav, 10));
+//window.addEventListener('resize', resetNav);

@@ -88,11 +88,11 @@ button{
 li {
     list-style-type: none;
   }
-.guiLinks{
+.guiLists{
     display:block;
     /* overflow:scroll; */
 }
-.guiLinks li{
+.guiLists li{
     display:block;
     height:50px;
     position: relative;
@@ -104,37 +104,37 @@ li {
     border-color:lightgray;
     
 }
-.guiLinks li p{
+.guiLists li p{
     display:inline-block;
     vertical-align:middle; 
 }
-.guiLinks li label{
+.guiLists li label{
     display:inline-block;
     vertical-align:middle; 
     line-height: 50px;
 } 
 
 /*Unselectanle text*/
-.guiLinks li label,
-.guiLinks li p {    
+.guiLists li label,
+.guiLists li p {    
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
 }
 
 /*right aligned docker elements*/
-.guiLinks li input, 
-.guiLinks li button {
+.guiLists li input, 
+.guiLists li button {
     position: absolute;
     right: 30px;
     top: 50%; 
     transform: translateY(-50%); 
 } 
-.guiLinks li input[type="checkbox"]{
+.guiLists li input[type="checkbox"]{
     width:20px;
     height:20px;
 }
-.guiLinks li input[type="range"]{
+.guiLists li input[type="range"]{
     width:75px
 }
 
@@ -181,7 +181,20 @@ li {
     background-color:hsla(0, 0%, 100%, 0.8)
 }
 @media screen and (max-width: 540px) {
-    .guiLinks{
+/*
+    #gui_floater
+        gui         top = "10vh"
+        gui         left = "0"
+    
+    #mainMenuModal
+        modal       display = "none";
+    
+    .guiLists
+        links       display = "block";
+*/
+
+
+    .guiLists{
         z-index: 2;
         display:none;
         height: 100vh;
@@ -191,15 +204,15 @@ li {
         border:10px;  
         overflow:scroll
     }
-    .guiLinks li{
-        display:flex;
+    .guiLists li{
+        display:none;
         width:100%;
         padding:10px;
         z-index: 2;
         
     }
-    .guiLinks li p,
-    .guiLinks li label{
+    .guiLists li p,
+    .guiLists li label{
         padding:5px;
         display:flex;
         align-self:center;
