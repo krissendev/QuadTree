@@ -1,11 +1,23 @@
-/*
-Overview of hierarchy:
+/*Overview of hierarchy:
 gui_floater
     title_bar
         corner_icon
             corner_icon_inside
-    list
-*/
+    list*/
+
+body{
+    margin:0px;
+    overflow:hidden;
+}
+
+/*Svgcontainer*/
+#content_svg { 
+    position:absolute;
+    width:100vw;
+    height:100vh;
+    z-index:0;
+}
+
 /*Ul: #gui_floater*/
 #gui_floater {
     z-index: 2;
@@ -22,9 +34,8 @@ gui_floater
 #gui_floater:hover{
     border-color:#3584e4;
 }
-.guiLinks{display:block;}
 
-/*Titlebar */
+/*Docker Titlebar */
 .title_bar{
     /*border:solid;*/
     display:flex;
@@ -32,7 +43,7 @@ gui_floater
     align-items: center;
     background-color:white; 
     width:100%;
-    padding-right: 10px;
+
     box-sizing: border-box;
 }
 .title_bar:hover {
@@ -48,35 +59,90 @@ gui_floater
 }
 .title_bar label{
     font-weight: bold;
+    font-size:25px;
 }
-
-/*Button*/
 #corner_icon{
     padding:0;
-    margin:0;
+    margin:5px;
     display: flex;
     justify-content: center; 
     align-items: center;
-    border:2px solid black;
-    height: 15px;
-    width: 18px;
+    border:3px solid black;
+    height: 30px;
+    width: 35px;
     background-color: white;
 }
 #corner_icon:hover, #corner_icon:hover #corner_icon_inside{background-color:#3584e4;}
 #corner_icon_inside{
-    border:2px solid black;
+    border:3px solid black;
     height: 0px;
-    width: 7px;
+    width: 15px;
     background-color:white;
 }
 
-
-/*List*/
+/*Docker items*/
+button{
+    height:40px;
+    font-size: 20px;
+}
 li {
     list-style-type: none;
   }
+.guiLinks{
+    display:block;
+    /* overflow:scroll; */
+}
+.guiLinks li{
+    display:block;
+    height:50px;
+    position: relative;
+    padding:5px;
+    font-size:20px;
+    list-style-type: none;
+    border-style:solid;
+    border-width:1px;
+    border-color:lightgray;
+    
+}
+.guiLinks li p{
+    display:inline-block;
+    vertical-align:middle; 
+}
+.guiLinks li label{
+    display:inline-block;
+    vertical-align:middle; 
+    line-height: 50px;
+} 
+
+/*Unselectanle text*/
+.guiLinks li label,
+.guiLinks li p {    
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+/*right aligned docker elements*/
+.guiLinks li input, 
+.guiLinks li button {
+    position: absolute;
+    right: 30px;
+    top: 50%; 
+    transform: translateY(-50%); 
+} 
+.guiLinks li input[type="checkbox"]{
+    width:20px;
+    height:20px;
+}
+.guiLinks li input[type="range"]{
+    width:75px
+}
 
 
+
+
+
+  /*Mobile*/
 .burger {
     z-index: 2;
     display: none;
@@ -114,7 +180,6 @@ li {
     height:100vh;
     background-color:hsla(0, 0%, 100%, 0.8)
 }
-
 @media screen and (max-width: 540px) {
     .guiLinks{
         z-index: 2;
@@ -127,9 +192,21 @@ li {
         overflow:scroll
     }
     .guiLinks li{
+        display:flex;
+        width:100%;
         padding:10px;
         z-index: 2;
+        
     }
+    .guiLinks li p,
+    .guiLinks li label{
+        padding:5px;
+        display:flex;
+        align-self:center;
+        vertical-align:middle;
+        line-height: 50px;
+    }
+
     .burger{
         display:block;
     }

@@ -27,9 +27,11 @@ function toggleMenu(){
 function resetNav(){
     toggled = false;
     if(window.innerWidth > 540){
+        gui.style.top = "10vh"
+        gui.style.left = "0"
+        console.log("big")
         modal.style.display = "none";
-        links.style.display = "inline-block";
-        
+        links.style.display = "block";
     }
     else if(window.innerWidth < 541){
         modal.style.display = "none";

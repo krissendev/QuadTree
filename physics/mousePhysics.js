@@ -6,7 +6,6 @@ import {decimalFixing} from '../util/decimalFixing.js'
 
 
 function physicsMouseloopQuad(mousePosition,circleElements, QuadTree, svgQuadTree){    
-    console.log("mouse")
     if (svgQuadTree ){
         //console.log(head)
         if(svgQuadTree.points.length >0){

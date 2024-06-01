@@ -12,9 +12,7 @@ let circleCount=0;
 //Click to add circles
 const screenClick = document.querySelector('#content_svg');
 screenClick.addEventListener('pointerdown', (event) => {
-    console.log(circleCount)
-    circleCount = addSVGCircle(circleCount);
-    console.log(circleCount)
+    circleCount = addSVGCircle(event, circleCount);
 });
 
 //Update UI slider number
@@ -24,7 +22,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 //clear canvas
-document.querySelector('#clear_svg').addEventListener('pointerdown', () => {
+const clearBtn = document.querySelector('#clear_svg');
+clearBtn.addEventListener('pointerdown', () => {
+    clearCanvas();
+});
+//Aria - keyboard button activation
+clearBtn.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter'){clearCanvas();}
+});
+function clearCanvas (){
     const circles = document.querySelector('#quadtree-circles');
     const rects = document.querySelector('#quadtree-rects');
     const displayCount = document.querySelector('#display_svgNumber');
@@ -32,7 +38,9 @@ document.querySelector('#clear_svg').addEventListener('pointerdown', () => {
     rects.innerHTML = '';
     circleCount=0;
     displayCount.innerHTML = circleCount;
-});
+}
+
+
 
 
 //store mouse position
@@ -45,7 +53,19 @@ document.addEventListener("mousemove", (event)=>{
 
 
 //generate quads & turn on physics
-document.querySelector('#toggle_mousePhysics').addEventListener('change', (event) => {
+const physicsCheckbox = document.querySelector('#toggle_mousePhysics');
+physicsCheckbox.addEventListener('change', togglePhysics);
+
+
+physicsCheckbox.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter'){
+        physicsCheckbox.checked = !physicsCheckbox.checked;
+        togglePhysics(event);
+    }
+});
+//Aria - keyboard button activation
+function togglePhysics(event){
+    console.log("toggled check")
     let checkbox = event.target;
     if(checkbox.checked){
         generateQuadTree();
@@ -59,25 +79,34 @@ document.querySelector('#toggle_mousePhysics').addEventListener('change', (event
         stopQuadGenerationLoop();
         stopReactCreate();
     }
-});
+}
 
 //Minimize GUI docker
 let cornerIcon = document.querySelector('#corner_icon_inside');
-document.querySelector('#corner_icon').addEventListener('pointerdown', () => {
+const cornerBtn = document.querySelector('#corner_icon');
+cornerBtn.addEventListener('pointerdown', () => {
+    togglingBtn();
+});
+//Aria - keyboard button activation
+cornerBtn.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter'){togglingBtn();}
+});
+function togglingBtn(){
     let border = document.querySelector("ul");
     let group= document.querySelector(".guiLinks").style;
-
     if(group.visibility == "visible"){
         group.visibility = "hidden";
         border.style.height = "50px";
-        cornerIcon.style.height = "6px";
+        cornerIcon.style.height = "10px";
+        cornerBtn.setAttribute("aria-pressed", "false");
     }
     else{
         group.visibility = "visible"
         border.style.height = "auto";
         cornerIcon.style.height = "0px";
+        cornerBtn.setAttribute("aria-pressed", "true");
     } 
-});
+}
 
 
 //Movable GUI
