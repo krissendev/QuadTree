@@ -81,10 +81,21 @@ body{
 }
 
 /*Docker items*/
-button{
+button, input{
+    border-radius: 10px;
     height:40px;
     font-size: 20px;
+    border:solid black;
+    background-color: white;
+    font-weight: bold;
 }
+button:hover, input:hover{
+    color:white;
+    background-color: #3584e4;
+}
+
+
+
 li {
     list-style-type: none;
   }
