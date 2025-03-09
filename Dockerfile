@@ -1,4 +1,4 @@
-# docker-compose up
+# docker-compose up 
 FROM node:13-slim
 WORKDIR /app 
 COPY package*.json ./
