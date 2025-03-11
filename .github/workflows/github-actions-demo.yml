@@ -1,0 +1,49 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Basic information
+        run: echo "Event-${{ github.event_name }}. Server-${{ runner.os }}. Repo-${{ github.repository }}. Branch-${{ github.ref }}"
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+
+
+
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t europe-west1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/github-docker-artifact-ms-qt/tempdoc-image-ms-qt:latest .
+          docker push europe-west1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/github-docker-artifact-ms-qt/tempdoc-image-ms-qt:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy tempdoc-service-ms-qt \
+            --image europe-west1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/github-docker-artifact-ms-qt/tempdoc-image-ms-qt:latest \
+            --region europe-west1 \
+            --platform managed \
+            --allow-unauthenticated
+
+
+
+
+
+
+      - name: List files in the repository
+        run: ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
