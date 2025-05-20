@@ -1,3 +1,4 @@
+# Build stage
 FROM node:18-alpine AS node-builder
 
 WORKDIR /app
@@ -10,11 +11,11 @@ EXPOSE 3000
 
 # -------------------------------------------
 
+# Final stage
 FROM alpine:3.14
 
-# Install nginx, nodejs (runtime only), and supervisord
-RUN apk add --no-cache nginx supervisor
-
+# Install nginx, nodejs (runtime only), supervisord, and tini
+RUN apk add --no-cache nginx supervisor tini
 
 # Create necessary directories
 RUN mkdir -p /var/log/supervisor /run/nginx
@@ -37,5 +38,8 @@ COPY supervisord.conf /etc/supervisord.conf
 # Expose ports (Nginx frontend and Node.js backend)
 EXPOSE 8080 3000
 
-# Run both processes under supervisord
+# Use Tini as the init system to prevent nginx from crashing on gcloud
+# https://medium.com/google-cloud/cloud-run-multiple-processes-4b6f1b3827e
+# https://computingforgeeks.com/use-tini-init-system-in-docker-containers/
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
