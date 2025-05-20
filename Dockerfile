@@ -18,7 +18,10 @@ RUN apk add --no-cache nginx supervisor tini
 
 
 # Create necessary directories
-RUN mkdir -p /var/log/supervisor /run/nginx
+RUN mkdir -p /var/log/supervisor /run/nginx /usr/share/nginx/html
+
+# Create error page
+RUN echo "<html><body><h1>Server Error</h1></body></html>" > /usr/share/nginx/html/50x.html
 
 # Copy built Node.js app
 COPY --from=node-builder /app /app
@@ -37,6 +40,9 @@ COPY supervisord.conf /etc/supervisord.conf
 
 # Expose ports (Nginx frontend and Node.js backend)
 EXPOSE 8080 3000
+
+
+
 
 # Use Tini as the init system to prevent nginx from crashing on gcloud
 # https://medium.com/google-cloud/cloud-run-multiple-processes-4b6f1b3827e

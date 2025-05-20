@@ -12,6 +12,13 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(port, () => {
+//debugging nginx on gcloud
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+})
+
+app.listen(port,'0.0.0.0', () => {
   console.log(`Example app listening on port localhost:${port}/`)
 })
+
+
