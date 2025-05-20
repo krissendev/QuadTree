@@ -1,4 +1,3 @@
-# Build stage
 FROM node:18-alpine AS node-builder
 
 WORKDIR /app
@@ -16,6 +15,7 @@ FROM alpine:3.14
 
 # Install nginx, nodejs (runtime only), supervisord, and tini
 RUN apk add --no-cache nginx supervisor tini
+
 
 # Create necessary directories
 RUN mkdir -p /var/log/supervisor /run/nginx
@@ -42,4 +42,5 @@ EXPOSE 8080 3000
 # https://medium.com/google-cloud/cloud-run-multiple-processes-4b6f1b3827e
 # https://computingforgeeks.com/use-tini-init-system-in-docker-containers/
 ENTRYPOINT ["/sbin/tini", "--"]
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
