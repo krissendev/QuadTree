@@ -14,7 +14,7 @@ EXPOSE 3000
 FROM alpine:3.14
 
 # Install nginx, nodejs (runtime only), supervisord, and tini
-RUN apk add --no-cache nginx supervisor tini
+RUN apk add --no-cache nginx supervisor tini libstdc++
 
 
 # Create necessary directories
