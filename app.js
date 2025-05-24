@@ -12,10 +12,14 @@ console.log('app.js(express) starting to run...');
 app.use((req, res, next) => {
   console.log('Request URL:', req.url);
   console.log('Request Headers:', req.headers);
+  res.on('finish', () => {
+    console.log('Response Content-Type:', res.get('Content-Type'));
+  });
   next();
 });
 app.get('*.js', (req, res, next) => {
   res.set('Content-Type', 'application/javascript');
+  
   next();
 });
 
