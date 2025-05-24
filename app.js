@@ -8,6 +8,17 @@ const port = 3000;
 
 console.log('app.js(express) starting to run...');
 
+//Added middleware for logging and debugging MIME Content-Type problems
+app.use((req, res, next) => {
+  console.log('Request URL:', req.url);
+  console.log('Request Headers:', req.headers);
+  next();
+});
+app.get('*.js', (req, res, next) => {
+  res.set('Content-Type', 'application/javascript');
+  next();
+});
+
 app.use('/', express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
