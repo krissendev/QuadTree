@@ -15,6 +15,7 @@ COPY . .
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY supervisord.conf /etc/supervisord.conf
+RUN chmod -R 777 /app/public
 EXPOSE 8080 3000
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
