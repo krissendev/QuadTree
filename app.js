@@ -23,11 +23,11 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
-app.use('/', express.static(path.join(__dirname, 'public')))
+app.use('/', express.static(path.join(__dirname, 'static')))
 
 app.get('/', (req, res) => {
   console.log('Handling GET / request');
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });
 
 //debugging nginx on gcloud
