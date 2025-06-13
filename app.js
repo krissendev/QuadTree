@@ -23,7 +23,9 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
-app.use('/', express.static(path.join(__dirname, 'static')))
+// app.use('/', express.static(path.join(__dirname, 'static')))
+
+app.use('/', express.static('static'))
 
 app.get('/', (req, res) => {
   console.log('Handling GET / request');
