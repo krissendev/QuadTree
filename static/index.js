@@ -52,7 +52,7 @@ document.addEventListener("mousemove", (event)=>{
     mousePosition.x = event.clientX;
     mousePosition.y = event.clientY;
 });
-
+window.mousePosition = mousePosition;
 
 
 //generate quads & turn on physics
@@ -72,7 +72,7 @@ function togglePhysics(event){
     let checkbox = event.target;
     if(checkbox.checked){
         generateQuadTree();
-        startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
+        startPhysicsloop();
         startQuadGenerationLoop();
         startReactCreate();
     }

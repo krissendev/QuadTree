@@ -18,7 +18,7 @@ function generateQuadTree(){
     
     window.QuadTree = QuadTree;
     window.svgQuadTree = svgQuadTree;
-    window.circleElements = circleElements;
+    //window.circleElements = circleElements;
     //for printing circle coordinates
     /*
     window.circleElements.forEach(circle => {
