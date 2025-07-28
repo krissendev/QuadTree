@@ -5,43 +5,48 @@ import{physicsCircleCollisionQuad} from './pointCheckQuad.js'
 import {physicsSwarmMove} from './pointWander.js'
 
 let physicsIntervalSwarm;
-let physicsIntervalCursor;
 let physicsIntervalSwarmCollision;
+
+//raf = RequestAnimationFrame
+//NOTE Regarding RequestAnimationFrame(somefunc), the variable of said function is by deafult the timestamp of the frame
+let raf_swarm;
+let raf_cursor;
+let raf_swarmcollision;
 let looping = false;
 
-function startPhysicsloop(mousePosition, QuadTree, svgQuadTree){
+function loopCursor(circleElements){    
+    physicsMouseloopQuad(window.mousePosition, circleElements, window.QuadTree, window.svgQuadTree)
+    raf_cursor = requestAnimationFrame(()=>{loopCursor(circleElements)});
+}
+function loopSwarmMove(circleElements){
+    physicsSwarmMove(circleElements);    
+    raf_swarm = setTimeout(() => requestAnimationFrame(()=>{(loopSwarmMove(circleElements))}), 50);
+}
+function loopSwarmCollide(QuadTree, head){
+    physicsCircleCollisionQuad(QuadTree, head)
+    raf_swarmcollision = requestAnimationFrame(()=>{loopSwarmCollide(QuadTree, head)});
+}
+function startPhysicsloop(mousePosition){
 
     let currentQuad = window.svgQuadTree;
     let head = [];
 
-    //console.log("startphysics");
-    const svgContainer = document.querySelector('#quadtree-circles');
-    const circleElements = svgContainer.querySelectorAll('circle');
     if(!looping){
         looping = true;
-        physicsIntervalCursor = setInterval(() => {
-            let svgQuadTree = window.svgQuadTree;
-            physicsMouseloopQuad(mousePosition, circleElements, QuadTree, svgQuadTree)
-        }, 50);
-
-        physicsIntervalSwarm = setInterval(() => {
-            physicsSwarmMove(circleElements)
-        }, 100); 
-        physicsIntervalSwarmCollision = setInterval(() => {
-            //QuadTree is class for typechecking quads
-            //currentQuad = used for recursing down the three like a tail 
-            //quadTree = the whole three
-            //head array of path 
-            //console.log("Set Interval...")
-            physicsCircleCollisionQuad(QuadTree, head)
-        }, 100);
+        const svgContainer = document.querySelector('#quadtree-circles');
+        const circleElements = svgContainer.querySelectorAll('circle');
+        loopCursor(circleElements);
+        loopSwarmMove(circleElements);
+        loopSwarmCollide(QuadTree, head)
     }
 }
 function stopPhysicsloop(){
     if(looping){
-        clearInterval(physicsIntervalSwarm);
-        clearInterval(physicsIntervalCursor);
-        clearInterval(physicsIntervalSwarmCollision);
+        cancelAnimationFrame(raf_cursor);
+        cancelAnimationFrame(raf_swarm);
+        cancelAnimationFrame(raf_swarmcollision)
+        // clearInterval(physicsIntervalSwarm);
+        // clearInterval(physicsIntervalSwarmCollision);
         looping = false;
     }
 }
