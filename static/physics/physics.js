@@ -41,9 +41,10 @@ function startPhysicsloop(mousePosition){
     }
 }
 function stopPhysicsloop(){
+    console.log("stopping physics loop, looping:", looping)
     if(looping){
         cancelAnimationFrame(raf_cursor);
-        cancelAnimationFrame(raf_swarm);
+        clearInterval(raf_swarm);
         cancelAnimationFrame(raf_swarmcollision)
         // clearInterval(physicsIntervalSwarm);
         // clearInterval(physicsIntervalSwarmCollision);

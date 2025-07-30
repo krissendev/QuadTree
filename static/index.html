@@ -31,6 +31,14 @@
 
             <!--<li><button aria-label="About this application" title="About this application">About</button></li>-->
 
+            <!--Toggle physics from mouse to points-->            
+            <form>
+                <input type="radio" name="toggleCursorMode" id="mouseGenerate" checked="checked">
+                <label for="mouseGenerate">Generate</label>
+                <input type="radio" name="toggleCursorMode" id="mousePhysics" >
+                <label for="mousePhysics">Physics</label>
+            </form>
+
             <li class="listElement" ><button id="clear_svg" title="Click to delete" aria-label="Clear circles." > Clear</button></li>
             <!--Count Property-->
             <li class="listElement">
@@ -63,16 +71,7 @@
                 <p aria-hidden="true" id="display_spread"></p>
                 <input aria-label="Circle spread radius" type="range" min="1" max="100" value="50" class="slider" id="svgprop_spread">
             </li>
-            
-
-            <!--Toggle physics from mouse to points-->
-            <li class="listElement" >
-                <label title="physics on/off">
-                    Toggle physics
-                    <input aria-label="Click to toggle physics" type="checkbox" id="toggle_mousePhysics" unchecked> 
-                </label>
-                               
-            </li>
+                        
         </div>
 
         <div class="modal" id="mainMenuModal"></div>
