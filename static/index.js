@@ -7,13 +7,64 @@ import {toggleMenu, resetNav, debounce, initWindowSize} from './util/responsiveM
 
 let circleCount=0;
 
+document.querySelectorAll('input[name="toggleCursorMode"]').forEach(item => {
+    item.addEventListener("change",inputChangeHandler, false);
+})    
 
-
-//Click to add circles
 const screenClick = document.querySelector('#content_svg');
-screenClick.addEventListener('pointerdown', (event) => {
+
+
+function inputChangeHandler(e){
+    //Click to be in physics state
+    if(e.target.id==="mousePhysics"){
+        document.addEventListener("mousemove",  onMouseMove, { passive: false })
+        document.removeEventListener("pointerdown", onInputDown, { passive: false });
+        console.log("mousePhysics")
+        
+        //guarantees QuadTree exists before setInterval occurs
+        generateQuadTree(); 
+        startQuadGenerationLoop();
+        startReactCreate();
+        startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
+    }
+    //Click to add circles
+    else if(e.target.id==="mouseGenerate"){
+        document.removeEventListener("mousemove",  onMouseMove, { passive: false });
+         //toggleCursorMouseGenerate = (event)=> onPointerDown(event);
+         //document.addEventListener("pointedown",  toggleCursorMouseGenerate, { passive: false })
+        document.addEventListener("pointerdown", onInputDown, { passive: false });
+
+
+/*
+onpointerdown = (event) => {
+  console.log("Pointer down event");
+};
+*/
+        //toggleCursorMouseGenerate = document.addEventListener("pointedown",  ()=>{onPointerDown}, { passive: false })
+        console.log("generate circles")
+        stopPhysicsloop();
+        //clearPhysicsIntervalCursor()
+    }
+}
+
+function onMouseMove(){
+    console.log("mouse moving...")
+}
+function onInputDown(event){
+    console.log("mouse down...", event)
     circleCount = addSVGCircle(event, circleCount);
-});
+}
+
+
+
+
+
+
+
+// screenClick.addEventListener('pointerdown', (event) => {
+//     console.log("screenClick...")
+//     circleCount = addSVGCircle(event, circleCount);
+// });
 
 //Update UI slider number
 document.addEventListener('DOMContentLoaded', function () {
@@ -55,24 +106,14 @@ document.addEventListener("mousemove", (event)=>{
 window.mousePosition = mousePosition;
 
 
-//generate quads & turn on physics
-const physicsCheckbox = document.querySelector('#toggle_mousePhysics');
-physicsCheckbox.addEventListener('change', togglePhysics);
 
-
-physicsCheckbox.addEventListener('keydown', (event) => {
-    if(event.key === 'Enter'){
-        physicsCheckbox.checked = !physicsCheckbox.checked;
-        togglePhysics(event);
-    }
-});
 //Aria - keyboard button activation
+
 function togglePhysics(event){
     console.log("toggled check")
     let checkbox = event.target;
     if(checkbox.checked){
-        generateQuadTree();
-        startPhysicsloop();
+        startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
         startQuadGenerationLoop();
         startReactCreate();
     }
