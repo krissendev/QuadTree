@@ -7,14 +7,25 @@ import {toggleMenu, resetNav, debounce, initWindowSize} from './util/responsiveM
 
 let circleCount=0;
 
+//store mouse position
+let mousePosition = { x: 0, y: 0 };
+document.addEventListener("mousemove", (event)=>{
+    mousePosition.x = event.clientX;
+    mousePosition.y = event.clientY;
+});
+
+window.mousePosition = mousePosition;
 document.querySelectorAll('input[name="toggleCursorMode"]').forEach(item => {
     item.addEventListener("change",inputChangeHandler, false);
 })    
 
 const screenClick = document.querySelector('#content_svg');
 
+let toggleCursorModeInit =document.querySelectorAll('input[name="toggleCursorMode"]:checked');
+inputChangeHandler({ target: toggleCursorModeInit[0] });
 
 function inputChangeHandler(e){
+    console.log("inputChangeHandler:", e)
     //Click to be in physics state
     if(e.target.id==="mousePhysics"){
         document.addEventListener("mousemove",  onMouseMove, { passive: false })
@@ -51,8 +62,33 @@ function onMouseMove(){
     console.log("mouse moving...")
 }
 function onInputDown(event){
-    console.log("mouse down...", event)
-    circleCount = addSVGCircle(event, circleCount);
+    //Check if cursor is within the floater-box(desktop) or burger-button(mobile)
+    let guiFloaterBox = document.querySelector('#gui_floater');
+    let guiIsVisible = document.querySelector('.guiLists');
+    let computedstyleBox = (window.getComputedStyle(guiFloaterBox));
+    let computedstyleVisible = (window.getComputedStyle(guiIsVisible));
+    let dockerHidden = computedstyleVisible.display === "none";
+    let dockerLeft = parseFloat(computedstyleBox.left.match(/^-?\d+(\.\d+)?/)[0]);
+    let dockerWidth = parseFloat(computedstyleBox.width.match(/^-?\d+(\.\d+)?/)[0]);
+    let dockerTop = parseFloat(computedstyleBox.top.match(/^-?\d+(\.\d+)?/)[0]);
+    let dockerHeight = parseFloat(computedstyleBox.height.match(/^-?\d+(\.\d+)?/)[0]);
+    //console.log(computedstyleVisible)
+    //console.log(dockerHidden, dockerLeft, dockerRight, dockerTop, dockerBottom)
+    //if(!dockerHidden, )
+
+    let mx=window.mousePosition.x;
+    let my=window.mousePosition.y;
+    if((mx<=dockerWidth+dockerLeft && 
+       mx>= dockerLeft)&&
+       (my<=dockerHeight+dockerTop && 
+       my>= dockerTop)){
+        console.log("inside box, mx:,", mx," dr:", dockerWidth+dockerLeft, " dl:", dockerLeft)
+    }
+    else{
+        circleCount = addSVGCircle(event, circleCount);
+    }
+    //console.log("mouse down...", event, window.mousePosition)
+    
 }
 
 
@@ -97,13 +133,7 @@ function clearCanvas (){
 
 
 
-//store mouse position
-let mousePosition = { x: 0, y: 0 };
-document.addEventListener("mousemove", (event)=>{
-    mousePosition.x = event.clientX;
-    mousePosition.y = event.clientY;
-});
-window.mousePosition = mousePosition;
+
 
 
 
