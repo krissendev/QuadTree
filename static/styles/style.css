@@ -222,6 +222,13 @@ li {
         z-index: 2;
         
     }
+        .guiLists form{
+        display:none;
+        width:100%;
+        padding:10px;
+        z-index: 2;
+        
+    }
     .guiLists li p,
     .guiLists li label{
         padding:5px;

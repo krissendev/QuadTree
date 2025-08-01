@@ -25,12 +25,12 @@ let toggleCursorModeInit =document.querySelectorAll('input[name="toggleCursorMod
 inputChangeHandler({ target: toggleCursorModeInit[0] });
 
 function inputChangeHandler(e){
-    console.log("inputChangeHandler:", e)
+    //console.log("inputChangeHandler:", e)
     //Click to be in physics state
     if(e.target.id==="mousePhysics"){
         document.addEventListener("mousemove",  onMouseMove, { passive: false })
         document.removeEventListener("pointerdown", onInputDown, { passive: false });
-        console.log("mousePhysics")
+        //console.log("mousePhysics")
         
         //guarantees QuadTree exists before setInterval occurs
         generateQuadTree(); 
@@ -52,8 +52,10 @@ onpointerdown = (event) => {
 };
 */
         //toggleCursorMouseGenerate = document.addEventListener("pointedown",  ()=>{onPointerDown}, { passive: false })
-        console.log("generate circles")
+        //console.log("generate circles")
         stopPhysicsloop();
+        stopQuadGenerationLoop();
+        stopReactCreate();
         //clearPhysicsIntervalCursor()
     }
 }
@@ -64,10 +66,11 @@ function onMouseMove(){
 function onInputDown(event){
     //Check if cursor is within the floater-box(desktop) or burger-button(mobile)
     let guiFloaterBox = document.querySelector('#gui_floater');
-    let guiIsVisible = document.querySelector('.guiLists');
+    let guiIsVisible = document.querySelector('.listElement');
     let computedstyleBox = (window.getComputedStyle(guiFloaterBox));
     let computedstyleVisible = (window.getComputedStyle(guiIsVisible));
-    let dockerHidden = computedstyleVisible.display === "none";
+    console.log("mobileMenuUp:",guiIsVisible)
+    let mobileMenuUp = computedstyleVisible.display === "flex";
     let dockerLeft = parseFloat(computedstyleBox.left.match(/^-?\d+(\.\d+)?/)[0]);
     let dockerWidth = parseFloat(computedstyleBox.width.match(/^-?\d+(\.\d+)?/)[0]);
     let dockerTop = parseFloat(computedstyleBox.top.match(/^-?\d+(\.\d+)?/)[0]);
@@ -78,12 +81,22 @@ function onInputDown(event){
 
     let mx=window.mousePosition.x;
     let my=window.mousePosition.y;
-    if((mx<=dockerWidth+dockerLeft && 
+    //Mobile
+    let burger = document.querySelector('#mainMenu');
+    let isMobile = (window.getComputedStyle(burger)).display === "block";
+    console.log("click generate. isMobile:",isMobile," mobileMenuUp:",mobileMenuUp)
+    if(isMobile && mobileMenuUp){
+        console.log("inside mobile burger")
+    }
+    //Desktop
+    else if((mx<=dockerWidth+dockerLeft && 
        mx>= dockerLeft)&&
        (my<=dockerHeight+dockerTop && 
        my>= dockerTop)){
-        console.log("inside box, mx:,", mx," dr:", dockerWidth+dockerLeft, " dl:", dockerLeft)
+        return;
+        //console.log("inside box, mx:,", mx," dr:", dockerWidth+dockerLeft, " dl:", dockerLeft)
     }
+    // dockerHidden
     else{
         circleCount = addSVGCircle(event, circleCount);
     }
