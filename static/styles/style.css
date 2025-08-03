@@ -135,12 +135,27 @@ li {
 
 /*right aligned docker elements*/
 .guiLists li input, 
-.guiLists li button {
+.guiLists li button{
     position: absolute;
     right: 30px;
     top: 50%; 
     transform: translateY(-50%); 
 } 
+.guiLists form{
+    display:inline-flex;
+    justify-content: flex-end;
+    width:100%;
+}
+.guiLists form input{
+    border-radius: 50%;
+    appearance: none;
+    border-radius: 10px;
+    height: 40px;
+    width: 40px;
+}
+.guiLists form input[type="radio"]:not(:disabled):checked {
+    background-color: #186be2;
+}
 .guiLists li input[type="checkbox"]{
     width:20px;
     height:20px;
