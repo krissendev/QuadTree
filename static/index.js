@@ -69,8 +69,12 @@ function onInputDown(event){
     let guiIsVisible = document.querySelector('.listElement');
     let computedstyleBox = (window.getComputedStyle(guiFloaterBox));
     let computedstyleVisible = (window.getComputedStyle(guiIsVisible));
-    console.log("mobileMenuUp:",guiIsVisible)
-    let mobileMenuUp = computedstyleVisible.display === "flex";
+
+const mobileWrap = document.querySelector('#mobileWrap')
+let mobileMenuHidden = mobileWrap.classList.contains('active');
+console.log("mobileMenuHidden:",mobileMenuHidden)
+    //let mobileMenuUp = computedstyleVisible.display === "flex";
+
     let dockerLeft = parseFloat(computedstyleBox.left.match(/^-?\d+(\.\d+)?/)[0]);
     let dockerWidth = parseFloat(computedstyleBox.width.match(/^-?\d+(\.\d+)?/)[0]);
     let dockerTop = parseFloat(computedstyleBox.top.match(/^-?\d+(\.\d+)?/)[0]);
@@ -84,12 +88,15 @@ function onInputDown(event){
     //Mobile
     let burger = document.querySelector('#mainMenu');
     let isMobile = (window.getComputedStyle(burger)).display === "block";
-    console.log("click generate. isMobile:",isMobile," mobileMenuUp:",mobileMenuUp)
-    if(isMobile && mobileMenuUp){
+
+    //generate
+    console.log("click generate. isMobile:",isMobile," mobileMenuHidden:",mobileMenuHidden)
+    if(isMobile && !mobileMenuHidden){
         console.log("inside mobile burger")
     }
     //Desktop
-    else if((mx<=dockerWidth+dockerLeft && 
+    else if(!isMobile && 
+        (mx<=dockerWidth+dockerLeft && 
        mx>= dockerLeft)&&
        (my<=dockerHeight+dockerTop && 
        my>= dockerTop)){
@@ -98,6 +105,7 @@ function onInputDown(event){
     }
     // dockerHidden
     else{
+        console.log("generate circle")
         circleCount = addSVGCircle(event, circleCount);
     }
     //console.log("mouse down...", event, window.mousePosition)
@@ -230,4 +238,11 @@ function guimove(gui, anchor_x, anchor_y){
 //Responsive design (mobile) Burger Main menu
 document.querySelector('#mainMenu').addEventListener("pointerdown", toggleMenu);
 window.addEventListener('resize', debounce(resetNav, 10));
+
+let burger = document.querySelector('#mainMenu');
+let isMobile = (window.getComputedStyle(burger)).display === "block";
+if(isMobile){
+    const mobileWrap = document.querySelector('#mobileWrap')
+    mobileWrap.classList.add('active');
+}
 //window.addEventListener('resize', resetNav);

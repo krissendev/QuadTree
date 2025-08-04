@@ -207,6 +207,12 @@ li {
     background-color:hsla(0, 0%, 100%, 0.8)
 }
 @media screen and (max-width: 540px) {
+    #mobileWrap.active{
+        width:100vw;
+        height:100vh;
+        visibility: hidden;
+        
+    }
 /*
     #gui_floater
         gui         top = "10vh"
@@ -222,7 +228,7 @@ li {
 
     .guiLists{
         z-index: 2;
-        display:none;
+        display:flex;
         height: 100vh;
         flex-direction: column; 
         justify-content: center;
@@ -231,14 +237,12 @@ li {
         overflow:scroll
     }
     .guiLists li{
-        display:none;
         width:100%;
         padding:10px;
         z-index: 2;
         
     }
         .guiLists form{
-        display:none;
         width:100%;
         padding:10px;
         z-index: 2;
