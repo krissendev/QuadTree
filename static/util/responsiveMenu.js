@@ -5,36 +5,43 @@ const lists = document.querySelector('.guiLists');
 const modal = document.querySelector('#mainMenuModal');
 
 const listElements = document.querySelectorAll('.listElement');
-let toggled = false;
-function toggleMenu(){
+const mobileWrap = document.querySelector('#mobileWrap')
 
+let mobileMenuHidden;
+
+function toggleMenu(){
+    mobileMenuHidden = mobileWrap.classList.contains('active');
+    console.log("toggled2:", mobileMenuHidden)
     //disabling menu
-    if(toggled){
-        lists.style.display = "none";
-        modal.style.display = "none";
-        mainMenu.classList.remove('active');
-        lists.style.display = "flex";
-        listElements.forEach(element => {
-            element.style.display = "none";
-        });
-        toggled = false;
+    if(!mobileMenuHidden){
+        mobileWrap.classList.add('active');
+        // lists.style.display = "none";
+        // modal.style.display = "none";
+        // mainMenu.classList.remove('active');
+        //lists.style.display = "flex";
+        // listElements.forEach(element => {
+        //     element.style.display = "none";
+        // });
+        mobileMenuHidden = false;
     }
     //enabling menu
-    else if(!toggled){
-        lists.style.display = "flex";
-        modal.style.display = "block";
-        mainMenu.classList.toggle('active');
-        listElements.forEach(element => {
-            element.style.display = "flex";
-        });
-        toggled = true;
+    else if(mobileMenuHidden){
+        mobileWrap.classList.remove('active');
+
+        //lists.style.display = "flex";
+        // modal.style.display = "block";
+        // mainMenu.classList.toggle('active');
+        // listElements.forEach(element => {
+        //     element.style.display = "flex";
+        // });
+        mobileMenuHidden = true;
     }
 }
 let counter=0;
 function resetNav(){
     counter++;
     console.log(counter)
-    toggled = false;
+    mobileMenuHidden = false;
     if(window.innerWidth > 540){
         gui.style.top = "10vh"
         gui.style.left = "0"

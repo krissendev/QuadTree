@@ -16,65 +16,66 @@
     </main> 
 
     <ul id="gui_floater">
-        <main class="title_bar">
-            <!--Label-->
-            <label aria-label="Click with mouse to move docker." >Circle Properties Docker </label>
-            <button aria-label="Window" title="Click to open/close" aria-pressed="false"  id="corner_icon">
-            <!-- <button aria-label="Click to hide/show properties docker." title="Close" aria-pressed="true"  id="corner_icon"></button> -->
-                <div id="corner_icon_inside">
-                </div></button>
+        <div id="mobileWrap" class="active">
+            <main class="title_bar">
+                    <!--Label-->
+                    <label aria-label="Click with mouse to move docker." >Circle Properties Docker </label>
+                    <button aria-label="Window" title="Click to open/close" aria-pressed="false"  id="corner_icon">
+                    <!-- <button aria-label="Click to hide/show properties docker." title="Close" aria-pressed="true"  id="corner_icon"></button> -->
+                        <div id="corner_icon_inside">
+                        </div></button>
 
-                
-
-            </main>
-        <div class="guiLists">
-            
-            <!--<li><button aria-label="About this application" title="About this application">About</button></li>-->
-
-            <!--Toggle physics from mouse to points-->            
-            <form>
-                <input type="radio" name="toggleCursorMode" id="mouseGenerate" checked="checked">
-                <label for="mouseGenerate">Generate</label>
-                <input type="radio" name="toggleCursorMode" id="mousePhysics" >
-                <label for="mousePhysics">Physics</label>
-            </form>
-
-            <li class="listElement" ><button id="clear_svg" title="Click to delete" aria-label="Clear circles." > Clear</button></li>
-            <!--Count Property-->
-            <li class="listElement">
-                <label>Total circles</label> 
-                <p id="display_svgNumber" aria-live="polite"></p>            
-            </li>    
-            <!--Color Property-->
-            <li class="listElement" >
-                <label title="code for circle's">Color</label> 
-                <p id="display_color"></p>
-                <input type="color" name="color picker" title="color" aria-label="Click to change circle color."id="svgprop_color">
-                
-                
-            </li>
-            <!--Size Property-->
-            <li class="listElement" >
-                <label aria-hidden="true">Size</label> 
-                <p aria-hidden="true"  id="display_svgsize"></p>
-                <input aria-label="Circle diameter size" type="range" min="1" max="100" value="20" class="slider" id="svgprop_size">
-            </li>
-            <!--Ammount Property-->
-            <li class="listElement">
-                <label aria-hidden="true">Circles</label> 
-                <p aria-hidden="true"  id="display_amount"></p>
-                <input aria-label="Circles to add per screen click" type="range" min="1" max="100" value="20" class="slider" id="svgprop_amount">
-            </li>
-            <!--Random Spread Property-->
-            <li class="listElement" >
-                <label aria-hidden="true">Spread</label> 
-                <p aria-hidden="true" id="display_spread"></p>
-                <input aria-label="Circle spread radius" type="range" min="1" max="100" value="50" class="slider" id="svgprop_spread">
-            </li>
                         
-        </div>
 
+                    </main>
+                <div class="guiLists">
+                    
+                    <!--<li><button aria-label="About this application" title="About this application">About</button></li>-->
+
+                    <!--Toggle physics from mouse to points-->            
+                    <form>
+                        <input type="radio" name="toggleCursorMode" id="mouseGenerate" checked="checked">
+                        <label for="mouseGenerate">Generate</label>
+                        <input type="radio" name="toggleCursorMode" id="mousePhysics" >
+                        <label for="mousePhysics">Physics</label>
+                    </form>
+
+                    <li class="listElement" ><button id="clear_svg" title="Click to delete" aria-label="Clear circles." > Clear</button></li>
+                    <!--Count Property-->
+                    <li class="listElement">
+                        <label>Total circles</label> 
+                        <p id="display_svgNumber" aria-live="polite"></p>            
+                    </li>    
+                    <!--Color Property-->
+                    <li class="listElement" >
+                        <label title="code for circle's">Color</label> 
+                        <p id="display_color"></p>
+                        <input type="color" name="color picker" title="color" aria-label="Click to change circle color."id="svgprop_color">
+                        
+                        
+                    </li>
+                    <!--Size Property-->
+                    <li class="listElement" >
+                        <label aria-hidden="true">Size</label> 
+                        <p aria-hidden="true"  id="display_svgsize"></p>
+                        <input aria-label="Circle diameter size" type="range" min="1" max="100" value="20" class="slider" id="svgprop_size">
+                    </li>
+                    <!--Ammount Property-->
+                    <li class="listElement">
+                        <label aria-hidden="true">Circles</label> 
+                        <p aria-hidden="true"  id="display_amount"></p>
+                        <input aria-label="Circles to add per screen click" type="range" min="1" max="100" value="20" class="slider" id="svgprop_amount">
+                    </li>
+                    <!--Random Spread Property-->
+                    <li class="listElement" >
+                        <label aria-hidden="true">Spread</label> 
+                        <p aria-hidden="true" id="display_spread"></p>
+                        <input aria-label="Circle spread radius" type="range" min="1" max="100" value="50" class="slider" id="svgprop_spread">
+                    </li>
+                                
+                </div>
         <div class="modal" id="mainMenuModal"></div>
+        </div>
     </ul>
     <button class="burger" id="mainMenu">
         <div></div><div></div><div></div>
