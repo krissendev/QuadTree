@@ -15,25 +15,24 @@ document.addEventListener("mousemove", (event)=>{
 });
 
 window.mousePosition = mousePosition;
+
+//RadioToggle-Generate/Physics
 document.querySelectorAll('input[name="toggleCursorMode"]').forEach(item => {
     item.addEventListener("change",inputChangeHandler, false);
 })    
-
-const screenClick = document.querySelector('#content_svg');
-
+//Init RadioToggle-Generate/Physics State
 let toggleCursorModeInit =document.querySelectorAll('input[name="toggleCursorMode"]:checked');
 inputChangeHandler({ target: toggleCursorModeInit[0] });
 
 function inputChangeHandler(e){
-    //console.log("inputChangeHandler:", e)
     //Click to be in physics state
     if(e.target.id==="mousePhysics"){
         document.addEventListener("mousemove",  onMouseMove, { passive: false })
         document.removeEventListener("pointerdown", onInputDown, { passive: false });
-        //console.log("mousePhysics")
         
         //guarantees QuadTree exists before setInterval occurs
         generateQuadTree(); 
+
         startQuadGenerationLoop();
         startReactCreate();
         startPhysicsloop(mousePosition, QuadTree, svgQuadTree);
@@ -41,22 +40,10 @@ function inputChangeHandler(e){
     //Click to add circles
     else if(e.target.id==="mouseGenerate"){
         document.removeEventListener("mousemove",  onMouseMove, { passive: false });
-         //toggleCursorMouseGenerate = (event)=> onPointerDown(event);
-         //document.addEventListener("pointedown",  toggleCursorMouseGenerate, { passive: false })
         document.addEventListener("pointerdown", onInputDown, { passive: false });
-
-
-/*
-onpointerdown = (event) => {
-  console.log("Pointer down event");
-};
-*/
-        //toggleCursorMouseGenerate = document.addEventListener("pointedown",  ()=>{onPointerDown}, { passive: false })
-        //console.log("generate circles")
         stopPhysicsloop();
         stopQuadGenerationLoop();
         stopReactCreate();
-        //clearPhysicsIntervalCursor()
     }
 }
 
@@ -70,9 +57,9 @@ function onInputDown(event){
     let computedstyleBox = (window.getComputedStyle(guiFloaterBox));
     let computedstyleVisible = (window.getComputedStyle(guiIsVisible));
 
-const mobileWrap = document.querySelector('#mobileWrap')
-let mobileMenuHidden = mobileWrap.classList.contains('active');
-console.log("mobileMenuHidden:",mobileMenuHidden)
+    const mobileWrap = document.querySelector('#mobileWrap')
+    let mobileMenuHidden = mobileWrap.classList.contains('active');
+    console.log("mobileMenuHidden:",mobileMenuHidden)
     //let mobileMenuUp = computedstyleVisible.display === "flex";
 
     let dockerLeft = parseFloat(computedstyleBox.left.match(/^-?\d+(\.\d+)?/)[0]);
@@ -83,15 +70,23 @@ console.log("mobileMenuHidden:",mobileMenuHidden)
     //console.log(dockerHidden, dockerLeft, dockerRight, dockerTop, dockerBottom)
     //if(!dockerHidden, )
 
-    let mx=window.mousePosition.x;
-    let my=window.mousePosition.y;
+    let mx=event.clientX;
+    let my=event.clientY;
     //Mobile
     let burger = document.querySelector('#mainMenu');
     let isMobile = (window.getComputedStyle(burger)).display === "block";
 
     //generate
     console.log("click generate. isMobile:",isMobile," mobileMenuHidden:",mobileMenuHidden)
-    if(isMobile && !mobileMenuHidden){
+    if(isMobile &&
+      (mx<=dockerWidth+dockerLeft && 
+      mx>= dockerLeft)&&
+      (my<=dockerHeight+dockerTop && 
+      my>= dockerTop)
+    ){
+      console.log("inside mobile topbar ?", " dockerWidth:", dockerWidth, " dockerHeight:", dockerHeight," isMobile:",isMobile, " mx:", mx, " my:", my)  
+    }
+    else if(isMobile && !mobileMenuHidden){
         console.log("inside mobile burger")
     }
     //Desktop

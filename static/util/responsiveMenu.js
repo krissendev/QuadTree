@@ -15,25 +15,13 @@ function toggleMenu(){
     //disabling menu
     if(!mobileMenuHidden){
         mobileWrap.classList.add('active');
-        // lists.style.display = "none";
-        // modal.style.display = "none";
-        // mainMenu.classList.remove('active');
-        //lists.style.display = "flex";
-        // listElements.forEach(element => {
-        //     element.style.display = "none";
-        // });
+        modal.style.display = "none";
         mobileMenuHidden = false;
     }
     //enabling menu
     else if(mobileMenuHidden){
         mobileWrap.classList.remove('active');
-
-        //lists.style.display = "flex";
-        // modal.style.display = "block";
-        // mainMenu.classList.toggle('active');
-        // listElements.forEach(element => {
-        //     element.style.display = "flex";
-        // });
+        modal.style.display = "block";
         mobileMenuHidden = true;
     }
 }

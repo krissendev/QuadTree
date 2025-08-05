@@ -277,9 +277,9 @@ li {
         top:0px;
         right:0px;
         width:100vw;
-        height:10vh;
+        height:50px;
         border:none;
-        background-color:none; 
+        background-color:rgb(211, 211, 211);
     }
     .title_bar{
         display:none;
