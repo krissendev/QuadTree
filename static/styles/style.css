@@ -127,7 +127,8 @@ li {
 
 /*Unselectanle text*/
 .guiLists li label,
-.guiLists li p {    
+.guiLists li p,
+form label {    
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
@@ -144,7 +145,6 @@ li {
 .guiLists form{
     display:inline-flex;
     justify-content: flex-end;
-    width:100%;
 }
 .guiLists form input{
     border-radius: 50%;
@@ -190,28 +190,24 @@ li {
     background-color: black;
 }
 
-.burger:hover {
-    border-color:#3584e4;
-}
-.burger:hover div{
-    background-color: #3584e4;;
-}
 .modal{
     right: 0;
     top: 0;
     z-index: 0;
     display:none;
     position: absolute;
-    width:100vh;
+    width:100vw;
     height:100vh;
-    background-color:hsla(0, 0%, 100%, 0.8)
+    background-color:rgba(211, 211, 211, 0.8);
 }
 @media screen and (max-width: 540px) {
-    #mobileWrap.active{
+    #mobileWrap{
         width:100vw;
         height:100vh;
-        visibility: hidden;
-        
+        visibility: hidden; 
+    }
+    #mobileWrap.active{
+        visibility: visible;
     }
 /*
     #gui_floater
@@ -224,14 +220,19 @@ li {
     .guiLists
         links       display = "block";
 */
-
+button:hover, input:hover{
+    background-color: unset;
+}
+button:active, input:active{
+    background-color: #3584e4;
+}
 
     .guiLists{
         z-index: 2;
         display:flex;
         height: 100vh;
         flex-direction: column; 
-        justify-content: center;
+        justify-content: space-evenly;
         align-items:center; 
         border:10px;  
         overflow:scroll
@@ -239,12 +240,16 @@ li {
     .guiLists li{
         width:100%;
         padding:10px;
+        box-sizing: border-box;
+        background-color:rgba(255, 255, 255, 0.8);
         z-index: 2;
         
     }
         .guiLists form{
-        width:100%;
+        width: 100vw;
         padding:10px;
+        box-sizing: border-box;
+        background-color:rgba(255, 255, 255, 0.8);
         z-index: 2;
         
     }
