@@ -78,6 +78,7 @@ function onInputDown(event){
 
     //generate
     console.log("click generate. isMobile:",isMobile," mobileMenuHidden:",mobileMenuHidden)
+    console.log("outside mobile topbar ?", " dockerWidth:", dockerWidth, " dockerHeight:", dockerHeight," isMobile:",isMobile, " mx:", mx, " my:", my)  
     if(isMobile &&
       (mx<=dockerWidth+dockerLeft && 
       mx>= dockerLeft)&&
@@ -86,7 +87,7 @@ function onInputDown(event){
     ){
       console.log("inside mobile topbar ?", " dockerWidth:", dockerWidth, " dockerHeight:", dockerHeight," isMobile:",isMobile, " mx:", mx, " my:", my)  
     }
-    else if(isMobile && !mobileMenuHidden){
+    else if(isMobile && mobileMenuHidden){
         console.log("inside mobile burger")
     }
     //Desktop
@@ -234,10 +235,4 @@ function guimove(gui, anchor_x, anchor_y){
 document.querySelector('#mainMenu').addEventListener("pointerdown", toggleMenu);
 window.addEventListener('resize', debounce(resetNav, 10));
 
-let burger = document.querySelector('#mainMenu');
-let isMobile = (window.getComputedStyle(burger)).display === "block";
-if(isMobile){
-    const mobileWrap = document.querySelector('#mobileWrap')
-    mobileWrap.classList.add('active');
-}
 //window.addEventListener('resize', resetNav);

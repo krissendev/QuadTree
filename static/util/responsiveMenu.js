@@ -7,29 +7,30 @@ const modal = document.querySelector('#mainMenuModal');
 const listElements = document.querySelectorAll('.listElement');
 const mobileWrap = document.querySelector('#mobileWrap')
 
-let mobileMenuHidden;
+let mobileMenuVisible;
 
 function toggleMenu(){
-    mobileMenuHidden = mobileWrap.classList.contains('active');
-    console.log("toggled2:", mobileMenuHidden)
-    //disabling menu
-    if(!mobileMenuHidden){
-        mobileWrap.classList.add('active');
-        modal.style.display = "none";
-        mobileMenuHidden = false;
-    }
+    mobileMenuVisible = mobileWrap.classList.contains('active');
+    console.log("toggled2:", mobileMenuVisible)
     //enabling menu
-    else if(mobileMenuHidden){
-        mobileWrap.classList.remove('active');
+    if(!mobileMenuVisible){
+        mobileWrap.classList.add('active'); //display burger menu
+        mainMenu.classList.add('active');  
         modal.style.display = "block";
-        mobileMenuHidden = true;
+        
+    }
+    //disabling menu
+    else if(mobileMenuVisible){
+        mobileWrap.classList.remove('active'); //hide burger menu
+        mainMenu.classList.remove('active')
+        modal.style.display = "none";
     }
 }
 let counter=0;
 function resetNav(){
     counter++;
     console.log(counter)
-    mobileMenuHidden = false;
+    mobileMenuVisible = false;
     if(window.innerWidth > 540){
         gui.style.top = "10vh"
         gui.style.left = "0"
