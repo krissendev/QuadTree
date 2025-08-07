@@ -55,7 +55,6 @@ function onInputDown(event){
     let guiFloaterBox = document.querySelector('#gui_floater');
     let guiIsVisible = document.querySelector('.listElement');
     let computedstyleBox = (window.getComputedStyle(guiFloaterBox));
-    let computedstyleVisible = (window.getComputedStyle(guiIsVisible));
 
     const mobileWrap = document.querySelector('#mobileWrap')
     let mobileMenuHidden = mobileWrap.classList.contains('active');
@@ -66,9 +65,6 @@ function onInputDown(event){
     let dockerWidth = parseFloat(computedstyleBox.width.match(/^-?\d+(\.\d+)?/)[0]);
     let dockerTop = parseFloat(computedstyleBox.top.match(/^-?\d+(\.\d+)?/)[0]);
     let dockerHeight = parseFloat(computedstyleBox.height.match(/^-?\d+(\.\d+)?/)[0]);
-    //console.log(computedstyleVisible)
-    //console.log(dockerHidden, dockerLeft, dockerRight, dockerTop, dockerBottom)
-    //if(!dockerHidden, )
 
     let mx=event.clientX;
     let my=event.clientY;
@@ -97,7 +93,6 @@ function onInputDown(event){
        (my<=dockerHeight+dockerTop && 
        my>= dockerTop)){
         return;
-        //console.log("inside box, mx:,", mx," dr:", dockerWidth+dockerLeft, " dl:", dockerLeft)
     }
     // dockerHidden
     else{
@@ -108,16 +103,6 @@ function onInputDown(event){
     
 }
 
-
-
-
-
-
-
-// screenClick.addEventListener('pointerdown', (event) => {
-//     console.log("screenClick...")
-//     circleCount = addSVGCircle(event, circleCount);
-// });
 
 //Update UI slider number
 document.addEventListener('DOMContentLoaded', function () {
@@ -146,13 +131,6 @@ function clearCanvas (){
     circleCount=0;
     displayCount.innerHTML = circleCount;
 }
-
-
-
-
-
-
-
 
 //Aria - keyboard button activation
 

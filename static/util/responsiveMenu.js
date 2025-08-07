@@ -11,7 +11,6 @@ let mobileMenuVisible;
 
 function toggleMenu(){
     mobileMenuVisible = mobileWrap.classList.contains('active');
-    console.log("toggled2:", mobileMenuVisible)
     //enabling menu
     if(!mobileMenuVisible){
         mobileWrap.classList.add('active'); //display burger menu

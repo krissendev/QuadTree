@@ -9,7 +9,10 @@ body{
     margin:0px;
     overflow:hidden;
 }
-
+p{
+    font-size: 20px;
+    list-style-type: none;
+}
 /*Svgcontainer*/
 #content_svg { 
     position:absolute;
@@ -128,7 +131,7 @@ li {
 /*Unselectanle text*/
 .guiLists li label,
 .guiLists li p,
-form label {    
+.radioContainer label {    
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
@@ -145,15 +148,25 @@ form label {
 .guiLists form{
     display:inline-flex;
     justify-content: flex-end;
+    flex-wrap: wrap; 
 }
-.guiLists form input{
+.radioContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding:3px;
+}
+.radioContainer input{
     border-radius: 50%;
     appearance: none;
     border-radius: 10px;
     height: 40px;
-    width: 40px;
+    width: 100%;
 }
-.guiLists form input[type="radio"]:not(:disabled):checked {
+.radioContainer label{width:100%}
+
+.radioContainer input[type="radio"]:not(:disabled):checked {
     background-color: #186be2;
 }
 .guiLists li input[type="checkbox"]{
