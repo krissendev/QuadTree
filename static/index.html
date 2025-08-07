@@ -34,10 +34,14 @@
 
                     <!--Toggle physics from mouse to points-->            
                     <form>
-                        <input type="radio" name="toggleCursorMode" id="mouseGenerate" checked="checked">
-                        <label for="mouseGenerate">Generate</label>
-                        <input type="radio" name="toggleCursorMode" id="mousePhysics" >
-                        <label for="mousePhysics">Physics</label>
+                        <div class="radioContainer">
+                            <input type="radio" name="toggleCursorMode" id="mouseGenerate" checked="checked">
+                            <label for="mouseGenerate"><p>Generate</p></label>
+                        </div>
+                        <div class="radioContainer">
+                            <input type="radio" name="toggleCursorMode" id="mousePhysics" >
+                            <label for="mousePhysics"><p>Physics</p></label>                            
+                        </div>
                     </form>
 
                     <li class="listElement" ><button id="clear_svg" title="Click to delete" aria-label="Clear circles." > Clear</button></li>
