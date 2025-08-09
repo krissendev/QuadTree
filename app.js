@@ -3,10 +3,14 @@ const path = require('path')
 
 
 const express = require('express')
+
 const app = express()
 const port = 3000;
 
 console.log('app.js(express) starting to run...');
+
+app.set('trust proxy', 1);
+
 
 //Added middleware for logging and debugging MIME Content-Type problems
 app.use((req, res, next) => {

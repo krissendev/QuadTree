@@ -1,7 +1,9 @@
+# docker build -t quadtree .
+# docker run -e PORT=PORTNUMBER -p PORTNUMBER:PORTNUMBER quadtree
 FROM node:18-alpine
 WORKDIR /app
 # Install nginx, supervisor, and tini
-RUN apk add --no-cache nginx supervisor tini
+RUN apk add --no-cache nginx supervisor tini gettext
 # Create necessary directories
 RUN mkdir -p /var/log/supervisor /run/nginx /usr/share/nginx/html
 # Create error page
@@ -14,6 +16,7 @@ COPY . .
 # Copy Nginx and Supervisor configs
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY supervisord.conf /etc/supervisord.conf
 RUN chmod -R 777 /app/static
 EXPOSE 8080 3000

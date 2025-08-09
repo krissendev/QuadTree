@@ -1,7 +1,0 @@
-services:
-  quadtree:
-    build: .  
-    image: "quadtree"
-    ports:
-      - "8080:8080"
-      - "3000:3000"  # Optional: for direct Node.js nginx access
