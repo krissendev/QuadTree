@@ -1,6 +1,5 @@
 # docker build -t quadtree .
 # docker run -e PORT=PORTNUMBER -p PORTNUMBER:PORTNUMBER quadtree
-# docker run -e NGINX_PORT=PORTNUMBER -p PORTNUMBER:PORTNUMBER quadtree
 
 FROM node:18-alpine
 WORKDIR /app

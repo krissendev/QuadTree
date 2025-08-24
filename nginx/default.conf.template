@@ -1,9 +1,7 @@
 server {
     # listen 8080;
-    # listen ${PORT};
-    # listen [::]:${PORT};
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
+    listen ${PORT};
+    listen [::]:${PORT};
     server_name _;
     access_log /dev/stdout;
     error_log /dev/stderr;
