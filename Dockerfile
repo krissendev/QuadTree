@@ -4,8 +4,8 @@
 
 FROM node:18-alpine
 WORKDIR /app
-# Install nginx, supervisor, and tini
-RUN apk add --no-cache nginx supervisor tini gettext
+# Install nginx, supervisor, tini and netcat-openbsd (for nc port listening with awaitnode.sh)
+RUN apk add --no-cache nginx supervisor tini gettext netcat-openbsd
 # Create necessary directories
 RUN mkdir -p /var/log/supervisor /run/nginx /usr/share/nginx/html
 # Create error page
