@@ -1,5 +1,6 @@
 # docker build -t quadtree .
 # docker run -e PORT=PORTNUMBER -p PORTNUMBER:PORTNUMBER quadtree
+# docker run -p 8080:3000 quadtree
 
 FROM node:18-alpine
 WORKDIR /app
@@ -20,6 +21,9 @@ COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY supervisord.conf /etc/supervisord.conf
 RUN chmod -R 777 /app/static
+# Bashscript forcing nginx to wait for node to fix coldstart issues on cloud
+COPY ./nginx/awaitnode.sh /etc/nginx/awaitnode.sh
+RUN chmod +x /etc/nginx/awaitnode.sh
 EXPOSE 8080 3000
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
